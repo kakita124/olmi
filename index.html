@@ -484,7 +484,7 @@
             pulleyConfig.pulleyFriction = parseFloat(this.value);
         });
         
-        // Función drawSimulation corregida - polea haciendo contrapeso
+        // Función drawSimulation corregida - polea en lado izquierdo
         function drawSimulation() {
             const width = canvas.width;
             const height = canvas.height;
@@ -512,7 +512,7 @@
             ctx.strokeStyle = "#000";
             ctx.stroke();
 
-            // Dibujar sistema de polea con contrapeso
+            // Dibujar sistema de polea con contrapeso en lado izquierdo
             if (usePulley) {
                 drawPulleySystem(width, height, planeWidth, planeHeight, objectX, objectY);
             }
@@ -546,10 +546,10 @@
             ctx.fillText(`${mass} kg`, objectX, objectY - objectSize - 5);
         }
 
-        // Dibujar sistema de polea con contrapeso
+        // Dibujar sistema de polea con contrapeso en LADO IZQUIERDO
         function drawPulleySystem(width, height, planeWidth, planeHeight, objectX, objectY) {
-            // Posición de la polea (arriba a la derecha del plano)
-            const pulleyX = 50 + planeWidth + 60;
+            // Posición de la polea (arriba a la IZQUIERDA del plano)
+            const pulleyX = 50 - 60;  // Mover a la izquierda
             const pulleyY = height - 50 - planeHeight - 20;
             const pulleyRadius = 20;
             
