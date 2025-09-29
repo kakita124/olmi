@@ -141,6 +141,7 @@
             overflow: hidden;
             position: relative;
             margin-bottom: 20px;
+            min-height: 400px;
         }
         
         canvas {
@@ -252,7 +253,7 @@
     <div class="container">
         <header>
             <h1>Simulador de Plano Inclinado con Poleas</h1>
-            <p class="subtitle">Estudia el comportamiento de un objeto en un plano inclinado con sistemas de poleas</p>
+            <p class="subtitle">Estudia el comportamiento de un objeto que baja por un plano inclinado con sistemas de poleas</p>
         </header>
         
         <div class="content">
@@ -507,16 +508,16 @@
             // Limpiar canvas
             ctx.clearRect(0, 0, width, height);
             
-            // Calcular dimensiones del plano
+            // Calcular dimensiones del plano - ahora el objeto baja desde la parte superior
             const angleRad = angle * Math.PI / 180;
             const planeHeight = Math.min(height * 0.6, width * 0.6 * Math.tan(angleRad));
             const planeWidth = planeHeight / Math.tan(angleRad);
             
-            // Dibujar plano inclinado
+            // Dibujar plano inclinado - invertido para que el objeto baje
             ctx.beginPath();
-            ctx.moveTo(50, height - 50);
-            ctx.lineTo(50 + planeWidth, height - 50 - planeHeight);
-            ctx.lineTo(50 + planeWidth, height - 50);
+            ctx.moveTo(50, 50);
+            ctx.lineTo(50 + planeWidth, 50 + planeHeight);
+            ctx.lineTo(50 + planeWidth, 50);
             ctx.closePath();
             
             // Rellenar plano
@@ -530,7 +531,7 @@
             
             // Dibujar ángulo
             ctx.beginPath();
-            ctx.arc(50, height - 50, 30, 0, angleRad, true);
+            ctx.arc(50, 50, 30, 0, -angleRad, true);
             ctx.strokeStyle = '#e74c3c';
             ctx.lineWidth = 2;
             ctx.stroke();
@@ -538,7 +539,7 @@
             // Etiqueta del ángulo
             ctx.fillStyle = '#e74c3c';
             ctx.font = '16px Arial';
-            ctx.fillText(`${angle}°`, 70, height - 80);
+            ctx.fillText(`${angle}°`, 70, 40);
             
             // Dibujar poleas si están activadas
             if (usePulley) {
@@ -553,7 +554,7 @@
         function drawPulleySystem(width, height, planeWidth, planeHeight) {
             const angleRad = angle * Math.PI / 180;
             const pulleyX = 50 + planeWidth + 80;
-            const pulleyY = height - 50 - planeHeight - 30;
+            const pulleyY = 50 + 30;
             const pulleyRadius = 25;
             
             // Dibujar polea
@@ -573,16 +574,16 @@
             
             // Dibujar cuerda
             ctx.beginPath();
-            ctx.moveTo(50 + planeWidth, height - 50 - planeHeight);
+            ctx.moveTo(50 + planeWidth, 50 + planeHeight);
             ctx.lineTo(pulleyX, pulleyY);
             ctx.strokeStyle = '#d35400';
             ctx.lineWidth = 2;
             ctx.stroke();
             
-            // Dibujar objeto en el plano
+            // Dibujar objeto en el plano - ahora baja desde la parte superior
             const objectSize = 30 + mass / 2;
             const objectX = 50 + (position / length) * planeWidth;
-            const objectY = height - 50 - (position / length) * planeHeight;
+            const objectY = 50 + (position / length) * planeHeight;
             
             ctx.beginPath();
             ctx.arc(objectX, objectY, objectSize / 2, 0, Math.PI * 2);
@@ -596,7 +597,7 @@
             ctx.fillStyle = '#fff';
             ctx.font = '14px Arial';
             ctx.textAlign = 'center';
-            ctx.fillText(`${mass} kg`, objectX, objectY + 5);
+            ctx.fillText(`${mass} kg`, objectX, objectY + objectSize/2 + 15);
             
             // Dibujar contrapeso
             const counterWeightY = pulleyY + (position / length) * planeWidth;
@@ -629,7 +630,7 @@
         function drawObject(width, height, planeWidth, planeHeight) {
             const objectSize = 30 + mass / 2;
             const objectX = 50 + (position / length) * planeWidth;
-            const objectY = height - 50 - (position / length) * planeHeight;
+            const objectY = 50 + (position / length) * planeHeight;
             
             ctx.beginPath();
             ctx.arc(objectX, objectY, objectSize / 2, 0, Math.PI * 2);
@@ -643,23 +644,23 @@
             ctx.fillStyle = '#fff';
             ctx.font = '14px Arial';
             ctx.textAlign = 'center';
-            ctx.fillText(`${mass} kg`, objectX, objectY + 5);
+            ctx.fillText(`${mass} kg`, objectX, objectY + objectSize/2 + 15);
         }
         
         // Calcular física del plano inclinado
         function calculatePhysics() {
             const angleRad = angle * Math.PI / 180;
             
-            // Fuerza gravitatoria paralela al plano
+            // Fuerza gravitatoria paralela al plano (ahora hace bajar el objeto)
             const gravitationalForce = mass * gravity * Math.sin(angleRad);
             
             // Fuerza normal
             const normalForce = mass * gravity * Math.cos(angleRad);
             
-            // Fuerza de fricción
+            // Fuerza de fricción (se opone al movimiento)
             const frictionForce = friction * normalForce;
             
-            // Fuerza neta inicial
+            // Fuerza neta inicial - ahora el objeto baja por el plano
             let netForceValue = gravitationalForce - frictionForce;
             
             // Aplicar sistema de poleas si está activado
@@ -668,7 +669,7 @@
                 const pulleyEfficiency = 1 - pulleyConfig.pulleyFriction;
                 
                 if (pulleyConfig.type === 'fixed') {
-                    // Polea fija: cambia dirección pero no magnitud de la fuerza
+                    // Polea fija: el contrapeso tira hacia arriba del objeto
                     netForceValue = gravitationalForce - frictionForce - counterWeightForce * pulleyEfficiency;
                 } else if (pulleyConfig.type === 'movable') {
                     // Polea móvil: divide la fuerza a la mitad
@@ -705,7 +706,7 @@
             if (isRunning) {
                 velocity += acceleration * deltaTime;
                 
-                // No permitir velocidad negativa si el objeto está en la base
+                // No permitir velocidad negativa si el objeto está en la parte superior
                 if (position <= 0 && velocity < 0) {
                     velocity = 0;
                     position = 0;
@@ -723,7 +724,8 @@
             }
             
             // Calcular energía
-            const potentialEnergy = mass * gravity * (position / length) * Math.sin(angleRad) * length;
+            const heightFromTop = (length - position) * Math.sin(angleRad);
+            const potentialEnergy = mass * gravity * heightFromTop;
             const kineticEnergy = 0.5 * mass * velocity * velocity;
             energy = potentialEnergy + kineticEnergy;
             
@@ -842,4 +844,5 @@
         });
     </script>
 </body>
+</html>
 </html>
