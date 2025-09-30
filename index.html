@@ -484,27 +484,31 @@
             pulleyConfig.pulleyFriction = parseFloat(this.value);
         });
         
-        // Función drawSimulation corregida - polea en lado izquierdo
+        // Función drawSimulation corregida - todo centrado
         function drawSimulation() {
             const width = canvas.width;
             const height = canvas.height;
 
             // Calcular dimensiones del plano
             const angleRad = angle * Math.PI / 180;
-            const planeHeight = Math.min(height * 0.6, width * 0.6 * Math.tan(angleRad));
+            const planeHeight = Math.min(height * 0.5, width * 0.4 * Math.tan(angleRad));
             const planeWidth = planeHeight / Math.tan(angleRad);
 
+            // Centrar el plano en el canvas
+            const centerX = width / 2;
+            const baseY = height - 80;
+
             // Calcular posición del objeto (desde la parte superior)
-            const objectX = 50 + (position / length) * planeWidth;
-            const objectY = (height - 50 - planeHeight) + (position / length) * planeHeight;
+            const objectX = centerX - planeWidth/2 + (position / length) * planeWidth;
+            const objectY = baseY - planeHeight + (position / length) * planeHeight;
 
             ctx.clearRect(0, 0, width, height);
 
-            // Dibujar plano inclinado (triángulo rectángulo)
+            // Dibujar plano inclinado (triángulo rectángulo) - CENTRADO
             ctx.beginPath();
-            ctx.moveTo(50, height - 50);                      // Punto base izquierdo
-            ctx.lineTo(50 + planeWidth, height - 50);         // Base derecha
-            ctx.lineTo(50, height - 50 - planeHeight);        // Punto superior izquierdo
+            ctx.moveTo(centerX - planeWidth/2, baseY);                      // Punto base izquierdo
+            ctx.lineTo(centerX + planeWidth/2, baseY);                      // Base derecha
+            ctx.lineTo(centerX - planeWidth/2, baseY - planeHeight);        // Punto superior izquierdo
             ctx.closePath();
 
             ctx.fillStyle = "#a3c9a8";
@@ -512,9 +516,9 @@
             ctx.strokeStyle = "#000";
             ctx.stroke();
 
-            // Dibujar sistema de polea con contrapeso en lado izquierdo
+            // Dibujar sistema de polea con contrapeso en lado izquierdo CENTRADO
             if (usePulley) {
-                drawPulleySystem(width, height, planeWidth, planeHeight, objectX, objectY);
+                drawPulleySystem(width, height, centerX, baseY, planeWidth, planeHeight, objectX, objectY);
             }
 
             // Dibujar objeto encima del plano
@@ -529,7 +533,7 @@
 
             // Dibujar ángulo
             ctx.beginPath();
-            ctx.arc(50, height - 50, 30, 0, -angleRad, true);
+            ctx.arc(centerX - planeWidth/2, baseY, 30, 0, -angleRad, true);
             ctx.strokeStyle = '#e74c3c';
             ctx.lineWidth = 2;
             ctx.stroke();
@@ -537,20 +541,20 @@
             // Etiqueta del ángulo
             ctx.fillStyle = '#e74c3c';
             ctx.font = '16px Arial';
-            ctx.fillText(`${angle}°`, 70, height - 80);
+            ctx.fillText(`${angle}°`, centerX - planeWidth/2 + 20, baseY - 20);
 
             // Etiqueta de masa
-            ctx.fillStyle = '#fff';
+            ctx.fillStyle = '#2c3e50';
             ctx.font = '14px Arial';
             ctx.textAlign = 'center';
             ctx.fillText(`${mass} kg`, objectX, objectY - objectSize - 5);
         }
 
-        // Dibujar sistema de polea con contrapeso en LADO IZQUIERDO
-        function drawPulleySystem(width, height, planeWidth, planeHeight, objectX, objectY) {
-            // Posición de la polea (arriba a la IZQUIERDA del plano)
-            const pulleyX = 50 - 60;  // Mover a la izquierda
-            const pulleyY = height - 50 - planeHeight - 20;
+        // Dibujar sistema de polea con contrapeso en LADO IZQUIERDO CENTRADO
+        function drawPulleySystem(width, height, centerX, baseY, planeWidth, planeHeight, objectX, objectY) {
+            // Posición de la polea (arriba a la IZQUIERDA del plano, CENTRADA)
+            const pulleyX = centerX - planeWidth/2 - 60;
+            const pulleyY = baseY - planeHeight - 20;
             const pulleyRadius = 20;
             
             // Dibujar polea
@@ -603,7 +607,7 @@
             ctx.stroke();
         }
         
-        // Calcular física del plano inclinado con polea
+        // Calcular física del plano inclinado con polea - CORREGIDO
         function calculatePhysics() {
             const angleRad = angle * Math.PI / 180;
             
@@ -616,20 +620,29 @@
             // Fuerza de fricción (se opone al movimiento)
             const frictionForce = friction * normalForce;
             
-            // Fuerza del contrapeso (hace subir el objeto)
-            const counterWeightForce = pulleyConfig.counterMass * gravity;
-            const pulleyEfficiency = 1 - pulleyConfig.pulleyFriction;
+            // Fuerza neta inicial sin polea
+            let netForceValue = gravitationalForce - frictionForce;
             
-            // Fuerza neta - el contrapeso se opone al movimiento del objeto
-            let netForceValue = gravitationalForce - frictionForce - (counterWeightForce * pulleyEfficiency);
+            // Aplicar sistema de polea si está activado
+            if (usePulley) {
+                // Fuerza del contrapeso (hace subir el objeto)
+                const counterWeightForce = pulleyConfig.counterMass * gravity;
+                const pulleyEfficiency = 1 - pulleyConfig.pulleyFriction;
+                
+                // En una polea fija, el contrapeso se opone al movimiento del objeto
+                netForceValue = gravitationalForce - frictionForce - (counterWeightForce * pulleyEfficiency);
+            }
             
             // Si el objeto está en reposo y la fuerza neta es menor que la fricción estática máxima
             if (velocity === 0 && Math.abs(netForceValue) <= frictionForce) {
                 netForceValue = 0;
             }
             
-            // Calcular masa efectiva (objeto + contrapeso)
-            const effectiveMass = mass + pulleyConfig.counterMass;
+            // Calcular masa efectiva
+            let effectiveMass = mass;
+            if (usePulley) {
+                effectiveMass = mass + pulleyConfig.counterMass;
+            }
             
             // Aceleración
             acceleration = netForceValue / effectiveMass;
@@ -660,9 +673,14 @@
             // Calcular energía
             const heightFromTop = (length - position) * Math.sin(angleRad);
             const potentialEnergyObject = mass * gravity * heightFromTop;
-            const potentialEnergyCounterWeight = pulleyConfig.counterMass * gravity * (position / length) * planeHeight;
-            const kineticEnergy = 0.5 * effectiveMass * velocity * velocity;
-            energy = potentialEnergyObject + potentialEnergyCounterWeight + kineticEnergy;
+            const kineticEnergy = 0.5 * mass * velocity * velocity;
+            
+            if (usePulley) {
+                const potentialEnergyCounterWeight = pulleyConfig.counterMass * gravity * (position / length);
+                energy = potentialEnergyObject + potentialEnergyCounterWeight + kineticEnergy;
+            } else {
+                energy = potentialEnergyObject + kineticEnergy;
+            }
             
             netForce = netForceValue;
             
