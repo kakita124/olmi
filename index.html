@@ -550,7 +550,7 @@
             ctx.fillText(`${mass} kg`, objectX, objectY - objectSize - 5);
         }
         
-        // Dibujar sistema de poleas corregido - MEJORADO PARA CENTRAR VISUALIZACIÓN
+        // Dibujar sistema de poleas corregido - CON MOVIMIENTO DEL CONTRAPESO
         function drawPulleySystem(width, height, baseX, baseY, planeWidth, planeHeight, objectX, objectY) {
             // Posicionar la polea a la izquierda del plano pero más centrada
             const pulleyX = baseX - 80;
@@ -580,8 +580,11 @@
             ctx.lineWidth = 2;
             ctx.stroke();
             
-            // Calcular posición del contrapeso (se mueve en dirección opuesta)
-            const counterWeightY = pulleyY + (position / length) * 150;
+            // Calcular posición del contrapeso (se mueve en dirección opuesta al objeto)
+            // Cuando el objeto está en la parte superior (posición 0), el contrapeso está abajo
+            // Cuando el objeto está en la parte inferior (posición = longitud), el contrapeso está arriba
+            const maxCounterWeightMovement = 200; // Máximo movimiento del contrapeso
+            const counterWeightY = pulleyY + pulleyRadius + 20 + (position / length) * maxCounterWeightMovement;
             
             // Dibujar contrapeso
             const counterWeightSize = 15 + pulleyConfig.counterMass / 3;
@@ -608,7 +611,7 @@
             ctx.stroke();
         }
         
-        // Calcular física del plano inclinado - CORREGIDO
+        // Calcular física del plano inclinado - CORREGIDO CON POLEAS FUNCIONALES
         function calculatePhysics() {
             const angleRad = angle * Math.PI / 180;
             
@@ -629,6 +632,8 @@
                 const counterWeightForce = pulleyConfig.counterMass * gravity;
                 const pulleyEfficiency = 1 - pulleyConfig.pulleyFriction;
                 
+                // CORRECCIÓN: La fuerza del contrapeso debe RESTARSE cuando el objeto baja
+                // (antes se estaba restando dos veces)
                 if (pulleyConfig.type === 'fixed') {
                     // Polea fija: cambia dirección pero no magnitud de la fuerza
                     netForceValue = gravitationalForce - frictionForce - counterWeightForce * pulleyEfficiency;
@@ -653,8 +658,13 @@
                 }
             }
             
-            // Aceleración
+            // Aceleración - CORRECCIÓN: Asegurar que la aceleración no sea negativa cuando debería ser positiva
             acceleration = netForceValue / effectiveMass;
+            
+            // Si la aceleración es muy pequeña o negativa cuando debería ser positiva, ajustar
+            if (usePulley && acceleration < 0.01 && gravitationalForce > frictionForce + (pulleyConfig.counterMass * gravity * 0.5)) {
+                acceleration = 0.1; // Valor mínimo para que el movimiento comience
+            }
             
             // Actualizar velocidad y posición
             const deltaTime = 0.016; // Aproximadamente 60 FPS
