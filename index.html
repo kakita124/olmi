@@ -395,93 +395,38 @@
             canvas.height = container.clientHeight;
         }
         
-        // Actualizar valores de los inputs
-        massInput.addEventListener('input', function() {
-            let value = parseFloat(this.value);
-            if (value < 1) value = 1;
-            if (value > 50) value = 50;
-            this.value = value;
-            mass = value;
-            if (isRunning) {
-                resetSimulation();
-            }
-        });
-        
-        angleInput.addEventListener('input', function() {
-            let value = parseFloat(this.value);
-            if (value < 5) value = 5;
-            if (value > 60) value = 60;
-            this.value = value;
-            angle = value;
+        // Actualizar valores de los inputs - CORREGIDO
+        function updateParameters() {
+            // Actualizar todos los parámetros en tiempo real
+            mass = parseFloat(massInput.value);
+            angle = parseFloat(angleInput.value);
+            friction = parseFloat(frictionInput.value);
+            length = parseFloat(lengthInput.value);
+            gravity = parseFloat(gravityInput.value);
+            
+            // Actualizar configuración de poleas
+            pulleyConfig.counterMass = parseFloat(counterMassInput.value);
+            pulleyConfig.pulleyFriction = parseFloat(pulleyFrictionInput.value);
+            pulleyConfig.type = pulleyType.value;
+            
+            // Redibujar la simulación con los nuevos parámetros
             drawSimulation();
-            if (isRunning) {
-                resetSimulation();
-            }
-        });
+        }
         
-        frictionInput.addEventListener('input', function() {
-            let value = parseFloat(this.value);
-            if (value < 0) value = 0;
-            if (value > 0.5) value = 0.5;
-            this.value = value;
-            friction = value;
-        });
-        
-        lengthInput.addEventListener('input', function() {
-            let value = parseFloat(this.value);
-            if (value < 1) value = 1;
-            if (value > 15) value = 15;
-            this.value = value;
-            length = value;
-            drawSimulation();
-            if (isRunning) {
-                resetSimulation();
-            }
-        });
-        
-        gravityInput.addEventListener('input', function() {
-            let value = parseFloat(this.value);
-            if (value < 1) value = 1;
-            if (value > 20) value = 20;
-            this.value = value;
-            gravity = value;
-        });
+        massInput.addEventListener('input', updateParameters);
+        angleInput.addEventListener('input', updateParameters);
+        frictionInput.addEventListener('input', updateParameters);
+        lengthInput.addEventListener('input', updateParameters);
+        gravityInput.addEventListener('input', updateParameters);
+        counterMassInput.addEventListener('input', updateParameters);
+        pulleyFrictionInput.addEventListener('input', updateParameters);
+        pulleyType.addEventListener('change', updateParameters);
         
         // Configuración de poleas
         pulleyToggle.addEventListener('change', function() {
             usePulley = this.checked;
             pulleyOptions.style.display = usePulley ? 'block' : 'none';
-            drawSimulation();
-            if (isRunning) {
-                resetSimulation();
-            }
-        });
-        
-        pulleyType.addEventListener('change', function() {
-            pulleyConfig.type = this.value;
-            drawSimulation();
-            if (isRunning) {
-                resetSimulation();
-            }
-        });
-        
-        counterMassInput.addEventListener('input', function() {
-            let value = parseFloat(this.value);
-            if (value < 1) value = 1;
-            if (value > 50) value = 50;
-            this.value = value;
-            pulleyConfig.counterMass = value;
-            if (isRunning) {
-                resetSimulation();
-            }
-        });
-        
-        pulleyFrictionInput.addEventListener('input', function() {
-            let value = parseFloat(this.value);
-            if (value < 0) value = 0;
-            if (value > 0.2) value = 0.2;
-            this.value = value;
-            pulleyConfig.pulleyFriction = value;
+            updateParameters();
         });
         
         // Función drawSimulation corregida
@@ -611,7 +556,7 @@
             ctx.stroke();
         }
         
-        // Calcular física del plano inclinado - CORREGIDO CON POLEAS FUNCIONALES
+        // Calcular física del plano inclinado - CORREGIDO CON PARÁMETROS ACTUALIZADOS
         function calculatePhysics() {
             const angleRad = angle * Math.PI / 180;
             
@@ -632,8 +577,6 @@
                 const counterWeightForce = pulleyConfig.counterMass * gravity;
                 const pulleyEfficiency = 1 - pulleyConfig.pulleyFriction;
                 
-                // CORRECCIÓN: La fuerza del contrapeso debe RESTARSE cuando el objeto baja
-                // (antes se estaba restando dos veces)
                 if (pulleyConfig.type === 'fixed') {
                     // Polea fija: cambia dirección pero no magnitud de la fuerza
                     netForceValue = gravitationalForce - frictionForce - counterWeightForce * pulleyEfficiency;
@@ -658,13 +601,8 @@
                 }
             }
             
-            // Aceleración - CORRECCIÓN: Asegurar que la aceleración no sea negativa cuando debería ser positiva
+            // Aceleración - CORRECCIÓN: Usar parámetros actualizados
             acceleration = netForceValue / effectiveMass;
-            
-            // Si la aceleración es muy pequeña o negativa cuando debería ser positiva, ajustar
-            if (usePulley && acceleration < 0.01 && gravitationalForce > frictionForce + (pulleyConfig.counterMass * gravity * 0.5)) {
-                acceleration = 0.1; // Valor mínimo para que el movimiento comience
-            }
             
             // Actualizar velocidad y posición
             const deltaTime = 0.016; // Aproximadamente 60 FPS
