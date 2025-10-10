@@ -395,38 +395,93 @@
             canvas.height = container.clientHeight;
         }
         
-        // Actualizar valores de los inputs - CORREGIDO
-        function updateParameters() {
-            // Actualizar todos los parámetros en tiempo real
-            mass = parseFloat(massInput.value);
-            angle = parseFloat(angleInput.value);
-            friction = parseFloat(frictionInput.value);
-            length = parseFloat(lengthInput.value);
-            gravity = parseFloat(gravityInput.value);
-            
-            // Actualizar configuración de poleas
-            pulleyConfig.counterMass = parseFloat(counterMassInput.value);
-            pulleyConfig.pulleyFriction = parseFloat(pulleyFrictionInput.value);
-            pulleyConfig.type = pulleyType.value;
-            
-            // Redibujar la simulación con los nuevos parámetros
-            drawSimulation();
-        }
+        // Actualizar valores de los inputs
+        massInput.addEventListener('input', function() {
+            let value = parseFloat(this.value);
+            if (value < 1) value = 1;
+            if (value > 50) value = 50;
+            this.value = value;
+            mass = value;
+            if (isRunning) {
+                resetSimulation();
+            }
+        });
         
-        massInput.addEventListener('input', updateParameters);
-        angleInput.addEventListener('input', updateParameters);
-        frictionInput.addEventListener('input', updateParameters);
-        lengthInput.addEventListener('input', updateParameters);
-        gravityInput.addEventListener('input', updateParameters);
-        counterMassInput.addEventListener('input', updateParameters);
-        pulleyFrictionInput.addEventListener('input', updateParameters);
-        pulleyType.addEventListener('change', updateParameters);
+        angleInput.addEventListener('input', function() {
+            let value = parseFloat(this.value);
+            if (value < 5) value = 5;
+            if (value > 60) value = 60;
+            this.value = value;
+            angle = value;
+            drawSimulation();
+            if (isRunning) {
+                resetSimulation();
+            }
+        });
+        
+        frictionInput.addEventListener('input', function() {
+            let value = parseFloat(this.value);
+            if (value < 0) value = 0;
+            if (value > 0.5) value = 0.5;
+            this.value = value;
+            friction = value;
+        });
+        
+        lengthInput.addEventListener('input', function() {
+            let value = parseFloat(this.value);
+            if (value < 1) value = 1;
+            if (value > 15) value = 15;
+            this.value = value;
+            length = value;
+            drawSimulation();
+            if (isRunning) {
+                resetSimulation();
+            }
+        });
+        
+        gravityInput.addEventListener('input', function() {
+            let value = parseFloat(this.value);
+            if (value < 1) value = 1;
+            if (value > 20) value = 20;
+            this.value = value;
+            gravity = value;
+        });
         
         // Configuración de poleas
         pulleyToggle.addEventListener('change', function() {
             usePulley = this.checked;
             pulleyOptions.style.display = usePulley ? 'block' : 'none';
-            updateParameters();
+            drawSimulation();
+            if (isRunning) {
+                resetSimulation();
+            }
+        });
+        
+        pulleyType.addEventListener('change', function() {
+            pulleyConfig.type = this.value;
+            drawSimulation();
+            if (isRunning) {
+                resetSimulation();
+            }
+        });
+        
+        counterMassInput.addEventListener('input', function() {
+            let value = parseFloat(this.value);
+            if (value < 1) value = 1;
+            if (value > 50) value = 50;
+            this.value = value;
+            pulleyConfig.counterMass = value;
+            if (isRunning) {
+                resetSimulation();
+            }
+        });
+        
+        pulleyFrictionInput.addEventListener('input', function() {
+            let value = parseFloat(this.value);
+            if (value < 0) value = 0;
+            if (value > 0.2) value = 0.2;
+            this.value = value;
+            pulleyConfig.pulleyFriction = value;
         });
         
         // Función drawSimulation corregida
@@ -495,7 +550,7 @@
             ctx.fillText(`${mass} kg`, objectX, objectY - objectSize - 5);
         }
         
-        // Dibujar sistema de poleas corregido - CON MOVIMIENTO DEL CONTRAPESO
+        // Dibujar sistema de poleas corregido - MEJORADO PARA CENTRAR VISUALIZACIÓN
         function drawPulleySystem(width, height, baseX, baseY, planeWidth, planeHeight, objectX, objectY) {
             // Posicionar la polea a la izquierda del plano pero más centrada
             const pulleyX = baseX - 80;
@@ -525,11 +580,8 @@
             ctx.lineWidth = 2;
             ctx.stroke();
             
-            // Calcular posición del contrapeso (se mueve en dirección opuesta al objeto)
-            // Cuando el objeto está en la parte superior (posición 0), el contrapeso está abajo
-            // Cuando el objeto está en la parte inferior (posición = longitud), el contrapeso está arriba
-            const maxCounterWeightMovement = 200; // Máximo movimiento del contrapeso
-            const counterWeightY = pulleyY + pulleyRadius + 20 + (position / length) * maxCounterWeightMovement;
+            // Calcular posición del contrapeso (se mueve en dirección opuesta)
+            const counterWeightY = pulleyY + (position / length) * 150;
             
             // Dibujar contrapeso
             const counterWeightSize = 15 + pulleyConfig.counterMass / 3;
@@ -556,7 +608,7 @@
             ctx.stroke();
         }
         
-        // Calcular física del plano inclinado - CORREGIDO CON PARÁMETROS ACTUALIZADOS
+        // Calcular física del plano inclinado - CORREGIDO
         function calculatePhysics() {
             const angleRad = angle * Math.PI / 180;
             
@@ -601,7 +653,7 @@
                 }
             }
             
-            // Aceleración - CORRECCIÓN: Usar parámetros actualizados
+            // Aceleración
             acceleration = netForceValue / effectiveMass;
             
             // Actualizar velocidad y posición
