@@ -494,17 +494,21 @@
             const planeHeight = Math.min(height * 0.5, width * 0.6 * Math.tan(angleRad));
             const planeWidth = planeHeight / Math.tan(angleRad);
             
+            // Ajustar posición inicial del plano según si hay polea o no
+            const baseX = usePulley ? width * 0.3 : width * 0.2;
+            const baseY = height - 100;
+            
             // Calcular posición del objeto
-            const objectX = 100 + (position / length) * planeWidth;
-            const objectY = (height - 100 - planeHeight) + (position / length) * planeHeight;
+            const objectX = baseX + (position / length) * planeWidth;
+            const objectY = baseY - planeHeight + (position / length) * planeHeight;
             
             ctx.clearRect(0, 0, width, height);
             
             // Dibujar plano inclinado
             ctx.beginPath();
-            ctx.moveTo(100, height - 100);
-            ctx.lineTo(100 + planeWidth, height - 100);
-            ctx.lineTo(100, height - 100 - planeHeight);
+            ctx.moveTo(baseX, baseY);
+            ctx.lineTo(baseX + planeWidth, baseY);
+            ctx.lineTo(baseX, baseY - planeHeight);
             ctx.closePath();
             ctx.fillStyle = "#a3c9a8";
             ctx.fill();
@@ -514,7 +518,7 @@
             
             // Dibujar poleas si están activadas
             if (usePulley) {
-                drawPulleySystem(width, height, planeWidth, planeHeight, objectX, objectY);
+                drawPulleySystem(width, height, baseX, baseY, planeWidth, planeHeight, objectX, objectY);
             }
             
             // Dibujar objeto
@@ -529,7 +533,7 @@
             
             // Dibujar ángulo
             ctx.beginPath();
-            ctx.arc(100, height - 100, 30, 0, -angleRad, true);
+            ctx.arc(baseX, baseY, 30, 0, -angleRad, true);
             ctx.strokeStyle = '#e74c3c';
             ctx.lineWidth = 2;
             ctx.stroke();
@@ -537,7 +541,7 @@
             // Etiqueta del ángulo
             ctx.fillStyle = '#e74c3c';
             ctx.font = '16px Arial';
-            ctx.fillText(`${angle}°`, 120, height - 120);
+            ctx.fillText(`${angle}°`, baseX + 20, baseY - 20);
             
             // Etiqueta de masa
             ctx.fillStyle = '#000';
@@ -546,11 +550,11 @@
             ctx.fillText(`${mass} kg`, objectX, objectY - objectSize - 5);
         }
         
-        // Dibujar sistema de poleas corregido - POLEA A LA IZQUIERDA
-        function drawPulleySystem(width, height, planeWidth, planeHeight, objectX, objectY) {
-            // Posicionar la polea a la IZQUIERDA del plano
-            const pulleyX = 50;
-            const pulleyY = height - 100 - planeHeight - 30;
+        // Dibujar sistema de poleas corregido - MEJORADO PARA CENTRAR VISUALIZACIÓN
+        function drawPulleySystem(width, height, baseX, baseY, planeWidth, planeHeight, objectX, objectY) {
+            // Posicionar la polea a la izquierda del plano pero más centrada
+            const pulleyX = baseX - 80;
+            const pulleyY = baseY - planeHeight - 30;
             const pulleyRadius = 20;
             
             // Dibujar polea
