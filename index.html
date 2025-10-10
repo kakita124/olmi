@@ -550,7 +550,7 @@
             ctx.fillText(`${mass} kg`, objectX, objectY - objectSize - 5);
         }
         
-        // Dibujar sistema de poleas corregido - MEJORADO PARA CENTRAR VISUALIZACIÓN
+        // Dibujar sistema de poleas corregido - CON MOVIMIENTO DEL CONTRAPESO
         function drawPulleySystem(width, height, baseX, baseY, planeWidth, planeHeight, objectX, objectY) {
             // Posicionar la polea a la izquierda del plano pero más centrada
             const pulleyX = baseX - 80;
@@ -580,8 +580,11 @@
             ctx.lineWidth = 2;
             ctx.stroke();
             
-            // Calcular posición del contrapeso (se mueve en dirección opuesta)
-            const counterWeightY = pulleyY + (position / length) * 150;
+            // Calcular posición del contrapeso (se mueve en dirección opuesta al objeto)
+            // Cuando el objeto está en la parte superior (posición 0), el contrapeso está abajo
+            // Cuando el objeto está en la parte inferior (posición = longitud), el contrapeso está arriba
+            const maxCounterWeightMovement = 200; // Máximo movimiento del contrapeso
+            const counterWeightY = pulleyY + pulleyRadius + 20 + (position / length) * maxCounterWeightMovement;
             
             // Dibujar contrapeso
             const counterWeightSize = 15 + pulleyConfig.counterMass / 3;
