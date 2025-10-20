@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -410,4 +411,548 @@
         const pulleyToggle = document.getElementById('pulley-toggle');
         const pulleyOptions = document.getElementById('pulley-options');
         const pulleyType = document.getElementById('pulley-type');
-        const
+        const counterMassInput = document.getElementById('counter-mass-input');
+        const pulleyFrictionInput = document.getElementById('pulley-friction-input');
+       
+        // Botones
+        const startBtn = document.getElementById('start-btn');
+        const pauseBtn = document.getElementById('pause-btn');
+        const resetBtn = document.getElementById('reset-btn');
+        const exportBtn = document.getElementById('export-btn');
+       
+        // Valores de datos
+        const timeValue = document.getElementById('time-value');
+        const positionValue = document.getElementById('position-value');
+        const velocityValue = document.getElementById('velocity-value');
+        const accelerationValue = document.getElementById('acceleration-value');
+        const forceValue = document.getElementById('force-value');
+        const energyValue = document.getElementById('energy-value');
+       
+        // Elemento de notificación
+        const notification = document.getElementById('notification');
+        
+        // Variables de simulación
+        let animationId;
+        let isRunning = false;
+        let isPaused = false;
+        let currentTime = 0;
+        let position = 0;
+        let velocity = 0;
+        let acceleration = 0;
+        let netForce = 0;
+        let energy = 0;
+        let simulationData = [];
+       
+        // Parámetros iniciales
+        let mass = parseFloat(massInput.value);
+        let angle = parseFloat(angleInput.value);
+        let friction = parseFloat(frictionInput.value);
+        let length = parseFloat(lengthInput.value);
+        let gravity = parseFloat(gravityInput.value);
+        let usePulley = false;
+        let pulleyConfig = {
+            type: 'fixed',
+            counterMass: parseFloat(counterMassInput.value),
+            pulleyFriction: parseFloat(pulleyFrictionInput.value)
+        };
+       
+        // Configuración del canvas
+        function setupCanvas() {
+            const container = canvas.parentElement;
+            canvas.width = container.clientWidth;
+            canvas.height = container.clientHeight;
+        }
+       
+        // Función para mostrar notificaciones
+        function showNotification(message, type = 'error') {
+            notification.textContent = message;
+            notification.className = 'notification';
+            notification.classList.add(type);
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 4000);
+        }
+        
+        // Función para verificar si el bloque se moverá
+        function willBlockMove() {
+            const angleRad = angle * Math.PI / 180;
+            
+            // Fuerza gravitatoria paralela al plano
+            const gravitationalForce = mass * gravity * Math.sin(angleRad);
+            
+            // Fuerza normal
+            const normalForce = mass * gravity * Math.cos(angleRad);
+            
+            // Fuerza de fricción estática máxima
+            const maxStaticFriction = friction * normalForce;
+            
+            // Verificar si hay suficiente fuerza para vencer la fricción estática
+            if (gravitationalForce <= maxStaticFriction) {
+                return false;
+            }
+            
+            // Si hay poleas, verificar el sistema completo
+            if (usePulley) {
+                const counterWeightForce = pulleyConfig.counterMass * gravity;
+                const pulleyEfficiency = 1 - pulleyConfig.pulleyFriction;
+                
+                let effectiveForce;
+                if (pulleyConfig.type === 'fixed') {
+                    effectiveForce = gravitationalForce - counterWeightForce * pulleyEfficiency;
+                } else if (pulleyConfig.type === 'movable') {
+                    effectiveForce = gravitationalForce - (counterWeightForce * pulleyEfficiency) / 2;
+                } else if (pulleyConfig.type === 'compound') {
+                    effectiveForce = gravitationalForce - (counterWeightForce * pulleyEfficiency) / 3;
+                }
+                
+                // Si la fuerza efectiva es menor que la fricción, no hay movimiento
+                if (effectiveForce <= maxStaticFriction) {
+                    return false;
+                }
+            }
+            
+            return true;
+        }
+       
+        // Actualizar valores de los inputs
+        massInput.addEventListener('input', function() {
+            let value = parseFloat(this.value);
+            if (value < 1) value = 1;
+            if (value > 50) value = 50;
+            this.value = value;
+            mass = value;
+            if (isRunning) {
+                resetSimulation();
+            }
+        });
+       
+        angleInput.addEventListener('input', function() {
+            let value = parseFloat(this.value);
+            if (value < 5) value = 5;
+            if (value > 60) value = 60;
+            this.value = value;
+            angle = value;
+            drawSimulation();
+            if (isRunning) {
+                resetSimulation();
+            }
+        });
+       
+        frictionInput.addEventListener('input', function() {
+            let value = parseFloat(this.value);
+            if (value < 0) value = 0;
+            if (value > 0.5) value = 0.5;
+            this.value = value;
+            friction = value;
+        });
+       
+        lengthInput.addEventListener('input', function() {
+            let value = parseFloat(this.value);
+            if (value < 1) value = 1;
+            if (value > 15) value = 15;
+            this.value = value;
+            length = value;
+            drawSimulation();
+            if (isRunning) {
+                resetSimulation();
+            }
+        });
+       
+        gravityInput.addEventListener('input', function() {
+            let value = parseFloat(this.value);
+            if (value < 1) value = 1;
+            if (value > 20) value = 20;
+            this.value = value;
+            gravity = value;
+        });
+       
+        // Configuración de poleas
+        pulleyToggle.addEventListener('change', function() {
+            usePulley = this.checked;
+            pulleyOptions.style.display = usePulley ? 'block' : 'none';
+            drawSimulation();
+            if (isRunning) {
+                resetSimulation();
+            }
+        });
+       
+        pulleyType.addEventListener('change', function() {
+            pulleyConfig.type = this.value;
+            drawSimulation();
+            if (isRunning) {
+                resetSimulation();
+            }
+        });
+       
+        counterMassInput.addEventListener('input', function() {
+            let value = parseFloat(this.value);
+            if (value < 1) value = 1;
+            if (value > 50) value = 50;
+            this.value = value;
+            pulleyConfig.counterMass = value;
+            if (isRunning) {
+                resetSimulation();
+            }
+        });
+       
+        pulleyFrictionInput.addEventListener('input', function() {
+            let value = parseFloat(this.value);
+            if (value < 0) value = 0;
+            if (value > 0.2) value = 0.2;
+            this.value = value;
+            pulleyConfig.pulleyFriction = value;
+        });
+       
+        // Función drawSimulation corregida
+        function drawSimulation() {
+            const width = canvas.width;
+            const height = canvas.height;
+           
+            // Calcular dimensiones del plano
+            const angleRad = angle * Math.PI / 180;
+            const planeHeight = Math.min(height * 0.5, width * 0.6 * Math.tan(angleRad));
+            const planeWidth = planeHeight / Math.tan(angleRad);
+           
+            // Ajustar posición inicial del plano según si hay polea o no
+            const baseX = usePulley ? width * 0.3 : width * 0.2;
+            const baseY = height - 100;
+           
+            // Calcular posición del objeto
+            const objectX = baseX + (position / length) * planeWidth;
+            const objectY = baseY - planeHeight + (position / length) * planeHeight;
+           
+            ctx.clearRect(0, 0, width, height);
+           
+            // Dibujar plano inclinado
+            ctx.beginPath();
+            ctx.moveTo(baseX, baseY);
+            ctx.lineTo(baseX + planeWidth, baseY);
+            ctx.lineTo(baseX, baseY - planeHeight);
+            ctx.closePath();
+            ctx.fillStyle = "#a3c9a8";
+            ctx.fill();
+            ctx.strokeStyle = "#2c3e50";
+            ctx.lineWidth = 2;
+            ctx.stroke();
+           
+            // Dibujar poleas si están activadas
+            if (usePulley) {
+                drawPulleySystem(width, height, baseX, baseY, planeWidth, planeHeight, objectX, objectY);
+            }
+           
+            // Dibujar objeto como CUADRADO
+            const objectSize = 20 + mass / 3;
+            ctx.fillStyle = "#e74c3c";
+            ctx.fillRect(objectX - objectSize/2, objectY - objectSize/2, objectSize, objectSize);
+            ctx.strokeStyle = "#c0392b";
+            ctx.lineWidth = 2;
+            ctx.strokeRect(objectX - objectSize/2, objectY - objectSize/2, objectSize, objectSize);
+           
+            // Dibujar ángulo
+            ctx.beginPath();
+            ctx.arc(baseX, baseY, 30, 0, -angleRad, true);
+            ctx.strokeStyle = '#3498db';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+           
+            // Etiqueta del ángulo
+            ctx.fillStyle = '#3498db';
+            ctx.font = '16px Arial';
+            ctx.fillText(`${angle}°`, baseX + 20, baseY - 20);
+           
+            // Etiqueta de masa
+            ctx.fillStyle = '#2c3e50';
+            ctx.font = '14px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText(`${mass} kg`, objectX, objectY - objectSize - 5);
+        }
+       
+        // Dibujar sistema de poleas corregido - CON MOVIMIENTO DEL CONTRAPESO Y DISEÑO FORMAL
+        function drawPulleySystem(width, height, baseX, baseY, planeWidth, planeHeight, objectX, objectY) {
+            // Posicionar la polea a la izquierda del plano pero más centrada
+            const pulleyX = baseX - 80;
+            const pulleyY = baseY - planeHeight - 30;
+            const pulleyRadius = 20;
+           
+            // Dibujar soporte de la polea (más formal)
+            ctx.beginPath();
+            ctx.moveTo(pulleyX - 35, pulleyY - 40);
+            ctx.lineTo(pulleyX + 35, pulleyY - 40);
+            ctx.lineTo(pulleyX + 35, pulleyY - 15);
+            ctx.lineTo(pulleyX - 35, pulleyY - 15);
+            ctx.closePath();
+            ctx.fillStyle = '#7f8c8d';
+            ctx.fill();
+            ctx.strokeStyle = '#2c3e50';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+           
+            // Dibujar polea (más formal con detalles)
+            ctx.beginPath();
+            ctx.arc(pulleyX, pulleyY, pulleyRadius, 0, Math.PI * 2);
+            ctx.strokeStyle = '#2c3e50';
+            ctx.lineWidth = 4;
+            ctx.stroke();
+           
+            // Detalles internos de la polea
+            ctx.beginPath();
+            ctx.arc(pulleyX, pulleyY, pulleyRadius - 8, 0, Math.PI * 2);
+            ctx.strokeStyle = '#95a5a6';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+           
+            // Eje de la polea
+            ctx.beginPath();
+            ctx.arc(pulleyX, pulleyY, 4, 0, Math.PI * 2);
+            ctx.fillStyle = '#e74c3c';
+            ctx.fill();
+           
+            // Dibujar cuerda desde el objeto hasta la polea
+            ctx.beginPath();
+            ctx.moveTo(objectX, objectY);
+            ctx.lineTo(pulleyX + pulleyRadius * Math.cos(Math.PI/4), pulleyY + pulleyRadius * Math.sin(Math.PI/4));
+            ctx.strokeStyle = '#8B4513';
+            ctx.lineWidth = 3;
+            ctx.stroke();
+           
+            // Calcular posición del contrapeso (se mueve en dirección opuesta al objeto)
+            const maxCounterWeightMovement = 200;
+            const counterWeightY = pulleyY + pulleyRadius + 20 + (position / length) * maxCounterWeightMovement;
+           
+            // Dibujar contrapeso como CUADRADO
+            const counterWeightSize = 15 + pulleyConfig.counterMass / 3;
+            ctx.fillStyle = '#3498db';
+            ctx.fillRect(pulleyX - counterWeightSize/2, counterWeightY - counterWeightSize/2, counterWeightSize, counterWeightSize);
+            ctx.strokeStyle = '#2980b9';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(pulleyX - counterWeightSize/2, counterWeightY - counterWeightSize/2, counterWeightSize, counterWeightSize);
+           
+            // Etiqueta de contrapeso
+            ctx.fillStyle = '#2c3e50';
+            ctx.font = '14px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText(`${pulleyConfig.counterMass} kg`, pulleyX, counterWeightY + counterWeightSize + 15);
+           
+            // Dibujar cuerda del contrapeso
+            ctx.beginPath();
+            ctx.moveTo(pulleyX - pulleyRadius * Math.cos(Math.PI/4), pulleyY + pulleyRadius * Math.sin(Math.PI/4));
+            ctx.lineTo(pulleyX, counterWeightY - counterWeightSize/2);
+            ctx.strokeStyle = '#8B4513';
+            ctx.lineWidth = 3;
+            ctx.stroke();
+        }
+       
+        // Calcular física del plano inclinado - CORREGIDA CON VERIFICACIÓN DE MOVIMIENTO
+        function calculatePhysics() {
+            const angleRad = angle * Math.PI / 180;
+           
+            // Fuerza gravitatoria paralela al plano
+            const gravitationalForce = mass * gravity * Math.sin(angleRad);
+           
+            // Fuerza normal
+            const normalForce = mass * gravity * Math.cos(angleRad);
+           
+            // Fuerza de fricción
+            const frictionForce = friction * normalForce;
+           
+            // Fuerza neta inicial
+            let netForceValue = gravitationalForce - frictionForce;
+           
+            // Aplicar sistema de poleas si está activado
+            if (usePulley) {
+                const counterWeightForce = pulleyConfig.counterMass * gravity;
+                const pulleyEfficiency = 1 - pulleyConfig.pulleyFriction;
+               
+                if (pulleyConfig.type === 'fixed') {
+                    netForceValue = gravitationalForce - frictionForce - counterWeightForce * pulleyEfficiency;
+                } else if (pulleyConfig.type === 'movable') {
+                    netForceValue = gravitationalForce - frictionForce - (counterWeightForce * pulleyEfficiency) / 2;
+                } else if (pulleyConfig.type === 'compound') {
+                    netForceValue = gravitationalForce - frictionForce - (counterWeightForce * pulleyEfficiency) / 3;
+                }
+            }
+           
+            // Calcular masa efectiva para sistemas con poleas
+            let effectiveMass = mass;
+            if (usePulley) {
+                if (pulleyConfig.type === 'movable') {
+                    effectiveMass = mass + pulleyConfig.counterMass / 2;
+                } else if (pulleyConfig.type === 'compound') {
+                    effectiveMass = mass + pulleyConfig.counterMass / 3;
+                } else {
+                    effectiveMass = mass + pulleyConfig.counterMass;
+                }
+            }
+           
+            // Aceleración - CORREGIDA: Si la fuerza neta es insuficiente, aceleración = 0
+            if (netForceValue <= 0) {
+                acceleration = 0;
+                velocity = 0;
+            } else {
+                acceleration = netForceValue / effectiveMass;
+            }
+           
+            // Actualizar velocidad y posición
+            const deltaTime = 0.016; // Aproximadamente 60 FPS
+           
+            if (isRunning && !isPaused && acceleration > 0) {
+                velocity += acceleration * deltaTime;
+               
+                // No permitir velocidad negativa si el objeto está en la parte superior
+                if (position <= 0 && velocity < 0) {
+                    velocity = 0;
+                    position = 0;
+                }
+               
+                // No permitir que el objeto sobrepase la longitud del plano
+                if (position >= length && velocity > 0) {
+                    velocity = 0;
+                    position = length;
+                    isRunning = false;
+                    showNotification("El bloque ha llegado al final del plano", "success");
+                } else {
+                    position += velocity * deltaTime;
+                }
+               
+                currentTime += deltaTime;
+            }
+           
+            // Calcular energía
+            const heightFromTop = (length - position) * Math.sin(angleRad);
+            const potentialEnergy = mass * gravity * heightFromTop;
+            const kineticEnergy = 0.5 * mass * velocity * velocity;
+            energy = potentialEnergy + kineticEnergy;
+           
+            netForce = netForceValue;
+           
+            // Actualizar valores en pantalla
+            timeValue.textContent = currentTime.toFixed(2) + " s";
+            positionValue.textContent = position.toFixed(2) + " m";
+            velocityValue.textContent = velocity.toFixed(2) + " m/s";
+            accelerationValue.textContent = acceleration.toFixed(2) + " m/s²";
+            forceValue.textContent = netForce.toFixed(2) + " N";
+            energyValue.textContent = energy.toFixed(2) + " J";
+           
+            // Guardar datos para exportación
+            if (isRunning && !isPaused) {
+                simulationData.push({
+                    time: currentTime,
+                    position: position,
+                    velocity: velocity,
+                    acceleration: acceleration,
+                    force: netForce,
+                    energy: energy
+                });
+            }
+        }
+       
+        // Bucle de animación
+        function animate() {
+            calculatePhysics();
+            drawSimulation();
+            if (isRunning && !isPaused) {
+                animationId = requestAnimationFrame(animate);
+            }
+        }
+       
+        // Función para reiniciar simulación
+        function resetSimulation() {
+            isRunning = false;
+            isPaused = false;
+            currentTime = 0;
+            position = 0;
+            velocity = 0;
+            acceleration = 0;
+            netForce = 0;
+            energy = 0;
+            simulationData = [];
+           
+            timeValue.textContent = "0.00 s";
+            positionValue.textContent = "0.00 m";
+            velocityValue.textContent = "0.00 m/s";
+            accelerationValue.textContent = "0.00 m/s²";
+            forceValue.textContent = "0.00 N";
+            energyValue.textContent = "0.00 J";
+           
+            drawSimulation();
+        }
+       
+        // Exportar datos a CSV
+        function exportData() {
+            if (simulationData.length === 0) {
+                alert("No hay datos para exportar. Ejecuta la simulación primero.");
+                return;
+            }
+           
+            let csvContent = "Tiempo (s),Posición (m),Velocidad (m/s),Aceleración (m/s²),Fuerza (N),Energía (J)\n";
+           
+            simulationData.forEach(data => {
+                csvContent += `${data.time.toFixed(2)},${data.position.toFixed(2)},${data.velocity.toFixed(2)},${data.acceleration.toFixed(2)},${data.force.toFixed(2)},${data.energy.toFixed(2)}\n`;
+            });
+           
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.setAttribute("href", url);
+            link.setAttribute("download", "datos_simulacion_plano_inclinado.csv");
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+        
+        // Controladores de botones CORREGIDOS con verificación de movimiento
+        startBtn.addEventListener('click', function() {
+            // Verificar si el bloque se moverá antes de iniciar
+            if (!willBlockMove()) {
+                showNotification("La fuerza no es suficiente para mover el bloque. Ajusta los parámetros.", "warning");
+                return;
+            }
+            
+            if (!isRunning) {
+                isRunning = true;
+                isPaused = false;
+                pauseBtn.textContent = "Pausar";
+                // Reiniciar datos al iniciar nueva simulación
+                if (currentTime === 0) {
+                    simulationData = [];
+                }
+                animate();
+            } else if (isPaused) {
+                isPaused = false;
+                pauseBtn.textContent = "Pausar";
+                animate();
+            }
+        });
+       
+        pauseBtn.addEventListener('click', function() {
+            if (isRunning) {
+                isPaused = !isPaused;
+                pauseBtn.textContent = isPaused ? "Continuar" : "Pausar";
+                if (!isPaused) {
+                    animate();
+                }
+            }
+        });
+       
+        resetBtn.addEventListener('click', function() {
+            resetSimulation();
+        });
+       
+        exportBtn.addEventListener('click', exportData);
+       
+        // Inicialización
+        window.addEventListener('load', function() {
+            setupCanvas();
+            drawSimulation();
+        });
+       
+        window.addEventListener('resize', function() {
+            setupCanvas();
+            drawSimulation();
+        });
+    </script>
+</body>
+</html>
