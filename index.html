@@ -5,7 +5,233 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Simulador de Plano Inclinado con Poleas</title>
     <style>
-        /* Estilos anteriores... */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #2c3e50);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 25px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+        .subtitle {
+            font-size: 1.2rem;
+            color: #7f8c8d;
+            font-weight: 400;
+        }
+        .content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        .panel {
+            flex: 1;
+            min-width: 300px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .panel h2 {
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #ecf0f1;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+        .input-group {
+            margin-bottom: 18px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #34495e;
+        }
+        input[type="number"], select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: #fff;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        input[type="number"]:focus, select:focus {
+            border-color: #3498db;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+        .input-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .input-container input {
+            flex: 1;
+        }
+        .unit {
+            min-width: 40px;
+            text-align: center;
+            font-weight: 600;
+            color: #7f8c8d;
+        }
+        button {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 14px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        button:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
+        .simulation-area {
+            flex: 2;
+            min-width: 500px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            flex-direction: column;
+        }
+        .canvas-container {
+            flex: 1;
+            background: #f8f9fa;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+            margin-bottom: 20px;
+            min-height: 400px;
+            border: 1px solid #e9ecef;
+        }
+        canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+        .data-display {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .data-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+        .data-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .data-label {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+            margin-bottom: 5px;
+        }
+        .data-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .controls button {
+            flex: 1;
+        }
+        .reset-btn {
+            background: #e74c3c;
+        }
+        .reset-btn:hover {
+            background: #c0392b;
+        }
+        .pause-btn {
+            background: #f39c12;
+        }
+        .pause-btn:hover {
+            background: #d35400;
+        }
+        .export-btn {
+            background: #27ae60;
+        }
+        .export-btn:hover {
+            background: #219653;
+        }
+        .pulley-config {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #ecf0f1;
+        }
+        .pulley-toggle {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .pulley-toggle input {
+            margin-right: 10px;
+            width: 20px;
+            height: 20px;
+        }
+        .pulley-options {
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-top: 10px;
+            border: 1px solid #e9ecef;
+        }
+        footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 30px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            font-size: 0.9rem;
+            color: #7f8c8d;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
         
         /* Nuevos estilos para notificaciones */
         .notification {
@@ -36,204 +262,153 @@
         .notification.warning {
             background: #f39c12;
         }
+        
+        @media (max-width: 768px) {
+            .content {
+                flex-direction: column;
+            }
+            .panel, .simulation-area {
+                min-width: 100%;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Contenido anterior... -->
+        <header>
+            <h1>Simulador de Plano Inclinado con Poleas</h1>
+            <p class="subtitle">Estudia el comportamiento de un objeto que baja por un plano inclinado con sistemas de poleas</p>
+        </header>
+        <div class="content">
+            <div class="panel">
+                <h2>Parámetros del Sistema</h2>
+                <div class="input-group">
+                    <label for="mass">Masa del objeto (kg)</label>
+                    <div class="input-container">
+                        <input type="number" id="mass-input" min="1" max="50" value="10" step="1">
+                        <span class="unit">kg</span>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label for="angle">Ángulo del plano (grados)</label>
+                    <div class="input-container">
+                        <input type="number" id="angle-input" min="5" max="60" value="30" step="1">
+                        <span class="unit">°</span>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label for="friction">Coeficiente de fricción</label>
+                    <div class="input-container">
+                        <input type="number" id="friction-input" min="0" max="0.5" value="0.1" step="0.01">
+                        <span class="unit">μ</span>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label for="length">Longitud del plano (m)</label>
+                    <div class="input-container">
+                        <input type="number" id="length-input" min="1" max="15" value="8" step="0.5">
+                        <span class="unit">m</span>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label for="gravity">Gravedad (m/s²)</label>
+                    <div class="input-container">
+                        <input type="number" id="gravity-input" value="9.8" min="1" max="20" step="0.1">
+                        <span class="unit">m/s²</span>
+                    </div>
+                </div>
+                <div class="pulley-config">
+                    <div class="pulley-toggle">
+                        <input type="checkbox" id="pulley-toggle">
+                        <label for="pulley-toggle">Usar sistema de poleas</label>
+                    </div>
+                    <div class="pulley-options" id="pulley-options" style="display: none;">
+                        <div class="input-group">
+                            <label for="pulley-type">Tipo de polea</label>
+                            <select id="pulley-type">
+                                <option value="fixed">Polea fija</option>
+                                <option value="movable">Polea móvil</option>
+                                <option value="compound">Sistema compuesto</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label for="counter-mass">Masa contrapeso (kg)</label>
+                            <div class="input-container">
+                                <input type="number" id="counter-mass-input" min="1" max="50" value="5" step="1">
+                                <span class="unit">kg</span>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label for="pulley-friction">Fricción en polea</label>
+                            <div class="input-container">
+                                <input type="number" id="pulley-friction-input" min="0" max="0.2" value="0.05" step="0.01">
+                                <span class="unit">μ</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button id="start-btn">Iniciar Simulación</button>
+            </div>
+            <div class="simulation-area">
+                <h2>Simulación</h2>
+                <div class="canvas-container">
+                    <canvas id="simulation-canvas"></canvas>
+                </div>
+                <div class="controls">
+                    <button id="pause-btn" class="pause-btn">Pausar</button>
+                    <button id="reset-btn" class="reset-btn">Reiniciar</button>
+                    <button id="export-btn" class="export-btn">Exportar Datos</button>
+                </div>
+                <div class="data-display">
+                    <div class="data-item">
+                        <div class="data-label">Tiempo</div>
+                        <div class="data-value" id="time-value">0.00 s</div>
+                    </div>
+                    <div class="data-item">
+                        <div class="data-label">Posición</div>
+                        <div class="data-value" id="position-value">0.00 m</div>
+                    </div>
+                    <div class="data-item">
+                        <div class="data-label">Velocidad</div>
+                        <div class="data-value" id="velocity-value">0.00 m/s</div>
+                    </div>
+                    <div class="data-item">
+                        <div class="data-label">Aceleración</div>
+                        <div class="data-value" id="acceleration-value">0.00 m/s²</div>
+                    </div>
+                    <div class="data-item">
+                        <div class="data-label">Fuerza Net</div>
+                        <div class="data-value" id="force-value">0.00 N</div>
+                    </div>
+                    <div class="data-item">
+                        <div class="data-label">Energía</div>
+                        <div class="data-value" id="energy-value">0.00 J</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer>
+            <p>Simulador de Plano Inclinado con Poleas - Física Clásica</p>
+        </footer>
     </div>
     
     <!-- Notificación para mostrar mensajes -->
     <div id="notification" class="notification"></div>
 
     <script>
-        // Elementos del DOM (código anterior...)
-        
-        // Elemento de notificación
-        const notification = document.getElementById('notification');
-        
-        // Función para mostrar notificaciones
-        function showNotification(message, type = 'error') {
-            notification.textContent = message;
-            notification.className = 'notification';
-            notification.classList.add(type);
-            notification.classList.add('show');
-            
-            setTimeout(() => {
-                notification.classList.remove('show');
-            }, 4000);
-        }
-        
-        // Función para verificar si el bloque se moverá
-        function willBlockMove() {
-            const angleRad = angle * Math.PI / 180;
-            
-            // Fuerza gravitatoria paralela al plano
-            const gravitationalForce = mass * gravity * Math.sin(angleRad);
-            
-            // Fuerza normal
-            const normalForce = mass * gravity * Math.cos(angleRad);
-            
-            // Fuerza de fricción estática máxima
-            const maxStaticFriction = friction * normalForce;
-            
-            // Verificar si hay suficiente fuerza para vencer la fricción estática
-            if (gravitationalForce <= maxStaticFriction) {
-                return false;
-            }
-            
-            // Si hay poleas, verificar el sistema completo
-            if (usePulley) {
-                const counterWeightForce = pulleyConfig.counterMass * gravity;
-                const pulleyEfficiency = 1 - pulleyConfig.pulleyFriction;
-                
-                let effectiveForce;
-                if (pulleyConfig.type === 'fixed') {
-                    effectiveForce = gravitationalForce - counterWeightForce * pulleyEfficiency;
-                } else if (pulleyConfig.type === 'movable') {
-                    effectiveForce = gravitationalForce - (counterWeightForce * pulleyEfficiency) / 2;
-                } else if (pulleyConfig.type === 'compound') {
-                    effectiveForce = gravitationalForce - (counterWeightForce * pulleyEfficiency) / 3;
-                }
-                
-                // Si la fuerza efectiva es menor que la fricción, no hay movimiento
-                if (effectiveForce <= maxStaticFriction) {
-                    return false;
-                }
-            }
-            
-            return true;
-        }
-        
-        // Calcular física del plano inclinado - CORREGIDA CON VERIFICACIÓN DE MOVIMIENTO
-        function calculatePhysics() {
-            const angleRad = angle * Math.PI / 180;
-           
-            // Fuerza gravitatoria paralela al plano
-            const gravitationalForce = mass * gravity * Math.sin(angleRad);
-           
-            // Fuerza normal
-            const normalForce = mass * gravity * Math.cos(angleRad);
-           
-            // Fuerza de fricción
-            const frictionForce = friction * normalForce;
-           
-            // Fuerza neta inicial
-            let netForceValue = gravitationalForce - frictionForce;
-           
-            // Aplicar sistema de poleas si está activado
-            if (usePulley) {
-                const counterWeightForce = pulleyConfig.counterMass * gravity;
-                const pulleyEfficiency = 1 - pulleyConfig.pulleyFriction;
-               
-                if (pulleyConfig.type === 'fixed') {
-                    netForceValue = gravitationalForce - frictionForce - counterWeightForce * pulleyEfficiency;
-                } else if (pulleyConfig.type === 'movable') {
-                    netForceValue = gravitationalForce - frictionForce - (counterWeightForce * pulleyEfficiency) / 2;
-                } else if (pulleyConfig.type === 'compound') {
-                    netForceValue = gravitationalForce - frictionForce - (counterWeightForce * pulleyEfficiency) / 3;
-                }
-            }
-           
-            // Calcular masa efectiva para sistemas con poleas
-            let effectiveMass = mass;
-            if (usePulley) {
-                if (pulleyConfig.type === 'movable') {
-                    effectiveMass = mass + pulleyConfig.counterMass / 2;
-                } else if (pulleyConfig.type === 'compound') {
-                    effectiveMass = mass + pulleyConfig.counterMass / 3;
-                } else {
-                    effectiveMass = mass + pulleyConfig.counterMass;
-                }
-            }
-           
-            // Aceleración - CORREGIDA: Si la fuerza neta es insuficiente, aceleración = 0
-            if (netForceValue <= 0) {
-                acceleration = 0;
-                velocity = 0;
-            } else {
-                acceleration = netForceValue / effectiveMass;
-            }
-           
-            // Actualizar velocidad y posición
-            const deltaTime = 0.016; // Aproximadamente 60 FPS
-           
-            if (isRunning && !isPaused && acceleration > 0) {
-                velocity += acceleration * deltaTime;
-               
-                // No permitir velocidad negativa si el objeto está en la parte superior
-                if (position <= 0 && velocity < 0) {
-                    velocity = 0;
-                    position = 0;
-                }
-               
-                // No permitir que el objeto sobrepase la longitud del plano
-                if (position >= length && velocity > 0) {
-                    velocity = 0;
-                    position = length;
-                    isRunning = false;
-                    showNotification("El bloque ha llegado al final del plano", "success");
-                } else {
-                    position += velocity * deltaTime;
-                }
-               
-                currentTime += deltaTime;
-            }
-           
-            // Calcular energía
-            const heightFromTop = (length - position) * Math.sin(angleRad);
-            const potentialEnergy = mass * gravity * heightFromTop;
-            const kineticEnergy = 0.5 * mass * velocity * velocity;
-            energy = potentialEnergy + kineticEnergy;
-           
-            netForce = netForceValue;
-           
-            // Actualizar valores en pantalla
-            timeValue.textContent = currentTime.toFixed(2) + " s";
-            positionValue.textContent = position.toFixed(2) + " m";
-            velocityValue.textContent = velocity.toFixed(2) + " m/s";
-            accelerationValue.textContent = acceleration.toFixed(2) + " m/s²";
-            forceValue.textContent = netForce.toFixed(2) + " N";
-            energyValue.textContent = energy.toFixed(2) + " J";
-           
-            // Guardar datos para exportación
-            if (isRunning && !isPaused) {
-                simulationData.push({
-                    time: currentTime,
-                    position: position,
-                    velocity: velocity,
-                    acceleration: acceleration,
-                    force: netForce,
-                    energy: energy
-                });
-            }
-        }
-        
-        // Controladores de botones CORREGIDOS con verificación de movimiento
-        startBtn.addEventListener('click', function() {
-            // Verificar si el bloque se moverá antes de iniciar
-            if (!willBlockMove()) {
-                showNotification("La fuerza no es suficiente para mover el bloque. Ajusta los parámetros.", "warning");
-                return;
-            }
-            
-            if (!isRunning) {
-                isRunning = true;
-                isPaused = false;
-                pauseBtn.textContent = "Pausar";
-                // Reiniciar datos al iniciar nueva simulación
-                if (currentTime === 0) {
-                    simulationData = [];
-                }
-                animate();
-            } else if (isPaused) {
-                isPaused = false;
-                pauseBtn.textContent = "Pausar";
-                animate();
-            }
-        });
-        
-        // Resto del código anterior...
-    </script>
-</body>
-</html>
+        // Elementos del DOM
+        const canvas = document.getElementById('simulation-canvas');
+        const ctx = canvas.getContext('2d');
+       
+        // Inputs numéricos
+        const massInput = document.getElementById('mass-input');
+        const angleInput = document.getElementById('angle-input');
+        const frictionInput = document.getElementById('friction-input');
+        const lengthInput = document.getElementById('length-input');
+        const gravityInput = document.getElementById('gravity-input');
+       
+        // Configuración de poleas
+        const pulleyToggle = document.getElementById('pulley-toggle');
+        const pulleyOptions = document.getElementById('pulley-options');
+        const pulleyType = document.getElementById('pulley-type');
+        const
