@@ -528,7 +528,7 @@
             const baseX = usePulley ? width * 0.3 : width * 0.2;
             const baseY = height - 100;
             
-            // Calcular posición del objeto
+            // Calcular posición del objeto - CORREGIDO: el cuadrado debe estar sobre el plano
             const objectX = baseX + (position / length) * planeWidth;
             const objectY = baseY - planeHeight + (position / length) * planeHeight;
             
@@ -551,15 +551,23 @@
                 drawPulleySystem(width, height, baseX, baseY, planeWidth, planeHeight, objectX, objectY);
             }
             
-            // Dibujar objeto (cuadrado en lugar de círculo)
+            // Dibujar objeto (cuadrado en lugar de círculo) - CORREGIDO: posicionado correctamente
             const objectSize = 20 + mass / 3;
+            
+            // Asegurar que el cuadrado esté sobre el plano
+            ctx.save();
+            ctx.translate(objectX, objectY);
+            ctx.rotate(-angleRad);
+            
             ctx.beginPath();
-            ctx.rect(objectX - objectSize/2, objectY - objectSize/2, objectSize, objectSize);
+            ctx.rect(-objectSize/2, -objectSize/2, objectSize, objectSize);
             ctx.fillStyle = "#e74c3c";
             ctx.fill();
             ctx.strokeStyle = "#c0392b";
             ctx.lineWidth = 2;
             ctx.stroke();
+            
+            ctx.restore();
             
             // Dibujar ángulo
             ctx.beginPath();
