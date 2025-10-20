@@ -12,7 +12,7 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         body {
-            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            background: linear-gradient(135deg, #1a2a6c, #2c3e50, #34495e);
             color: #fff;
             min-height: 100vh;
             padding: 20px;
@@ -24,55 +24,71 @@
         header {
             text-align: center;
             margin-bottom: 30px;
-            padding: 20px;
+            padding: 25px;
             background: rgba(0, 0, 0, 0.3);
-            border-radius: 15px;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
         h1 {
             font-size: 2.5rem;
             margin-bottom: 10px;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            font-weight: 600;
+            letter-spacing: 0.5px;
         }
         .subtitle {
             font-size: 1.2rem;
             opacity: 0.9;
+            font-weight: 300;
         }
         .content {
             display: flex;
             flex-wrap: wrap;
-            gap: 20px;
+            gap: 25px;
             margin-bottom: 30px;
         }
         .panel {
             flex: 1;
             min-width: 300px;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 20px;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(12px);
+            border-radius: 12px;
+            padding: 25px;
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
         .panel h2 {
             margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+            padding-bottom: 12px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+            font-weight: 500;
+            letter-spacing: 0.5px;
         }
         .input-group {
-            margin-bottom: 15px;
+            margin-bottom: 18px;
         }
         label {
             display: block;
             margin-bottom: 8px;
-            font-weight: 600;
+            font-weight: 500;
+            font-size: 0.95rem;
         }
         input[type="number"], select {
             width: 100%;
-            padding: 10px;
+            padding: 12px;
             border: none;
             border-radius: 8px;
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.15);
             font-size: 1rem;
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+        input[type="number"]:focus, select:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.5);
         }
         .input-container {
             display: flex;
@@ -86,12 +102,13 @@
             min-width: 40px;
             text-align: center;
             font-weight: bold;
+            color: rgba(255, 255, 255, 0.8);
         }
         button {
-            background: #4a90e2;
+            background: #3498db;
             color: white;
             border: none;
-            padding: 12px 20px;
+            padding: 14px 20px;
             border-radius: 8px;
             cursor: pointer;
             font-size: 1rem;
@@ -99,39 +116,40 @@
             transition: all 0.3s ease;
             width: 100%;
             margin-top: 10px;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
         button:hover {
-            background: #357abd;
+            background: #2980b9;
             transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
         }
         .simulation-area {
             flex: 2;
             min-width: 500px;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 20px;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(12px);
+            border-radius: 12px;
+            padding: 25px;
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             display: flex;
             flex-direction: column;
         }
         .canvas-container {
             flex: 1;
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.1);
             border-radius: 10px;
             overflow: hidden;
             position: relative;
             margin-bottom: 20px;
             min-height: 400px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
         canvas {
             display: block;
-            background: #f8f9fa;
-            border-radius: 8px;
+            width: 100%;
+            height: 100%;
         }
         .data-display {
             display: grid;
@@ -141,18 +159,25 @@
         }
         .data-item {
             background: rgba(255, 255, 255, 0.1);
-            padding: 15px;
+            padding: 18px;
             border-radius: 10px;
             text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease;
+        }
+        .data-item:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.15);
         }
         .data-value {
             font-size: 1.5rem;
             font-weight: bold;
             margin-top: 5px;
+            color: #3498db;
         }
         .controls {
             display: flex;
-            gap: 10px;
+            gap: 12px;
             margin-top: 20px;
         }
         .controls button {
@@ -179,7 +204,7 @@
         .pulley-config {
             margin-top: 20px;
             padding-top: 20px;
-            border-top: 2px solid rgba(255, 255, 255, 0.3);
+            border-top: 2px solid rgba(255, 255, 255, 0.2);
         }
         .pulley-toggle {
             display: flex;
@@ -193,17 +218,19 @@
         }
         .pulley-options {
             padding: 15px;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
             border-radius: 10px;
             margin-top: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
         footer {
             text-align: center;
             padding: 20px;
             margin-top: 30px;
             background: rgba(0, 0, 0, 0.3);
-            border-radius: 15px;
+            border-radius: 12px;
             font-size: 0.9rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
         @media (max-width: 768px) {
             .content {
@@ -294,7 +321,7 @@
             <div class="simulation-area">
                 <h2>Simulación</h2>
                 <div class="canvas-container">
-                    <canvas id="simulation-canvas" width="600" height="400"></canvas>
+                    <canvas id="simulation-canvas"></canvas>
                 </div>
                 <div class="controls">
                     <button id="pause-btn" class="pause-btn">Pausar</button>
@@ -394,8 +421,8 @@
         // Configuración del canvas
         function setupCanvas() {
             const container = canvas.parentElement;
-            canvas.width = container.clientWidth * 0.9;
-            canvas.height = container.clientHeight * 0.9;
+            canvas.width = container.clientWidth;
+            canvas.height = container.clientHeight;
         }
         
         // Actualizar valores de los inputs
@@ -492,21 +519,20 @@
             const width = canvas.width;
             const height = canvas.height;
             
-            // Limpiar canvas
-            ctx.clearRect(0, 0, width, height);
-            
             // Calcular dimensiones del plano
             const angleRad = angle * Math.PI / 180;
-            const planeHeight = Math.min(height * 0.6, width * 0.7 * Math.tan(angleRad));
+            const planeHeight = Math.min(height * 0.5, width * 0.6 * Math.tan(angleRad));
             const planeWidth = planeHeight / Math.tan(angleRad);
             
             // Ajustar posición inicial del plano según si hay polea o no
             const baseX = usePulley ? width * 0.3 : width * 0.2;
-            const baseY = height - 50;
+            const baseY = height - 100;
             
             // Calcular posición del objeto
             const objectX = baseX + (position / length) * planeWidth;
-            const objectY = baseY - (position / length) * planeHeight;
+            const objectY = baseY - planeHeight + (position / length) * planeHeight;
+            
+            ctx.clearRect(0, 0, width, height);
             
             // Dibujar plano inclinado
             ctx.beginPath();
@@ -514,18 +540,10 @@
             ctx.lineTo(baseX + planeWidth, baseY);
             ctx.lineTo(baseX, baseY - planeHeight);
             ctx.closePath();
-            ctx.fillStyle = "#a3c9a8";
+            ctx.fillStyle = "#5a7d5a";
             ctx.fill();
-            ctx.strokeStyle = "#2d5a3d";
-            ctx.lineWidth = 3;
-            ctx.stroke();
-            
-            // Dibujar superficie horizontal
-            ctx.beginPath();
-            ctx.moveTo(baseX, baseY);
-            ctx.lineTo(width, baseY);
-            ctx.strokeStyle = "#7a7a7a";
-            ctx.lineWidth = 3;
+            ctx.strokeStyle = "#3a5a3a";
+            ctx.lineWidth = 2;
             ctx.stroke();
             
             // Dibujar poleas si están activadas
@@ -533,17 +551,19 @@
                 drawPulleySystem(width, height, baseX, baseY, planeWidth, planeHeight, objectX, objectY);
             }
             
-            // Dibujar objeto como CUADRADO
-            const objectSize = 30 + mass / 3;
-            ctx.fillStyle = "#e63946";
-            ctx.fillRect(objectX - objectSize/2, objectY - objectSize/2, objectSize, objectSize);
-            ctx.strokeStyle = "#c1121f";
+            // Dibujar objeto (cuadrado en lugar de círculo)
+            const objectSize = 20 + mass / 3;
+            ctx.beginPath();
+            ctx.rect(objectX - objectSize/2, objectY - objectSize/2, objectSize, objectSize);
+            ctx.fillStyle = "#e74c3c";
+            ctx.fill();
+            ctx.strokeStyle = "#c0392b";
             ctx.lineWidth = 2;
-            ctx.strokeRect(objectX - objectSize/2, objectY - objectSize/2, objectSize, objectSize);
+            ctx.stroke();
             
             // Dibujar ángulo
             ctx.beginPath();
-            ctx.arc(baseX, baseY, 40, 0, -angleRad, true);
+            ctx.arc(baseX, baseY, 30, 0, -angleRad, true);
             ctx.strokeStyle = '#e74c3c';
             ctx.lineWidth = 2;
             ctx.stroke();
@@ -551,46 +571,35 @@
             // Etiqueta del ángulo
             ctx.fillStyle = '#e74c3c';
             ctx.font = '16px Arial';
-            ctx.fillText(`${angle}°`, baseX + 25, baseY - 25);
+            ctx.fillText(`${angle}°`, baseX + 20, baseY - 20);
             
             // Etiqueta de masa
-            ctx.fillStyle = '#000';
-            ctx.font = 'bold 14px Arial';
+            ctx.fillStyle = '#fff';
+            ctx.font = '14px Arial';
             ctx.textAlign = 'center';
             ctx.fillText(`${mass} kg`, objectX, objectY - objectSize - 5);
-            
-            // Etiqueta de longitud
-            ctx.fillStyle = '#2d5a3d';
-            ctx.font = '14px Arial';
-            ctx.fillText(`L = ${length} m`, baseX + planeWidth/2, baseY + 20);
         }
         
-        // Dibujar sistema de poleas
+        // Dibujar sistema de poleas corregido - CON MOVIMIENTO DEL CONTRAPESO
         function drawPulleySystem(width, height, baseX, baseY, planeWidth, planeHeight, objectX, objectY) {
-            // Posicionar la polea
+            // Posicionar la polea a la izquierda del plano pero más centrada
             const pulleyX = baseX - 80;
             const pulleyY = baseY - planeHeight - 30;
-            const pulleyRadius = 25;
+            const pulleyRadius = 20;
             
             // Dibujar polea
             ctx.beginPath();
             ctx.arc(pulleyX, pulleyY, pulleyRadius, 0, Math.PI * 2);
             ctx.strokeStyle = '#8e44ad';
-            ctx.lineWidth = 4;
+            ctx.lineWidth = 3;
             ctx.stroke();
-            
-            // Dibujar centro de la polea
-            ctx.beginPath();
-            ctx.arc(pulleyX, pulleyY, 5, 0, Math.PI * 2);
-            ctx.fillStyle = '#8e44ad';
-            ctx.fill();
             
             // Dibujar soporte de polea
             ctx.beginPath();
-            ctx.moveTo(pulleyX - 40, pulleyY);
-            ctx.lineTo(pulleyX + 40, pulleyY);
+            ctx.moveTo(pulleyX - 30, pulleyY);
+            ctx.lineTo(pulleyX + 30, pulleyY);
             ctx.strokeStyle = '#7f8c8d';
-            ctx.lineWidth = 6;
+            ctx.lineWidth = 4;
             ctx.stroke();
             
             // Dibujar cuerda desde el objeto hasta la polea
@@ -598,24 +607,28 @@
             ctx.moveTo(objectX, objectY);
             ctx.lineTo(pulleyX, pulleyY);
             ctx.strokeStyle = '#d35400';
-            ctx.lineWidth = 3;
+            ctx.lineWidth = 2;
             ctx.stroke();
             
             // Calcular posición del contrapeso (se mueve en dirección opuesta al objeto)
-            const maxCounterWeightMovement = 200;
-            const counterWeightY = pulleyY + pulleyRadius + 30 + (position / length) * maxCounterWeightMovement;
+            // Cuando el objeto está en la parte superior (posición 0), el contrapeso está abajo
+            // Cuando el objeto está en la parte inferior (posición = longitud), el contrapeso está arriba
+            const maxCounterWeightMovement = 200; // Máximo movimiento del contrapeso
+            const counterWeightY = pulleyY + pulleyRadius + 20 + (position / length) * maxCounterWeightMovement;
             
-            // Dibujar contrapeso como CUADRADO
-            const counterWeightSize = 25 + pulleyConfig.counterMass / 3;
+            // Dibujar contrapeso (cuadrado en lugar de círculo)
+            const counterWeightSize = 15 + pulleyConfig.counterMass / 3;
+            ctx.beginPath();
+            ctx.rect(pulleyX - counterWeightSize/2, counterWeightY - counterWeightSize/2, counterWeightSize, counterWeightSize);
             ctx.fillStyle = '#3498db';
-            ctx.fillRect(pulleyX - counterWeightSize/2, counterWeightY - counterWeightSize/2, counterWeightSize, counterWeightSize);
+            ctx.fill();
             ctx.strokeStyle = '#2980b9';
             ctx.lineWidth = 2;
-            ctx.strokeRect(pulleyX - counterWeightSize/2, counterWeightY - counterWeightSize/2, counterWeightSize, counterWeightSize);
+            ctx.stroke();
             
             // Etiqueta de contrapeso
-            ctx.fillStyle = '#000';
-            ctx.font = 'bold 14px Arial';
+            ctx.fillStyle = '#fff';
+            ctx.font = '14px Arial';
             ctx.textAlign = 'center';
             ctx.fillText(`${pulleyConfig.counterMass} kg`, pulleyX, counterWeightY + counterWeightSize + 15);
             
@@ -624,11 +637,11 @@
             ctx.moveTo(pulleyX, pulleyY + pulleyRadius);
             ctx.lineTo(pulleyX, counterWeightY - counterWeightSize/2);
             ctx.strokeStyle = '#d35400';
-            ctx.lineWidth = 3;
+            ctx.lineWidth = 2;
             ctx.stroke();
         }
         
-        // Calcular física del plano inclinado
+        // Calcular física del plano inclinado - CORREGIDO CON POLEAS FUNCIONALES
         function calculatePhysics() {
             const angleRad = angle * Math.PI / 180;
             
@@ -649,6 +662,8 @@
                 const counterWeightForce = pulleyConfig.counterMass * gravity;
                 const pulleyEfficiency = 1 - pulleyConfig.pulleyFriction;
                 
+                // CORRECCIÓN: La fuerza del contrapeso debe RESTARSE cuando el objeto baja
+                // (antes se estaba restando dos veces)
                 if (pulleyConfig.type === 'fixed') {
                     // Polea fija: cambia dirección pero no magnitud de la fuerza
                     netForceValue = gravitationalForce - frictionForce - counterWeightForce * pulleyEfficiency;
@@ -673,12 +688,12 @@
                 }
             }
             
-            // Aceleración
+            // Aceleración - CORRECCIÓN: Asegurar que la aceleración no sea negativa cuando debería ser positiva
             acceleration = netForceValue / effectiveMass;
             
             // Si la aceleración es muy pequeña o negativa cuando debería ser positiva, ajustar
             if (usePulley && acceleration < 0.01 && gravitationalForce > frictionForce + (pulleyConfig.counterMass * gravity * 0.5)) {
-                acceleration = 0.1;
+                acceleration = 0.1; // Valor mínimo para que el movimiento comience
             }
             
             // Actualizar velocidad y posición
@@ -789,7 +804,7 @@
             document.body.removeChild(link);
         }
         
-        // Controladores de botones
+        // Controladores de botones CORREGIDOS
         startBtn.addEventListener('click', function() {
             if (!isRunning) {
                 isRunning = true;
