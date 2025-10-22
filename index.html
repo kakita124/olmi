@@ -531,7 +531,7 @@
         <div class="content">
             <div class="panel">
                 <h2>Configuración del Experimento</h2>
-               
+  #avanzado  
                 <div class="tabs">
                     <div class="tab active" data-tab="basic">Básico</div>
                     <div class="tab" data-tab="advanced">Avanzado</div>
@@ -543,7 +543,7 @@
                         <label for="mass-input">Masa del objeto (m)</label>
                         <div class="input-container">
                             <input type="number" id="mass-input" min="0.1" max="50" value="5" step="0.1">
-                            <span class="unit">kg</span>
+                            <span class="unit">Kg</span>
                         </div>
                         <div class="validation-message" id="mass-validation"></div>
                     </div>
@@ -604,7 +604,7 @@
                         <label for="air-resistance">Resistencia del aire</label>
                         <div class="input-container">
                             <input type="number" id="air-resistance" value="0" min="0" max="0.1" step="0.001">
-                            <span class="unit">kg/m</span>
+                            <span class="unit">Kg/m</span>
                         </div>
                     </div>
                 </div>
@@ -626,7 +626,7 @@
                         </div>
                        
                         <div class="input-group">
-                            <label for="counter-mass-input">Masa contrapeso (m₂)</label>
+                            <label for="counter-mass-input">Masa contrapeso (M₂)</label>
                             <div class="input-container">
                                 <input type="number" id="counter-mass-input" min="0.1" max="50" value="3" step="0.1">
                                 <span class="unit">kg</span>
@@ -672,15 +672,15 @@
                     </div>
                     <div class="data-item">
                         <div class="data-label">Posición</div>
-                        <div class="data-value" id="position-value">0.00 m</div>
+                        <div class="data-value" id="position-value">0.00 M</div>
                     </div>
                     <div class="data-item">
                         <div class="data-label">Velocidad</div>
-                        <div class="data-value" id="velocity-value">0.00 m/s</div>
+                        <div class="data-value" id="velocity-value">0.00 M/s</div>
                     </div>
                     <div class="data-item">
                         <div class="data-label">Aceleración</div>
-                        <div class="data-value" id="acceleration-value">0.00 m/s²</div>
+                        <div class="data-value" id="acceleration-value">0.00 M/s²</div>
                     </div>
                     <div class="data-item">
                         <div class="data-label">Fuerza Net</div>
@@ -722,7 +722,7 @@
             <div class="tabs">
                 <div class="tab active" data-tab="theory">Teoría</div>
                 <div class="tab" data-tab="formulas">Fórmulas</div>
-                <div class="tab" data-tab="applications">Aplicaciones</div>
+                <div class="tab" data-tab="applications">Instrucciones</div>
             </div>
            
             <div class="tab-content active" id="theory-tab">
@@ -739,7 +739,7 @@
                     <p>Cuando se añade un sistema de poleas, se introduce una fuerza adicional que puede modificar el movimiento del objeto en el plano inclinado.</p>
                 </div>
             </div>
-           
+           #Formulas
             <div class="tab-content" id="formulas-tab">
                 <div class="theory-content">
                     <p><strong>Fuerzas en un plano inclinado:</strong></p>
@@ -774,21 +774,19 @@
            
             <div class="tab-content" id="applications-tab">
                 <div class="theory-content">
-                    <p>Los planos inclinados y sistemas de poleas tienen numerosas aplicaciones en la vida cotidiana y la ingeniería:</p>
+                    <p>Instrucciones del sistema:</p>
                    
                     <ul>
-                        <li><strong>Rampas de carga:</strong> Para subir objetos pesados a camiones o edificios.</li>
-                        <li><strong>Carreteras de montaña:</strong> Que suben gradualmente las laderas.</li>
-                        <li><strong>Sistemas de elevación:</strong> Grúas y montacargas que utilizan poleas.</li>
-                        <li><strong>Máquinas simples:</strong> Como parte de sistemas mecánicos más complejos.</li>
-                        <li><strong>Deportes:</strong> Pistas de ski, toboganes, etc.</li>
+                        <li><strong>Primer paso:</strong> Seleccionar el sistema que desee utilzar (Basico o con polea).</li>
+                        <li><strong>Segundo paso:</strong> Insertar datos correspondientes al sistema seleccionado y apretar el boton de iniciar simulación.</li>
+                        <li><strong>Tercer paso:</strong> Al detenerse, se puede utilizar la opción reiniciar o exportar datos, al exportarlos se entregará un documento.</li>
                     </ul>
                 </div>
             </div>
         </div>
        
         <footer>
-            <p>Laboratorio Virtual de Física - Simulador de Plano Inclinado con Poleas</p>
+            <p>Laboratorio Virtual de Física - Simulador de Plano Inclinado con Poleas y sin poleas</p>
             <p>© 2023 - Departamento de Física - Universidad Virtual</p>
         </footer>
     </div>
