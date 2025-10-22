@@ -540,7 +540,7 @@
                
                 <div class="tab-content active" id="basic-tab">
                     <div class="input-group">
-                        <label for="mass-input">Masa del objeto (m)</label>
+                        <label for="mass-input">Masa del objeto (M)</label>
                         <div class="input-container">
                             <input type="number" id="mass-input" min="0.1" max="50" value="5" step="0.1">
                             <span class="unit">Kg</span>
@@ -570,7 +570,7 @@
                         <label for="length-input">Longitud del plano (L)</label>
                         <div class="input-container">
                             <input type="number" id="length-input" min="1" max="15" value="8" step="0.5">
-                            <span class="unit">m</span>
+                            <span class="unit">M</span>
                         </div>
                     </div>
                    
@@ -578,7 +578,7 @@
                         <label for="gravity-input">Gravedad (g)</label>
                         <div class="input-container">
                             <input type="number" id="gravity-input" value="9.8" min="1" max="20" step="0.1">
-                            <span class="unit">m/s²</span>
+                            <span class="unit">M/s²</span>
                         </div>
                     </div>
                 </div>
@@ -588,7 +588,7 @@
                         <label for="initial-velocity">Velocidad inicial</label>
                         <div class="input-container">
                             <input type="number" id="initial-velocity" value="0" min="0" max="10" step="0.1">
-                            <span class="unit">m/s</span>
+                            <span class="unit">M/s</span>
                         </div>
                     </div>
                    
@@ -604,7 +604,7 @@
                         <label for="air-resistance">Resistencia del aire</label>
                         <div class="input-container">
                             <input type="number" id="air-resistance" value="0" min="0" max="0.1" step="0.001">
-                            <span class="unit">Kg/m</span>
+                            <span class="unit">Kg/M</span>
                         </div>
                     </div>
                 </div>
@@ -761,7 +761,7 @@
                     </div>
                    
                     <div class="formula">
-                        a = F<sub>neta</sub> / m
+                        a = F<sub>neta</sub> / M
                     </div>
                    
                     <p><strong>Con sistema de poleas:</strong></p>
@@ -1311,9 +1311,9 @@
            
             // Actualizar valores en pantalla
             timeValue.textContent = currentTime.toFixed(2) + " s";
-            positionValue.textContent = position.toFixed(2) + " m";
-            velocityValue.textContent = velocity.toFixed(2) + " m/s";
-            accelerationValue.textContent = acceleration.toFixed(2) + " m/s²";
+            positionValue.textContent = position.toFixed(2) + " M";
+            velocityValue.textContent = velocity.toFixed(2) + " M/s";
+            accelerationValue.textContent = acceleration.toFixed(2) + " M/s²";
             forceValue.textContent = netForce.toFixed(2) + " N";
             energyValue.textContent = energy.toFixed(2) + " J";
            
@@ -1352,9 +1352,9 @@
             simulationData = [];
            
             timeValue.textContent = "0.00 s";
-            positionValue.textContent = "0.00 m";
-            velocityValue.textContent = velocity.toFixed(2) + " m/s";
-            accelerationValue.textContent = "0.00 m/s²";
+            positionValue.textContent = "0.00 M";
+            velocityValue.textContent = velocity.toFixed(2) + " M/s";
+            accelerationValue.textContent = "0.00 M/s²";
             forceValue.textContent = "0.00 N";
             energyValue.textContent = "0.00 J";
            
@@ -1368,7 +1368,7 @@
                 return;
             }
            
-            let csvContent = "Tiempo (s),Posición (m),Velocidad (m/s),Aceleración (m/s²),Fuerza (N),Energía (J)\n";
+            let csvContent = "Tiempo (s),Posición (M),Velocidad (M/s),Aceleración (M/s²),Fuerza (N),Energía (J)\n";
            
             simulationData.forEach(data => {
                 csvContent += `${data.time.toFixed(2)},${data.position.toFixed(2)},${data.velocity.toFixed(2)},${data.acceleration.toFixed(2)},${data.force.toFixed(2)},${data.energy.toFixed(2)}\n`;
