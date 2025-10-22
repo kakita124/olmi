@@ -85,25 +85,6 @@
             font-weight: 400;
         }
        
-        .history-btn {
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            border: none;
-            padding: 10px 16px;
-            border-radius: var(--border-radius);
-            cursor: pointer;
-            font-size: 0.9rem;
-            font-weight: 500;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-       
-        .history-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-        }
-       
         .content {
             display: grid;
             grid-template-columns: 1fr 2fr;
@@ -435,7 +416,7 @@
             border: 1px solid #e2e8f0;
         }
        
-        .graph-container {
+        .history-container {
             background: white;
             border-radius: var(--border-radius);
             padding: 25px;
@@ -445,21 +426,90 @@
             border: 1px solid rgba(0, 0, 0, 0.05);
         }
        
-        .graph-container:hover {
+        .history-container:hover {
             box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
         }
        
-        .graph-placeholder {
-            width: 100%;
-            height: 250px;
-            background: #f8fafc;
+        .history-list {
+            max-height: 250px;
+            overflow-y: auto;
+            margin-top: 15px;
+            border: 1px solid #e2e8f0;
             border-radius: var(--border-radius);
+            padding: 10px;
+        }
+       
+        .history-item {
+            background: #f8fafc;
+            padding: 15px;
+            border-radius: var(--border-radius);
+            margin-bottom: 10px;
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            justify-content: center;
+            border-left: 4px solid var(--accent-color);
+            transition: var(--transition);
+        }
+       
+        .history-item:hover {
+            background: #edf2f7;
+            transform: translateX(5px);
+        }
+       
+        .history-details {
+            flex: 1;
+        }
+       
+        .history-title {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 5px;
+        }
+       
+        .history-params {
+            font-size: 0.85rem;
             color: var(--secondary-color);
-            border: 1px dashed #cbd5e0;
-            font-weight: 500;
+        }
+       
+        .history-date {
+            font-size: 0.8rem;
+            color: var(--secondary-color);
+            margin-top: 3px;
+        }
+       
+        .history-actions {
+            display: flex;
+            gap: 8px;
+        }
+       
+        .history-btn-small {
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: var(--transition);
+        }
+       
+        .history-btn-small:hover {
+            background: #2c5aa0;
+        }
+       
+        .history-btn-small.delete {
+            background: var(--danger-color);
+        }
+       
+        .history-btn-small.delete:hover {
+            background: #c53030;
+        }
+       
+        .empty-history {
+            text-align: center;
+            padding: 30px;
+            color: var(--secondary-color);
+            font-style: italic;
         }
        
         footer {
@@ -546,96 +596,6 @@
             height: 18px;
             fill: currentColor;
         }
-       
-        /* Estilos para el historial */
-        .history-panel {
-            background: white;
-            border-radius: var(--border-radius);
-            padding: 28px;
-            box-shadow: var(--box-shadow);
-            margin-bottom: 25px;
-            transition: var(--transition);
-            border: 1px solid rgba(0, 0, 0, 0.05);
-            display: none;
-        }
-       
-        .history-panel.active {
-            display: block;
-            animation: fadeIn 0.3s ease;
-        }
-       
-        .history-list {
-            max-height: 300px;
-            overflow-y: auto;
-            margin-top: 15px;
-        }
-       
-        .history-item {
-            background: #f8fafc;
-            padding: 15px;
-            border-radius: var(--border-radius);
-            margin-bottom: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-left: 4px solid var(--accent-color);
-            transition: var(--transition);
-        }
-       
-        .history-item:hover {
-            background: #edf2f7;
-            transform: translateX(5px);
-        }
-       
-        .history-details {
-            flex: 1;
-        }
-       
-        .history-title {
-            font-weight: 600;
-            color: var(--primary-color);
-            margin-bottom: 5px;
-        }
-       
-        .history-params {
-            font-size: 0.85rem;
-            color: var(--secondary-color);
-        }
-       
-        .history-actions {
-            display: flex;
-            gap: 8px;
-        }
-       
-        .history-btn-small {
-            background: var(--accent-color);
-            color: white;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 0.8rem;
-            transition: var(--transition);
-        }
-       
-        .history-btn-small:hover {
-            background: #2c5aa0;
-        }
-       
-        .history-btn-small.delete {
-            background: var(--danger-color);
-        }
-       
-        .history-btn-small.delete:hover {
-            background: #c53030;
-        }
-       
-        .empty-history {
-            text-align: center;
-            padding: 30px;
-            color: var(--secondary-color);
-            font-style: italic;
-        }
     </style>
 </head>
 <body>
@@ -646,22 +606,8 @@
                     <h1>Laboratorio Virtual: Plano Inclinado</h1>
                     <p class="subtitle">Simulador interactivo para el estudio de la física del movimiento</p>
                 </div>
-                <button class="history-btn" id="history-toggle">
-                    <svg class="icon" viewBox="0 0 24 24">
-                        <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
-                    </svg>
-                    Historial
-                </button>
             </div>
         </header>
-        
-        <!-- Panel de Historial -->
-        <div class="history-panel" id="history-panel">
-            <h2>Configuraciones Guardadas</h2>
-            <div class="history-list" id="history-list">
-                <div class="empty-history" id="empty-history">No hay configuraciones guardadas</div>
-            </div>
-        </div>
        
         <div class="content">
             <div class="panel">
@@ -848,10 +794,11 @@
                     </button>
                 </div>
                
-                <div class="graph-container">
-                    <h2>Gráficos en Tiempo Real</h2>
-                    <div class="graph-placeholder">
-                        Gráfico de posición, velocidad y aceleración vs tiempo
+                <!-- Reemplazo de gráficos por historial -->
+                <div class="history-container">
+                    <h2>Historial de Configuraciones</h2>
+                    <div class="history-list" id="history-list">
+                        <div class="empty-history" id="empty-history">No hay configuraciones guardadas. Guarda una configuración para verla aquí.</div>
                     </div>
                 </div>
             </div>
@@ -969,8 +916,8 @@
         const resetBtn = document.getElementById('reset-btn');
         const exportBtn = document.getElementById('export-btn');
         const saveConfigBtn = document.getElementById('save-config-btn');
-        const historyToggle = document.getElementById('history-toggle');
-        const historyPanel = document.getElementById('history-panel');
+        
+        // Historial
         const historyList = document.getElementById('history-list');
         const emptyHistory = document.getElementById('empty-history');
        
@@ -1019,13 +966,8 @@
         // Historial de configuraciones
         let configHistory = JSON.parse(localStorage.getItem('inclinedPlaneHistory')) || [];
         
-        // Mostrar/ocultar historial
-        historyToggle.addEventListener('click', function() {
-            historyPanel.classList.toggle('active');
-            if (historyPanel.classList.contains('active')) {
-                renderHistory();
-            }
-        });
+        // Inicializar el historial
+        renderHistory();
         
         // Guardar configuración actual
         saveConfigBtn.addEventListener('click', function() {
@@ -1062,10 +1004,8 @@
                 // Guardar en localStorage
                 localStorage.setItem('inclinedPlaneHistory', JSON.stringify(configHistory));
                 
-                // Actualizar vista si el panel está abierto
-                if (historyPanel.classList.contains('active')) {
-                    renderHistory();
-                }
+                // Actualizar vista
+                renderHistory();
                 
                 alert(`Configuración "${configName}" guardada correctamente.`);
             }
@@ -1076,6 +1016,7 @@
             if (configHistory.length === 0) {
                 emptyHistory.style.display = 'block';
                 historyList.innerHTML = '';
+                historyList.appendChild(emptyHistory);
                 return;
             }
             
@@ -1179,9 +1120,6 @@
                 
                 // Redibujar simulación
                 drawSimulation();
-                
-                // Cerrar panel de historial
-                historyPanel.classList.remove('active');
                 
                 alert(`Configuración "${config.name}" cargada correctamente.`);
             }
