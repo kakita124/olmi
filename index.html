@@ -43,7 +43,7 @@
         header {
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             color: white;
-            padding: 25px; /* Reducido de 35px */
+            padding: 20px;
             border-radius: var(--border-radius);
             margin-bottom: 30px;
             box-shadow: var(--box-shadow);
@@ -62,22 +62,48 @@
             background: linear-gradient(90deg, var(--accent-color), var(--success-color));
         }
        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+       
+        .header-title {
+            flex: 1;
+        }
+       
         h1 {
-            font-size: 1.8rem; /* Reducido de 2.6rem */
-            margin-bottom: 10px; /* Reducido de 12px */
+            font-size: 1.5rem;
+            margin-bottom: 8px;
             font-weight: 600;
             letter-spacing: -0.5px;
         }
        
         .subtitle {
-            font-size: 1rem; /* Reducido de 1.25rem */
+            font-size: 0.9rem;
             opacity: 0.85;
             font-weight: 400;
-            max-width: 600px;
-            margin: 0 auto;
         }
        
-        /* El resto del CSS permanece igual */
+        .history-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+       
+        .history-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+       
         .content {
             display: grid;
             grid-template-columns: 1fr 2fr;
@@ -520,14 +546,122 @@
             height: 18px;
             fill: currentColor;
         }
+       
+        /* Estilos para el historial */
+        .history-panel {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 28px;
+            box-shadow: var(--box-shadow);
+            margin-bottom: 25px;
+            transition: var(--transition);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            display: none;
+        }
+       
+        .history-panel.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+       
+        .history-list {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-top: 15px;
+        }
+       
+        .history-item {
+            background: #f8fafc;
+            padding: 15px;
+            border-radius: var(--border-radius);
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 4px solid var(--accent-color);
+            transition: var(--transition);
+        }
+       
+        .history-item:hover {
+            background: #edf2f7;
+            transform: translateX(5px);
+        }
+       
+        .history-details {
+            flex: 1;
+        }
+       
+        .history-title {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 5px;
+        }
+       
+        .history-params {
+            font-size: 0.85rem;
+            color: var(--secondary-color);
+        }
+       
+        .history-actions {
+            display: flex;
+            gap: 8px;
+        }
+       
+        .history-btn-small {
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: var(--transition);
+        }
+       
+        .history-btn-small:hover {
+            background: #2c5aa0;
+        }
+       
+        .history-btn-small.delete {
+            background: var(--danger-color);
+        }
+       
+        .history-btn-small.delete:hover {
+            background: #c53030;
+        }
+       
+        .empty-history {
+            text-align: center;
+            padding: 30px;
+            color: var(--secondary-color);
+            font-style: italic;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>Laboratorio Virtual: Plano Inclinado</h1>
-            <p class="subtitle">Simulador interactivo para el estudio de la física del movimiento en planos inclinados</p>
+            <div class="header-content">
+                <div class="header-title">
+                    <h1>Laboratorio Virtual: Plano Inclinado</h1>
+                    <p class="subtitle">Simulador interactivo para el estudio de la física del movimiento</p>
+                </div>
+                <button class="history-btn" id="history-toggle">
+                    <svg class="icon" viewBox="0 0 24 24">
+                        <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
+                    </svg>
+                    Historial
+                </button>
+            </div>
         </header>
+        
+        <!-- Panel de Historial -->
+        <div class="history-panel" id="history-panel">
+            <h2>Configuraciones Guardadas</h2>
+            <div class="history-list" id="history-list">
+                <div class="empty-history" id="empty-history">No hay configuraciones guardadas</div>
+            </div>
+        </div>
        
         <div class="content">
             <div class="panel">
@@ -651,6 +785,12 @@
                         <path d="M8 5v14l11-7z"/>
                     </svg>
                     Iniciar Simulación
+                </button>
+                <button id="save-config-btn" style="background: var(--success-color);">
+                    <svg class="icon" viewBox="0 0 24 24">
+                        <path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"/>
+                    </svg>
+                    Guardar Configuración
                 </button>
                 <button id="reset-btn" class="reset-btn">
                     <svg class="icon" viewBox="0 0 24 24">
@@ -778,9 +918,10 @@
                     <p>Instrucciones del sistema:</p>
                    
                     <ul>
-                        <li><strong>Primer paso:</strong> Seleccionar el sistema que desee utilzar (Basico o con polea).</li>
+                        <li><strong>Primer paso:</strong> Seleccionar el sistema que desee utilzar (Básico o con polea).</li>
                         <li><strong>Segundo paso:</strong> Insertar datos correspondientes al sistema seleccionado y apretar el boton de iniciar simulación.</li>
                         <li><strong>Tercer paso:</strong> Al detenerse, se puede utilizar la opción reiniciar o exportar datos, al exportarlos se entregará un documento.</li>
+                        <li><strong>Nueva función:</strong> Puede guardar configuraciones para usarlas posteriormente desde el panel de historial.</li>
                     </ul>
                 </div>
             </div>
@@ -818,153 +959,4 @@
         const pulleyOptions = document.getElementById('pulley-options');
         const pulleyType = document.getElementById('pulley-type');
         const counterMassInput = document.getElementById('counter-mass-input');
-        const pulleyFrictionInput = document.getElementById('pulley-friction-input');
-        const pulleyFrictionRange = document.getElementById('pulley-friction-range');
-        const pulleyFrictionValue = document.getElementById('pulley-friction-value');
-       
-        // Botones
-        const startBtn = document.getElementById('start-btn');
-        const pauseBtn = document.getElementById('pause-btn');
-        const resetBtn = document.getElementById('reset-btn');
-        const exportBtn = document.getElementById('export-btn');
-       
-        // Valores de datos
-        const timeValue = document.getElementById('time-value');
-        const positionValue = document.getElementById('position-value');
-        const velocityValue = document.getElementById('velocity-value');
-        const accelerationValue = document.getElementById('acceleration-value');
-        const forceValue = document.getElementById('force-value');
-        const energyValue = document.getElementById('energy-value');
-       
-        // Mensajes de validación
-        const massValidation = document.getElementById('mass-validation');
-        const counterMassValidation = document.getElementById('counter-mass-validation');
-       
-        // Variables de simulación
-        let animationId;
-        let isRunning = false;
-        let isPaused = false;
-        let currentTime = 0;
-        let position = 0;
-        let velocity = 0;
-        let acceleration = 0;
-        let netForce = 0;
-        let energy = 0;
-        let simulationData = [];
-       
-        // Parámetros iniciales
-        let mass = parseFloat(massInput.value);
-        let angle = parseFloat(angleInput.value);
-        let friction = parseFloat(frictionInput.value);
-        let length = parseFloat(lengthInput.value);
-        let gravity = parseFloat(gravityInput.value);
-        let usePulley = false;
-        let pulleyConfig = {
-            type: 'fixed',
-            counterMass: parseFloat(counterMassInput.value),
-            pulleyFriction: parseFloat(pulleyFrictionInput.value)
-        };
-       
-        // Configuración avanzada
-        let initialVelocity = parseFloat(initialVelocityInput.value);
-        let timeStep = parseFloat(timeStepInput.value);
-        let airResistance = parseFloat(airResistanceInput.value);
-       
-        // Configuración del canvas
-        function setupCanvas() {
-            const container = canvas.parentElement;
-            canvas.width = container.clientWidth;
-            canvas.height = container.clientHeight;
-        }
-       
-        // Sistema de pestañas
-        document.querySelectorAll('.tab').forEach(tab => {
-            tab.addEventListener('click', function() {
-                const tabId = this.getAttribute('data-tab');
-               
-                // Desactivar todas las pestañas
-                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-               
-                // Activar la pestaña seleccionada
-                this.classList.add('active');
-                document.getElementById(`${tabId}-tab`).classList.add('active');
-            });
-        });
-       
-        // Sincronización de inputs de rango y número
-        angleRange.addEventListener('input', function() {
-            angleValue.textContent = this.value + '°';
-            angleInput.value = this.value;
-            angle = parseFloat(this.value);
-            drawSimulation();
-            if (isRunning) {
-                resetSimulation();
-            }
-        });
-       
-        frictionRange.addEventListener('input', function() {
-            frictionValue.textContent = parseFloat(this.value).toFixed(2);
-            frictionInput.value = this.value;
-            friction = parseFloat(this.value);
-        });
-       
-        pulleyFrictionRange.addEventListener('input', function() {
-            pulleyFrictionValue.textContent = parseFloat(this.value).toFixed(2);
-            pulleyFrictionInput.value = this.value;
-            pulleyConfig.pulleyFriction = parseFloat(this.value);
-        });
-       
-        // Validación de parámetros
-        function validateParameters() {
-            let isValid = true;
-           
-            // Validar masa
-            if (mass <= 0) {
-                massValidation.textContent = "La masa debe ser mayor que cero";
-                massValidation.style.display = 'block';
-                isValid = false;
-            } else {
-                massValidation.style.display = 'none';
-            }
-           
-            // Validar contrapeso si las poleas están activadas
-            if (usePulley && pulleyConfig.counterMass <= 0) {
-                counterMassValidation.textContent = "La masa del contrapeso debe ser mayor que cero";
-                counterMassValidation.style.display = 'block';
-                isValid = false;
-            } else {
-                counterMassValidation.style.display = 'none';
-            }
-           
-            return isValid;
-        }
-       
-        // Actualizar valores de los inputs
-        massInput.addEventListener('input', function() {
-            let value = parseFloat(this.value);
-            if (value < 0.1) value = 0.1;
-            if (value > 50) value = 50;
-            this.value = value;
-            mass = value;
-            validateParameters();
-            if (isRunning) {
-                resetSimulation();
-            }
-        });
-       
-        angleInput.addEventListener('input', function() {
-            let value = parseFloat(this.value);
-            if (value < 5) value = 5;
-            if (value > 60) value = 60;
-            this.value = value;
-            angleRange.value = value;
-            angleValue.textContent = value + '°';
-            angle = value;
-            drawSimulation();
-            if (isRunning) {
-                resetSimulation();
-            }
-        });
-       
-        frictionInput
+        const pulleyFrictionInput = document.getElementById('pulley-friction
