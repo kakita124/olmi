@@ -785,8 +785,8 @@
                         <div class="input-container">
                             <input type="number" id="mass-input-pulley" min="0.1" value="5" step="0.1">
                             <span class="unit">Kg</span>
-                        </div>
            
+                        </div>
                         <div class="validation-message" id="mass-validation-pulley"></div>
                     </div>
                    
@@ -1108,7 +1108,7 @@ que desee utilzar (Básico o con polea).</li>
 
         /**
          * Dibuja el símbolo del ángulo en la esquina inferior izquierda (P1),
-         * marcando el ángulo complementario (90 - theta) entre la rampa y la vertical.
+         * marcando el ángulo theta (θ) entre la rampa y la horizontal (suelo).
          * @param {CanvasRenderingContext2D} ctx - Contexto de dibujo del canvas.
          * @param {number} x - Coordenada X del vértice (esquina inferior izquierda P1).
          * @param {number} y - Coordenada Y del vértice (esquina inferior izquierda P1).
@@ -1117,59 +1117,15 @@ que desee utilzar (Básico o con polea).</li>
          * @param {string} color - Color del ángulo.
          * @param {string} label - Etiqueta del ángulo ('θ').
          */
-        function drawAngleAtBaseVertical(ctx, x, y, angleRad, radius, color = '#e53e3e', label = 'θ') {
+        function drawAngleAtBaseHorizontal(ctx, x, y, angleRad, radius, color = '#e53e3e', label = 'θ') {
             ctx.save();
             ctx.beginPath();
 
-            // El ángulo que se forma con la vertical es (90 - theta)
-            const complementAngleRad = Math.PI / 2 - angleRad; 
+            // Arco: desde el suelo (ángulo 0) hasta la rampa (ángulo -angleRad)
+            // Se dibuja en sentido antihorario (true) para un ángulo positivo
+            // o directamente desde 0 hasta el ángulo negativo
             
-            // Dibuja el arco: desde la rampa (ángulo -angleRad) hasta la vertical (ángulo -Math.PI/2)
-            // Ya que Y es hacia abajo y X es hacia la derecha, en el cuadrante inferior izquierdo
-            // la rampa está en el ángulo -angleRad
-            
-            // Ángulo de inicio: Vertical (PI) en el sistema rotado
-            // Ángulo de fin: Rampa (PI - angleRad) en el sistema rotado
-            
-            // En el sistema de coordenadas de P1:
-            // La horizontal es 0. La vertical es PI/2.
-            // La rampa está a un ángulo de PI - angleRad.
-            // Para marcar el ángulo interior (theta) entre la rampa y el suelo:
-            // ctx.arc(x, y, radius, 0, -angleRad, true); 
-            
-            // Para marcar el ángulo entre la vertical y la rampa (complementario):
-            // El arco va desde la vertical (que debería ser PI/2) hasta la rampa (PI - angleRad)
-            // O, más simple, en el dibujo es el ángulo theta que forma la rampa con la vertical.
-            
-            // Dibujar el ángulo interior normal (theta) con el suelo para referencia
-            // ctx.arc(x, y, radius, -angleRad, 0, false); 
-            
-            // DIBUJAR EL ÁNGULO EXTERIOR (RAMPA vs VERTICAL)
-            // Arco: desde el suelo (PI) hasta la rampa (PI - complementAngleRad)
-            // No, el arco debe ir desde la vertical (PI/2) hasta la rampa
-            
-            // Como el plano se dibuja de izquierda a derecha (P1 a P3), la vertical es un
-            // elemento imaginario hacia arriba desde P1. El suelo es el eje X (0 grados).
-            
-            // Para que se parezca al dibujo: marcamos el ángulo entre el suelo y una vertical imaginaria.
-            // Simplemente dibujamos el arco en la posición de P1, abriendo desde la vertical (90 grados) hasta la rampa (theta).
-            
-            ctx.arc(x, y, radius, Math.PI, Math.PI + complementAngleRad, false); 
-            
-            // Se dibuja el arco desde la rampa (ángulo `complementAngleRad` desde la vertical) 
-            // hasta el suelo (PI) si el triángulo estuviera dibujado al revés.
-            
-            // Dado el diseño actual (P1 en la base izquierda):
-            // Suelo (horizontal) = 0 radianes (hacia la derecha).
-            // Vertical (imaginaria hacia la pared) = 3*PI/2 o -PI/2.
-            
-            // Vamos a dibujarlo como el ángulo interior complementario (PI/2 - theta) en P1, pero rotado 90 grados.
-            // Mejor dibujamos el ángulo que realmente está ahí (theta con la horizontal) y lo rotulamos, 
-            // y luego forzamos el dibujo para que se vea con la vertical.
-            
-            // Dibuja el arco entre la rampa (ángulo -angleRad) y una línea vertical imaginaria (ángulo -PI/2)
-            // Esto es el ángulo (PI/2 - angleRad) en el vértice P1.
-            ctx.arc(x, y, radius, Math.PI, Math.PI - complementAngleRad, true); // Arco de (90-theta) con la vertical
+            ctx.arc(x, y, radius, 0, -angleRad, true); 
             
             ctx.strokeStyle = color;
             ctx.lineWidth = 3;
@@ -1181,13 +1137,12 @@ que desee utilzar (Básico o con polea).</li>
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
             
-            // Posición para la etiqueta θ en el centro del ángulo (90 - theta)
-            // Lo colocamos a 45 grados desde la rampa, o 90 grados desde el suelo
-            const midComplementAngle = Math.PI - complementAngleRad / 2;
-            const labelX = x + (radius + 15) * Math.cos(midComplementAngle); 
-            const labelY = y + (radius + 15) * Math.sin(midComplementAngle); 
+            // Posición para la etiqueta θ: a medio camino entre 0 y -angleRad
+            const midAngle = -angleRad / 2;
+            const labelX = x + (radius + 15) * Math.cos(midAngle); 
+            const labelY = y + (radius + 15) * Math.sin(midAngle); 
             
-            ctx.fillText(label, labelX - 10, labelY - 10); 
+            ctx.fillText(label, labelX, labelY); 
 
             ctx.restore();
         }
@@ -1199,8 +1154,17 @@ que desee utilzar (Básico o con polea).</li>
 
             // Escala el dibujo para que se ajuste al canvas
             const MAX_CANVAS_WIDTH = W - 100;
-            const scale = MAX_CANVAS_WIDTH / MAX_LENGTH_PHYSICAL; 
+            const MAX_CANVAS_HEIGHT = H - 100;
             
+            // Si la altura máxima es menor que la base máxima, ajusta por altura
+            const maxBase = MAX_LENGTH_PHYSICAL / Math.cos(Math.PI / 4); // Para 45 grados
+            const maxHeight = MAX_LENGTH_PHYSICAL / Math.sin(Math.PI / 4);
+            
+            const scaleBase = MAX_CANVAS_WIDTH / maxBase;
+            const scaleHeight = MAX_CANVAS_HEIGHT / maxHeight;
+            
+            const scale = Math.min(scaleBase, scaleHeight);
+
             const adjustedLength = length * scale; 
             const height = adjustedLength * Math.sin(angleRad);
             const base = adjustedLength * Math.cos(angleRad);
@@ -1249,20 +1213,18 @@ que desee utilzar (Básico o con polea).</li>
             ctx.lineWidth = 4;
             ctx.stroke();
             
-            // Dibuja la vertical imaginaria en P1 (paralela al cateto opuesto)
+            // Dibuja la línea vertical en P2
             ctx.beginPath();
-            ctx.moveTo(P1_X, P1_Y);
-            ctx.lineTo(P1_X, P1_Y - H);
-            ctx.strokeStyle = 'gray'; 
-            ctx.setLineDash([5, 5]); 
-            ctx.lineWidth = 1;
+            ctx.moveTo(P2_X, P2_Y);
+            ctx.lineTo(P2_X, P3_Y);
+            ctx.strokeStyle = '#2d3748';
+            ctx.lineWidth = 4;
             ctx.stroke();
-            ctx.setLineDash([]); 
             
             ctx.restore();
 
-            // 2. Dibuja el Símbolo del Ángulo (θ) - EN LA ESQUINA SOLICITADA (Inferior Izquierda con la Vertical)
-            drawAngleAtBaseVertical(ctx, P1_X, P1_Y, angleRad, 40); 
+            // 2. Dibuja el Símbolo del Ángulo (θ) - EN LA ESQUINA INFERIOR IZQUIERDA (P1)
+            drawAngleAtBaseHorizontal(ctx, P1_X, P1_Y, angleRad, 40); 
 
 
             return { P1_X, P1_Y, P3_X, P3_Y, base, height, scale, angleRad };
