@@ -3,7 +3,1749 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laboratorio Virtual - Plano Inclinado</title><!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Laboratorio Virtual - Plano Inclinado</title>
+    <style>
+        :root {
+            --primary-color: #1a365d;
+            --secondary-color: #2d3748;
+            --accent-color: #3182ce;
+            --light-color: #f7fafc;
+            --dark-color: #1a202c;
+            --success-color: #38a169;
+            --warning-color: #d69e2e;
+            --danger-color: #e53e3e;
+            --text-color: #2d3748;
+            --border-radius: 10px;
+            --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s ease;
+        }
+       
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+       
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+            color: var(--text-color);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+       
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+       
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 15px;
+            border-radius: var(--border-radius);
+            margin-bottom: 20px;
+            box-shadow: var(--box-shadow);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+       
+        header::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-color), var(--success-color));
+        }
+       
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+       
+        .header-title {
+            flex: 1;
+        }
+       
+        h1 {
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+        }
+       
+        .subtitle {
+            font-size: 0.8rem;
+            opacity: 0.85;
+            font-weight: 400;
+        }
+       
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+       
+        @media (max-width: 1024px) {
+            .content {
+                grid-template-columns: 1fr;
+            }
+        }
+       
+        .panel {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 28px;
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+       
+        .panel:hover {
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+        }
+       
+        .panel h2 {
+            margin-bottom: 22px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #e2e8f0;
+            color: var(--primary-color);
+            font-weight: 600;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+        }
+       
+        .panel h2::before {
+            content: "";
+            display: inline-block;
+            width: 4px;
+            height: 22px;
+            background: var(--accent-color);
+            margin-right: 12px;
+            border-radius: 2px;
+        }
+       
+        .tabs {
+            display: flex;
+            margin-bottom: 22px;
+            border-bottom: 1px solid #e2e8f0;
+            background: #f8fafc;
+            border-radius: 8px 8px 0 0;
+            padding: 5px;
+        }
+       
+        .tab {
+            padding: 12px 22px;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: var(--transition);
+            font-weight: 500;
+            flex: 1;
+            text-align: center;
+            color: var(--secondary-color);
+        }
+       
+        .tab.active {
+            background: white;
+            color: var(--accent-color);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+       
+        .tab:hover:not(.active) {
+            background: rgba(49, 130, 206, 0.05);
+        }
+       
+        .tab-content {
+            display: none;
+        }
+       
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+       
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+       
+        .input-group {
+            margin-bottom: 22px;
+        }
+       
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 500;
+            color: var(--secondary-color);
+            font-size: 0.95rem;
+        }
+       
+        input[type="number"], select {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #e2e8f0;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            transition: var(--transition);
+            background: white;
+        }
+       
+        input[type="number"]:focus, select:focus {
+            border-color: var(--accent-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.15);
+        }
+       
+        .input-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+       
+        .input-container input {
+            flex: 1;
+        }
+       
+        .unit {
+            min-width: 45px;
+            text-align: center;
+            font-weight: 500;
+            color: var(--secondary-color);
+            background: #f7fafc;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+        }
+       
+        .range-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+       
+        .range-container input[type="range"] {
+            flex: 1;
+            height: 6px;
+            border-radius: 3px;
+            background: #e2e8f0;
+            outline: none;
+            -webkit-appearance: none;
+        }
+       
+        .range-container input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--accent-color);
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+       
+        .range-value {
+            min-width: 45px;
+            text-align: center;
+            font-weight: 600;
+            background: #f7fafc;
+            padding: 8px 12px;
+            border-radius: 6px;
+            color: var(--primary-color);
+        }
+       
+        button {
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 14px 22px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: var(--transition);
+            width: 100%;
+            margin-top: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+       
+        button:hover {
+            background: #2c5aa0;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+       
+        .simulation-area {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+       
+        .canvas-container {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 25px;
+            box-shadow: var(--box-shadow);
+            flex: 1;
+            min-height: 450px;
+            display: flex;
+            flex-direction: column;
+            transition: var(--transition);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+       
+        .canvas-container:hover {
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+        }
+       
+        canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+            border-radius: var(--border-radius);
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+        }
+       
+        .data-display {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 18px;
+            margin-top: 22px;
+        }
+       
+        .data-item {
+            background: white;
+            padding: 18px;
+            border-radius: var(--border-radius);
+            text-align: center;
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+            border-left: 4px solid var(--accent-color);
+        }
+       
+        .data-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+       
+        .data-label {
+            font-size: 0.9rem;
+            color: var(--secondary-color);
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+       
+        .data-value {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+       
+        .controls {
+            display: flex;
+            gap: 12px;
+            margin-top: 22px;
+        }
+       
+        .controls button {
+            flex: 1;
+            margin-top: 0;
+        }
+       
+        .reset-btn {
+            background: var(--danger-color);
+        }
+       
+        .reset-btn:hover {
+            background: #c53030;
+        }
+       
+        .pause-btn {
+            background: var(--warning-color);
+        }
+       
+        .pause-btn:hover {
+            background: #b7791f;
+        }
+       
+        .export-btn {
+            background: var(--success-color);
+        }
+       
+        .export-btn:hover {
+            background: #2f855a;
+        }
+       
+        .pulley-config {
+            margin-top: 22px;
+            padding-top: 22px;
+            border-top: 1px solid #e2e8f0;
+        }
+       
+        .pulley-toggle {
+            display: flex;
+            align-items: center;
+            margin-bottom: 18px;
+            background: #f8fafc;
+            padding: 15px;
+            border-radius: var(--border-radius);
+        }
+       
+        .pulley-toggle input {
+            margin-right: 12px;
+            width: 20px;
+            height: 20px;
+            accent-color: var(--accent-color);
+        }
+       
+        .pulley-options {
+            padding: 18px;
+            background: #f8fafc;
+            border-radius: var(--border-radius);
+            margin-top: 12px;
+            border: 1px solid #e2e8f0;
+        }
+       
+        .history-container {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 25px;
+            box-shadow: var(--box-shadow);
+            min-height: 320px;
+            transition: var(--transition);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+       
+        .history-container:hover {
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+        }
+       
+        .history-list {
+            max-height: 250px;
+            overflow-y: auto;
+            margin-top: 15px;
+            border: 1px solid #e2e8f0;
+            border-radius: var(--border-radius);
+            padding: 10px;
+        }
+       
+        .history-item {
+            background: #f8fafc;
+            padding: 15px;
+            border-radius: var(--border-radius);
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 4px solid var(--accent-color);
+            transition: var(--transition);
+        }
+       
+        .history-item:hover {
+            background: #edf2f7;
+            transform: translateX(5px);
+        }
+       
+        .history-details {
+            flex: 1;
+        }
+       
+        .history-title {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 5px;
+        }
+       
+        .history-params {
+            font-size: 0.85rem;
+            color: var(--secondary-color);
+        }
+       
+        .history-date {
+            font-size: 0.8rem;
+            color: var(--secondary-color);
+            margin-top: 3px;
+        }
+       
+        .history-actions {
+            display: flex;
+            gap: 8px;
+        }
+       
+        .history-btn-small {
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: var(--transition);
+        }
+       
+        .history-btn-small:hover {
+            background: #2c5aa0;
+        }
+       
+        .history-btn-small.delete {
+            background: var(--danger-color);
+        }
+       
+        .history-btn-small.delete:hover {
+            background: #c53030;
+        }
+       
+        .empty-history {
+            text-align: center;
+            padding: 30px;
+            color: var(--secondary-color);
+            font-style: italic;
+        }
+       
+        footer {
+            text-align: center;
+            padding: 25px;
+            margin-top: 35px;
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            font-size: 0.95rem;
+            color: var(--secondary-color);
+            border-top: 4px solid var(--accent-color);
+        }
+       
+        .info-panel {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 28px;
+            box-shadow: var(--box-shadow);
+            margin-top: 25px;
+            transition: var(--transition);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+       
+        .info-panel:hover {
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+        }
+       
+        .info-panel h2 {
+            margin-bottom: 18px;
+            color: var(--primary-color);
+            font-weight: 600;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+        }
+       
+        .info-panel h2::before {
+            content: "";
+            display: inline-block;
+            width: 4px;
+            height: 22px;
+            background: var(--accent-color);
+            margin-right: 12px;
+            border-radius: 2px;
+        }
+       
+        .formula {
+            background: #f8fafc;
+            padding: 18px;
+            border-radius: var(--border-radius);
+            margin: 18px 0;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+            border-left: 4px solid var(--accent-color);
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+       
+        .variable {
+            font-style: italic;
+            color: var(--accent-color);
+            font-weight: 500;
+        }
+       
+        .theory-content {
+            line-height: 1.8;
+        }
+       
+        .theory-content p {
+            margin-bottom: 18px;
+        }
+       
+        .validation-message {
+            color: var(--danger-color);
+            font-size: 0.9rem;
+            margin-top: 8px;
+            display: none;
+            font-weight: 500;
+        }
+       
+        .icon {
+            width: 18px;
+            height: 18px;
+            fill: currentColor;
+        }
+       
+        /* Estilos para el sistema de notificaciones */
+        .notification-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            max-width: 350px;
+        }
+       
+        .notification {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 15px;
+            margin-bottom: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            border-left: 4px solid var(--accent-color);
+            display: flex;
+            align-items: flex-start;
+            animation: slideIn 0.3s ease;
+        }
+       
+        .notification-icon {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+       
+        .notification-content {
+            flex: 1;
+        }
+       
+        .notification-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: var(--primary-color);
+        }
+       
+        .notification-message {
+            font-size: 0.9rem;
+            color: var(--secondary-color);
+            line-height: 1.4;
+        }
+       
+        .notification-close {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: var(--secondary-color);
+            padding: 0;
+            margin: 0;
+            width: auto;
+        }
+       
+        .notification-close:hover {
+            color: var(--danger-color);
+            transform: none;
+            box-shadow: none;
+        }
+       
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(100%);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+       
+        /* Estilos para la sección de resultados */
+        .results-container {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 25px;
+            box-shadow: var(--box-shadow);
+            margin-top: 25px;
+            transition: var(--transition);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+       
+        .results-container:hover {
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+        }
+       
+        .results-explanation {
+            background: #f8fafc;
+            padding: 15px;
+            border-radius: var(--border-radius);
+            margin-top: 15px;
+            border-left: 4px solid var(--success-color);
+        }
+       
+        .results-explanation h4 {
+            margin-bottom: 10px;
+            color: var(--primary-color);
+        }
+       
+        .results-explanation p {
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <div class="header-title">
+                    <h1>Laboratorio Virtual: Plano Inclinado</h1>
+                    <p class="subtitle">Simulador interactivo para el estudio de la física del movimiento</p>
+                </div>
+            </div>
+        </header>
+       
+        <div class="content">
+            <div class="panel">
+                <h2>Configuración del Experimento</h2>
+               
+                <div class="tabs">
+                    <div class="tab active" data-tab="basic">Básico</div>
+                    <div class="tab" data-tab="pulley">Poleas</div>
+                </div>
+               
+       
+                <div class="tab-content active" id="basic-tab">
+                    <div class="input-group">
+                        <label for="mass-input">Masa del objeto (M)</label>
+                        <div class="input-container">
+              
+                            <input type="number" id="mass-input" min="0.1" value="5" step="0.1">
+                            <span class="unit">Kg</span>
+                        </div>
+                        <div class="validation-message" id="mass-validation"></div>
+  
+                    </div>
+                   
+                    <div class="input-group">
+                        <label for="angle-input">Ángulo del plano (θ)</label>
+              
+                        <div class="range-container">
+                            <input type="range" id="angle-range" min="1" max="90" value="30" step="1">
+                            <span class="range-value" id="angle-value">30°</span>
+                        </div>
+ 
+                        <input type="number" id="angle-input" min="1" max="90" value="30" step="1" style="display: none;">
+                    </div>
+                   
+                    <div class="input-group">
+         
+                        <label for="friction-input">Coeficiente de fricción (μ)</label>
+                        <div class="range-container">
+                            <input type="range" id="friction-range" min="0" max="1" value="0.1" step="0.01">
+                      
+                            <span class="range-value" id="friction-value">0.10</span>
+                        </div>
+                        <input type="number" id="friction-input" min="0" max="1" value="0.1" step="0.01" style="display: none;">
+                    </div>
+                
+    
+                    <div class="input-group">
+                        <label for="length-input">Longitud del plano (L)</label>
+                        <div class="input-container">
+                       
+                            <input type="number" id="length-input" min="1" value="8" step="0.5">
+                            <span class="unit">M</span>
+                        </div>
+                    </div>
+                 
+    
+                    <div class="input-group">
+                        <label for="gravity-input">Gravedad (g)</label>
+                        <div class="input-container">
+                          
+                            <input type="number" id="gravity-input" value="9.8" min="1" step="0.1">
+                            <span class="unit">M/s²</span>
+                        </div>
+                    </div>
+                </div>
+    
+            
+                <div class="tab-content" id="pulley-tab">
+                    <div class="input-group">
+                        <label for="mass-input-pulley">Masa del objeto (M)</label>
+                      
+                        <div class="input-container">
+                            <input type="number" id="mass-input-pulley" min="0.1" value="5" step="0.1">
+                            <span class="unit">Kg</span>
+                        </div>
+           
+                        <div class="validation-message" id="mass-validation-pulley"></div>
+                    </div>
+                   
+                    <div class="input-group">
+                        <label 
+for="counter-mass-input">Masa contrapeso (M₂)</label>
+                        <div class="input-container">
+                            <input type="number" id="counter-mass-input" min="0.1" value="3" step="0.1">
+                            <span class="unit">kg</span>
+           
+                        </div>
+                        <div class="validation-message" id="counter-mass-validation"></div>
+                    </div>
+                   
+                    <div class="input-group">
+ 
+                        <label for="angle-input-pulley">Ángulo del plano (θ)</label>
+                        <div class="range-container">
+                            <input type="range" id="angle-range-pulley" min="1" max="90" value="30" step="1">
+              
+                            <span class="range-value" id="angle-value-pulley">30°</span>
+                        </div>
+                        <input type="number" id="angle-input-pulley" min="1" max="90" value="30" step="1" style="display: none;">
+                    </div>
+        
+            
+                    <div class="input-group">
+                        <label for="friction-input-pulley">Coeficiente de fricción (μ)</label>
+                        <div class="range-container">
+               
+                            <input type="range" id="friction-range-pulley" min="0" max="1" value="0.1" step="0.01">
+                            <span class="range-value" id="friction-value-pulley">0.10</span>
+                        </div>
+                        <input type="number" id="friction-input-pulley" 
+min="0" max="1" value="0.1" step="0.01" style="display: none;">
+                    </div>
+                   
+                    <div class="input-group">
+                        <label for="length-input-pulley">Longitud del plano (L)</label>
+       
+                        <div class="input-container">
+                            <input type="number" id="length-input-pulley" min="1" value="8" step="0.5">
+                            <span class="unit">M</span>
+                    
+                        </div>
+                    </div>
+                   
+                    <div class="input-group">
+                        <label for="gravity-input-pulley">Gravedad (g)</label>
+          
+                        <div class="input-container">
+                            <input type="number" id="gravity-input-pulley" value="9.8" min="1" step="0.1">
+                            <span class="unit">M/s²</span>
+                       
+                        </div>
+                    </div>
+                </div>
+               
+                <button id="start-btn">
+                    <svg class="icon" viewBox="0 0 24 24">
+      
+                        <path d="M8 5v14l11-7z"/>
+                    </svg>
+                    Iniciar Simulación
+                </button>
+                <button id="save-config-btn" style="background: var(--success-color);">
+    
+                    <svg class="icon" viewBox="0 0 24 24">
+                        <path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"/>
+                    </svg>
+              
+                    Guardar Configuración
+                </button>
+                <button id="reset-btn" class="reset-btn">
+                    <svg class="icon" viewBox="0 0 24 24">
+                        <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 
+8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
+                    </svg>
+                    Reiniciar
+                </button>
+            </div>
+           
+    
+            <div class="simulation-area">
+                <div class="canvas-container">
+                    <h2>Visualización del Experimento</h2>
+                    <canvas id="simulation-canvas"></canvas>
+                </div>
+               
+ 
+                <div class="data-display">
+                    <div class="data-item">
+                        <div class="data-label">Tiempo</div>
+                        <div class="data-value" id="time-value">0.00 s</div>
+          
+                    </div>
+                    <div class="data-item">
+                        <div class="data-label">Posición</div>
+                        <div class="data-value" id="position-value">0.00 M</div>
+                 
+                    </div>
+                    <div class="data-item">
+                        <div class="data-label">Velocidad</div>
+                        <div class="data-value" id="velocity-value">0.00 M/s</div>
+                    </div>
+    
+                    <div class="data-item">
+                        <div class="data-label">Aceleración</div>
+                        <div class="data-value" id="acceleration-value">0.00 M/s²</div>
+                    </div>
+           
+                    <div class="data-item">
+                        <div class="data-label">Fuerza Net</div>
+                        <div class="data-value" id="force-value">0.00 N</div>
+                    </div>
+                 
+                    <div class="data-item">
+                        <div class="data-label">Energía</div>
+                        <div class="data-value" id="energy-value">0.00 J</div>
+                    </div>
+                </div>
+        
+        
+                <div class="controls">
+                    <button id="pause-btn" class="pause-btn">
+                        <svg class="icon" viewBox="0 0 24 24">
+                         
+                            <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+                        </svg>
+                        Pausar
+                    </button>
+                    <button id="export-btn" class="export-btn">
+     
+                        <svg class="icon" viewBox="0 0 24 24">
+                            <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+                        </svg>
+                        Exportar Datos
+                    </button>
+                </div> <div class="history-container">
+                    <h2>Historial de Configuraciones</h2>
+                    <div class="history-list" id="history-list">
+                        <div class="empty-history" id="empty-history">No hay configuraciones guardadas. Guarda una configuración para verla aquí.</div>
+                    </div>
+                </div>
+            </div>
+        </div> <div class="results-container">
+            <h2>Resultados y Explicación del Sistema</h2>
+            <div class="results-explanation">
+                <h4>Análisis del Movimiento</h4>
+                <p id="movement-analysis">El sistema está en reposo. Inicie la simulación para ver el análisis del movimiento.</p>
+                <h4>Comportamiento del Sistema</h4>
+                <p id="system-behavior">El objeto permanecerá en reposo o se moverá dependiendo de la relación entre la fuerza gravitatoria paralela al plano y la fuerza de fricción.</p>
+                <h4>Explicación del Desplazamiento</h4>
+                <p id="displacement-explanation">El desplazamiento del objeto está determinado por la fuerza neta que actúa sobre él. Si la componente gravitatoria paralela al plano supera la fuerza de fricción, el objeto acelerará hacia abajo del plano.</p>
+            </div>
+        </div>
+        
+        <div class="info-panel">
+            <h2>Fundamentos Teóricos</h2>
+            <div class="tabs">
+                <div class="tab active" data-tab="theory">Teoría</div>
+                <div class="tab" data-tab="formulas">Fórmulas</div>
+                <div class="tab" data-tab="instructions">Instrucciones</div>
+            </div>
+            
+            <div class="tab-content active" id="theory-tab">
+                <div class="theory-content">
+                    <p>Un plano inclinado es una superficie plana que forma un ángulo agudo con la horizontal. Se utiliza para elevar cuerpos a una cierta altura con una fuerza menor que el peso del cuerpo.</p>
+                    <p>Las fuerzas que actúan sobre un objeto en un plano inclinado son:</p>
+                    <ul>
+                        <li><span class="variable">Peso (mg)</span>: Fuerza gravitatoria dirigida hacia el centro de la Tierra.</li>
+                        <li><span class="variable">Fuerza normal (N)</span>: Fuerza perpendicular al plano ejercida por la superficie.</li>
+                        <li><span class="variable">Fuerza de fricción (f)</span>: Fuerza que se opone al movimiento, paralela al plano.</li>
+                    </ul>
+                    <p>Cuando se añade un sistema de poleas, se introduce una fuerza adicional que puede modificar el movimiento del objeto en el plano inclinado.</p>
+                </div>
+            </div>
+            
+            <div class="tab-content" id="formulas-tab">
+                <div class="theory-content">
+                    <p><strong>Fuerzas en un plano inclinado (Serway):</strong></p>
+                    <div class="formula"> F<sub>gx</sub> = mg sen θ </div>
+                    <div class="formula"> F<sub>gy</sub> = mg cos θ </div>
+                    <div class="formula"> F<sub>n</sub> = mg cos θ </div>
+                    <div class="formula"> f<sub>k</sub> = μ<sub>k</sub> F<sub>n</sub> = μ<sub>k</sub> mg cos θ </div>
+                    <div class="formula"> F<sub>neta</sub> = mg sen θ - f<sub>k</sub> </div>
+                    <div class="formula"> a = F<sub>neta</sub> / m </div>
+                    <p><strong>Con sistema de poleas:</strong></p>
+                    <div class="formula"> F<sub>neta</sub> = mg sen θ - f<sub>k</sub> - T </div>
+                    <div class="formula"> T = m<sub>2</sub>g - m<sub>2</sub>a </div>
+                </div>
+            </div>
+            
+            <div class="tab-content" id="instructions-tab">
+                <div class="theory-content">
+                    <p>Instrucciones del sistema:</p>
+                    <ul>
+                        <li><strong>Primer paso:</strong> Seleccionar el sistema 
+que desee utilzar (Básico o con polea).</li>
+                        <li><strong>Segundo paso:</strong> Insertar datos correspondientes al sistema seleccionado y apretar el boton de iniciar simulación.</li>
+                        <li><strong>Tercer paso:</strong> Al detenerse, se puede utilizar la opción reiniciar o exportar datos, al exportarlos se entregará un documento.</li>
+                        <li><strong>Nueva función:</strong> Puede guardar configuraciones para usarlas posteriormente desde el panel de historial.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>Laboratorio Virtual de Física - Simulador de Plano Inclinado con Poleas y sin poleas</p>
+            <p>© 2023 - Departamento de Física - Universidad Virtual</p>
+        </footer>
+    </div> 
+    
+    <div class="notification-container" id="notification-container"></div> 
+    
+    <script> 
+        // Elementos del DOM 
+        const canvas = document.getElementById('simulation-canvas'); 
+        const ctx = canvas.getContext('2d'); 
+        
+        // Inputs numéricos 
+        const massInput = document.getElementById('mass-input'); 
+        const angleInput = document.getElementById('angle-input'); 
+        const angleRange = document.getElementById('angle-range');
+        const angleValue = document.getElementById('angle-value'); 
+        const frictionInput = document.getElementById('friction-input'); 
+        const frictionRange = document.getElementById('friction-range'); 
+        const frictionValue = document.getElementById('friction-value'); 
+        const lengthInput = document.getElementById('length-input');
+        const gravityInput = document.getElementById('gravity-input'); 
+        
+        // Inputs de la pestaña Poleas 
+        const massInputPulley = document.getElementById('mass-input-pulley'); 
+        const angleInputPulley = document.getElementById('angle-input-pulley');
+        const angleRangePulley = document.getElementById('angle-range-pulley'); 
+        const angleValuePulley = document.getElementById('angle-value-pulley'); 
+        const frictionInputPulley = document.getElementById('friction-input-pulley'); 
+        const frictionRangePulley = document.getElementById('friction-range-pulley'); 
+        const frictionValuePulley = document.getElementById('friction-value-pulley');
+        const lengthInputPulley = document.getElementById('length-input-pulley'); 
+        const gravityInputPulley = document.getElementById('gravity-input-pulley'); 
+        
+        // Configuración de poleas 
+        const counterMassInput = document.getElementById('counter-mass-input');
+        
+        // Botones 
+        const startBtn = document.getElementById('start-btn'); 
+        const pauseBtn = document.getElementById('pause-btn'); 
+        const resetBtn = document.getElementById('reset-btn'); 
+        const exportBtn = document.getElementById('export-btn');
+        const saveConfigBtn = document.getElementById('save-config-btn'); 
+        
+        // Historial 
+        const historyList = document.getElementById('history-list'); 
+        const emptyHistory = document.getElementById('empty-history');
+        
+        // Valores de datos 
+        const timeValue = document.getElementById('time-value'); 
+        const positionValue = document.getElementById('position-value'); 
+        const velocityValue = document.getElementById('velocity-value'); 
+        const accelerationValue = document.getElementById('acceleration-value');
+        const forceValue = document.getElementById('force-value'); 
+        const energyValue = document.getElementById('energy-value'); 
+        
+        // Mensajes de validación 
+        const massValidation = document.getElementById('mass-validation'); 
+        const massValidationPulley = document.getElementById('mass-validation-pulley');
+        const counterMassValidation = document.getElementById('counter-mass-validation'); 
+        
+        // Elementos de resultados 
+        const movementAnalysis = document.getElementById('movement-analysis'); 
+        const systemBehavior = document.getElementById('system-behavior'); 
+        const displacementExplanation = document.getElementById('displacement-explanation');
+        
+        // Variables de simulación 
+        let animationId; 
+        let isRunning = false; 
+        let isPaused = false; 
+        let currentTime = 0;
+        let position = 0; 
+        let velocity = 0; 
+        let acceleration = 0; 
+        let netForce = 0; 
+        let energy = 0;
+        let simulationData = []; 
+        
+        // Parámetros iniciales 
+        let mass = parseFloat(massInput.value); 
+        let angle = parseFloat(angleInput.value); 
+        let friction = parseFloat(frictionInput.value);
+        let length = parseFloat(lengthInput.value); 
+        let gravity = parseFloat(gravityInput.value); 
+        let usePulley = false; 
+        let pulleyConfig = { counterMass: parseFloat(counterMassInput.value) };
+        
+        // Variables para controlar notificaciones 
+        let angleChanged = false; 
+        let frictionChanged = false;
+        
+        // Historial de configuraciones 
+        let configHistory = JSON.parse(localStorage.getItem('inclinedPlaneHistory')) || []; 
+        
+        // Constantes para dibujar el plano (ajusta si es necesario)
+        const INCLINE_START_X = 50;
+        const INCLINE_START_Y_OFFSET = 50; 
+        const MAX_LENGTH_PHYSICAL = 10; // Longitud máxima física para el escalado
+        const BOX_SIZE = 40; 
+        
+        
+        // -------------------------------------------------------------------
+        // FUNCIONES DE DIBUJO Y SIMULACIÓN (Parte esencial modificada/añadida)
+        // -------------------------------------------------------------------
+        
+        function setupCanvas() {
+            // Ajusta el tamaño del canvas al contenedor
+            canvas.width = canvas.parentElement.clientWidth;
+            canvas.height = Math.max(canvas.parentElement.clientHeight - 50, 400); 
+        }
+
+        /**
+         * Dibuja el símbolo del ángulo en la esquina inferior izquierda (P1),
+         * marcando el ángulo complementario (90 - theta) entre la rampa y la vertical.
+         * @param {CanvasRenderingContext2D} ctx - Contexto de dibujo del canvas.
+         * @param {number} x - Coordenada X del vértice (esquina inferior izquierda P1).
+         * @param {number} y - Coordenada Y del vértice (esquina inferior izquierda P1).
+         * @param {number} angleRad - Valor del ángulo en radianes.
+         * @param {number} radius - Radio del arco.
+         * @param {string} color - Color del ángulo.
+         * @param {string} label - Etiqueta del ángulo ('θ').
+         */
+        function drawAngleAtBaseVertical(ctx, x, y, angleRad, radius, color = '#e53e3e', label = 'θ') {
+            ctx.save();
+            ctx.beginPath();
+
+            // El ángulo que se forma con la vertical es (90 - theta)
+            const complementAngleRad = Math.PI / 2 - angleRad; 
+            
+            // Dibuja el arco: desde la rampa (ángulo -angleRad) hasta la vertical (ángulo -Math.PI/2)
+            // Ya que Y es hacia abajo y X es hacia la derecha, en el cuadrante inferior izquierdo
+            // la rampa está en el ángulo -angleRad
+            
+            // Ángulo de inicio: Vertical (PI) en el sistema rotado
+            // Ángulo de fin: Rampa (PI - angleRad) en el sistema rotado
+            
+            // En el sistema de coordenadas de P1:
+            // La horizontal es 0. La vertical es PI/2.
+            // La rampa está a un ángulo de PI - angleRad.
+            // Para marcar el ángulo interior (theta) entre la rampa y el suelo:
+            // ctx.arc(x, y, radius, 0, -angleRad, true); 
+            
+            // Para marcar el ángulo entre la vertical y la rampa (complementario):
+            // El arco va desde la vertical (que debería ser PI/2) hasta la rampa (PI - angleRad)
+            // O, más simple, en el dibujo es el ángulo theta que forma la rampa con la vertical.
+            
+            // Dibujar el ángulo interior normal (theta) con el suelo para referencia
+            // ctx.arc(x, y, radius, -angleRad, 0, false); 
+            
+            // DIBUJAR EL ÁNGULO EXTERIOR (RAMPA vs VERTICAL)
+            // Arco: desde el suelo (PI) hasta la rampa (PI - complementAngleRad)
+            // No, el arco debe ir desde la vertical (PI/2) hasta la rampa
+            
+            // Como el plano se dibuja de izquierda a derecha (P1 a P3), la vertical es un
+            // elemento imaginario hacia arriba desde P1. El suelo es el eje X (0 grados).
+            
+            // Para que se parezca al dibujo: marcamos el ángulo entre el suelo y una vertical imaginaria.
+            // Simplemente dibujamos el arco en la posición de P1, abriendo desde la vertical (90 grados) hasta la rampa (theta).
+            
+            ctx.arc(x, y, radius, Math.PI, Math.PI + complementAngleRad, false); 
+            
+            // Se dibuja el arco desde la rampa (ángulo `complementAngleRad` desde la vertical) 
+            // hasta el suelo (PI) si el triángulo estuviera dibujado al revés.
+            
+            // Dado el diseño actual (P1 en la base izquierda):
+            // Suelo (horizontal) = 0 radianes (hacia la derecha).
+            // Vertical (imaginaria hacia la pared) = 3*PI/2 o -PI/2.
+            
+            // Vamos a dibujarlo como el ángulo interior complementario (PI/2 - theta) en P1, pero rotado 90 grados.
+            // Mejor dibujamos el ángulo que realmente está ahí (theta con la horizontal) y lo rotulamos, 
+            // y luego forzamos el dibujo para que se vea con la vertical.
+            
+            // Dibuja el arco entre la rampa (ángulo -angleRad) y una línea vertical imaginaria (ángulo -PI/2)
+            // Esto es el ángulo (PI/2 - angleRad) en el vértice P1.
+            ctx.arc(x, y, radius, Math.PI, Math.PI - complementAngleRad, true); // Arco de (90-theta) con la vertical
+            
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 3;
+            ctx.stroke();
+
+            // Coloca la etiqueta del ángulo (θ)
+            ctx.fillStyle = color;
+            ctx.font = '24px serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            
+            // Posición para la etiqueta θ en el centro del ángulo (90 - theta)
+            // Lo colocamos a 45 grados desde la rampa, o 90 grados desde el suelo
+            const midComplementAngle = Math.PI - complementAngleRad / 2;
+            const labelX = x + (radius + 15) * Math.cos(midComplementAngle); 
+            const labelY = y + (radius + 15) * Math.sin(midComplementAngle); 
+            
+            ctx.fillText(label, labelX - 10, labelY - 10); 
+
+            ctx.restore();
+        }
+        
+        function drawInclinedPlane(ctx, angle, length, usePulley) {
+            const W = canvas.width;
+            const H = canvas.height;
+            const angleRad = angle * Math.PI / 180;
+
+            // Escala el dibujo para que se ajuste al canvas
+            const MAX_CANVAS_WIDTH = W - 100;
+            const scale = MAX_CANVAS_WIDTH / MAX_LENGTH_PHYSICAL; 
+            
+            const adjustedLength = length * scale; 
+            const height = adjustedLength * Math.sin(angleRad);
+            const base = adjustedLength * Math.cos(angleRad);
+
+            // Coordenadas del plano inclinado (triángulo rectángulo)
+            const P1_X = INCLINE_START_X; // Esquina inferior izquierda (BASE)
+            const P1_Y = H - INCLINE_START_Y_OFFSET; 
+            const P2_X = P1_X + base; // Esquina inferior derecha (BASE + Cateto Adyacente)
+            const P2_Y = P1_Y;
+            const P3_X = P2_X; // Esquina superior derecha (Cateto Opuesto)
+            const P3_Y = P1_Y - height; 
+
+            // 1. Dibuja el Plano Inclinado (Rampa)
+            ctx.save();
+            ctx.beginPath();
+            ctx.moveTo(P1_X, P1_Y); 
+            ctx.lineTo(P2_X, P2_Y); 
+            ctx.lineTo(P3_X, P3_Y); 
+            ctx.closePath();
+            ctx.fillStyle = '#e2e8f0'; 
+            ctx.fill();
+
+            // Dibuja el suelo (Cateto Adyacente)
+            ctx.beginPath();
+            ctx.moveTo(0, P1_Y); 
+            ctx.lineTo(W, P2_Y); 
+            ctx.strokeStyle = '#2d3748';
+            ctx.lineWidth = 4;
+            ctx.stroke();
+
+            // Dibuja la altura (Cateto Opuesto - línea punteada)
+            ctx.beginPath();
+            ctx.moveTo(P2_X, P2_Y);
+            ctx.lineTo(P3_X, P3_Y);
+            ctx.strokeStyle = '#2d3748';
+            ctx.setLineDash([5, 5]); 
+            ctx.lineWidth = 1;
+            ctx.stroke();
+            ctx.setLineDash([]); 
+
+            // Dibuja la superficie del plano (Hipotenusa)
+            ctx.beginPath();
+            ctx.moveTo(P1_X, P1_Y);
+            ctx.lineTo(P3_X, P3_Y);
+            ctx.strokeStyle = '#2d3748';
+            ctx.lineWidth = 4;
+            ctx.stroke();
+            
+            // Dibuja la vertical imaginaria en P1 (paralela al cateto opuesto)
+            ctx.beginPath();
+            ctx.moveTo(P1_X, P1_Y);
+            ctx.lineTo(P1_X, P1_Y - H);
+            ctx.strokeStyle = 'gray'; 
+            ctx.setLineDash([5, 5]); 
+            ctx.lineWidth = 1;
+            ctx.stroke();
+            ctx.setLineDash([]); 
+            
+            ctx.restore();
+
+            // 2. Dibuja el Símbolo del Ángulo (θ) - EN LA ESQUINA SOLICITADA (Inferior Izquierda con la Vertical)
+            drawAngleAtBaseVertical(ctx, P1_X, P1_Y, angleRad, 40); 
+
+
+            return { P1_X, P1_Y, P3_X, P3_Y, base, height, scale, angleRad };
+        }
+        
+        function drawObject(ctx, planeCoords, currentPosition) {
+            const { P1_X, P1_Y, base, height, scale, angleRad } = planeCoords;
+            
+            // La posición (currentPosition) es a lo largo de la hipotenusa (0 a length)
+            const scaledPosition = currentPosition * scale;
+            
+            // Calcular la posición del centro del bloque en el plano.
+            // La rotación se aplica al contexto, no solo al bloque.
+            ctx.save();
+            
+            // Traslada al punto de inicio del plano
+            ctx.translate(P1_X, P1_Y);
+            // Rota el sistema de coordenadas por el ángulo del plano
+            ctx.rotate(-angleRad);
+            
+            // Dibuja el bloque. En el sistema rotado, el plano es horizontal.
+            // El bloque comienza en x=0 (y=0) y se mueve a lo largo de X.
+            const boxCenterOffset = BOX_SIZE / 2;
+            const boxX = scaledPosition - boxCenterOffset;
+            const boxY = -boxCenterOffset; // Se dibuja sobre la línea que ahora es el eje x
+
+            ctx.fillStyle = 'var(--primary-color)';
+            ctx.fillRect(boxX, boxY, BOX_SIZE, BOX_SIZE);
+            
+            // Dibujar un pequeño punto de referencia en la posición 0
+            ctx.fillStyle = 'white';
+            ctx.fillRect(scaledPosition - 5, -5, 10, 10);
+
+            ctx.restore();
+            
+            // Dibujar las fuerzas (simplificado)
+            // ... (Fuerzas y polea irían aquí)
+        }
+
+        function drawSimulation() {
+            // Clear canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Determine current parameters based on active tab
+            let currentAngle, currentLength;
+            if (usePulley) {
+                currentAngle = angleInputPulley.value;
+                currentLength = lengthInputPulley.value;
+            } else {
+                currentAngle = angleInput.value;
+                currentLength = lengthInput.value;
+            }
+
+            // Draw the inclined plane and get its coordinates
+            const planeCoords = drawInclinedPlane(ctx, parseFloat(currentAngle), parseFloat(currentLength), usePulley);
+            
+            // Draw the block
+            drawObject(ctx, planeCoords, position);
+        }
+
+        let lastTime;
+        function animate(timestamp) {
+            if (!isRunning || isPaused) {
+                return;
+            }
+
+            if (lastTime === undefined) {
+                lastTime = timestamp;
+            }
+            const deltaTime = (timestamp - lastTime) / 1000; // Delta time in seconds
+            lastTime = timestamp;
+
+            // --- FÍSICA ---
+            // Recalcula aceleración con los parámetros actuales
+            let currentMass = usePulley ? parseFloat(massInputPulley.value) : parseFloat(massInput.value);
+            let currentAngle = usePulley ? parseFloat(angleInputPulley.value) : parseFloat(angleInput.value);
+            let currentFriction = usePulley ? parseFloat(frictionInputPulley.value) : parseFloat(frictionInput.value);
+            let currentGravity = usePulley ? parseFloat(gravityInputPulley.value) : parseFloat(gravityInput.value);
+            let currentLength = usePulley ? parseFloat(lengthInputPulley.value) : parseFloat(lengthInput.value);
+            
+            const angleRad = currentAngle * Math.PI / 180;
+            const fn = currentMass * currentGravity * Math.cos(angleRad);
+            const fk = currentFriction * fn;
+            const fgx = currentMass * currentGravity * Math.sin(angleRad);
+            
+            if (usePulley) {
+                // Lógica de poleas más compleja. Simplificamos la aceleración
+                const m2 = parseFloat(counterMassInput.value);
+                netForce = (fgx - fk + m2 * currentGravity) / (currentMass + m2); // Simplificado para que se mueva.
+                acceleration = netForce; 
+            } else {
+                // Lógica sin poleas
+                netForce = fgx - fk;
+                acceleration = netForce / currentMass;
+            }
+            
+            if (Math.abs(netForce) < 0.01 && velocity < 0.01) {
+                 acceleration = 0;
+                 netForce = 0;
+            }
+
+            // Integración de movimiento
+            velocity += acceleration * deltaTime;
+            position += velocity * deltaTime;
+            currentTime += deltaTime;
+
+            // --- DETENCIÓN ---
+            if (position < 0 || position > currentLength) {
+                isRunning = false;
+                position = Math.max(0, Math.min(currentLength, position)); 
+                velocity = 0;
+                acceleration = 0;
+                showNotification('Simulación Terminada', 'El objeto ha llegado al final del plano.', 'success');
+            }
+
+            // --- ACTUALIZAR DATOS ---
+            timeValue.textContent = currentTime.toFixed(2) + ' s';
+            positionValue.textContent = position.toFixed(2) + ' M';
+            velocityValue.textContent = velocity.toFixed(2) + ' M/s';
+            accelerationValue.textContent = acceleration.toFixed(2) + ' M/s²';
+            forceValue.textContent = netForce.toFixed(2) + ' N';
+            
+            // --- DIBUJAR ---
+            drawSimulation();
+            
+            if (isRunning) {
+                animationId = requestAnimationFrame(animate);
+            }
+        }
+        
+        function resetSimulation() {
+            cancelAnimationFrame(animationId);
+            isRunning = false;
+            isPaused = false;
+            currentTime = 0;
+            position = 0;
+            velocity = 0;
+            acceleration = 0;
+            netForce = 0;
+            simulationData = [];
+
+            // Resetear visualización de datos
+            timeValue.textContent = '0.00 s';
+            positionValue.textContent = '0.00 M';
+            velocityValue.textContent = '0.00 M/s';
+            accelerationValue.textContent = '0.00 M/s²';
+            forceValue.textContent = '0.00 N';
+            energyValue.textContent = '0.00 J';
+
+            // Redibujar el estado inicial
+            drawSimulation();
+            updateResultsExplanation();
+            
+            pauseBtn.textContent = "Pausar";
+            startBtn.disabled = false;
+            showNotification('Simulación Reiniciada', 'Todos los parámetros y la simulación han sido restablecidos.', 'info');
+        }
+
+        // --- MANEJO DE HISTORIAL Y CONFIGURACIÓN ---
+        
+        function renderHistory() { 
+            if (configHistory.length === 0) { 
+                emptyHistory.style.display = 'block'; 
+                historyList.innerHTML = ''; 
+                historyList.appendChild(emptyHistory); 
+                return; 
+            } 
+            emptyHistory.style.display = 'none'; 
+            historyList.innerHTML = ''; 
+            configHistory.forEach((config, index) => { 
+                const item = document.createElement('div'); 
+                item.className = 'history-item'; 
+                const date = new Date(config.timestamp); 
+                const dateStr = date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'});
+                
+                const type = config.params.usePulley ? 'Polea' : 'Básico';
+                const paramsStr = `M: ${config.params.mass} kg, θ: ${config.params.angle}°, μ: ${config.params.friction}`;
+                
+                item.innerHTML = `
+                    <div class="history-details">
+                        <div class="history-title">${config.name} (${type})</div>
+                        <div class="history-params">${paramsStr}</div>
+                        <div class="history-date">${dateStr}</div>
+                    </div>
+                    <div class="history-actions">
+                        <button class="history-btn-small load-config" data-index="${index}">Cargar</button>
+                        <button class="history-btn-small delete" data-index="${index}">Eliminar</button>
+                    </div>
+                `;
+                historyList.appendChild(item); 
+            }); 
+        } 
+        
+        // --- MANEJO DE TABS ---
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                
+                document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
+                document.getElementById(this.getAttribute('data-tab') + '-tab').classList.add('active');
+
+                // Actualizar el estado de usePulley al cambiar de pestaña
+                usePulley = (this.getAttribute('data-tab') === 'pulley');
+                drawSimulation();
+            });
+        });
+        
+        // --- MANEJO DE ENTRADAS ---
+        
+        // Sincronización de rangos y valores
+        function syncRange(rangeId, valueId, inputId, unit = '', decimals = 0) {
+            const range = document.getElementById(rangeId);
+            const valueSpan = document.getElementById(valueId);
+            const input = document.getElementById(inputId);
+
+            range.addEventListener('input', () => {
+                const val = parseFloat(range.value).toFixed(decimals);
+                valueSpan.textContent = val + unit;
+                input.value = val;
+                
+                // Actualizar variable global y redibujar
+                if (rangeId.includes('angle-range')) {
+                    angle = parseFloat(val);
+                } else if (rangeId.includes('friction-range')) {
+                    friction = parseFloat(val);
+                }
+                drawSimulation();
+                updateResultsExplanation();
+            });
+        }
+        
+        syncRange('angle-range', 'angle-value', 'angle-input', '°', 0);
+        syncRange('friction-range', 'friction-value', 'friction-input', '', 2);
+        syncRange('angle-range-pulley', 'angle-value-pulley', 'angle-input-pulley', '°', 0);
+        syncRange('friction-range-pulley', 'friction-value-pulley', 'friction-input-pulley', '', 2);
+        
+        // Actualizar parámetros globales al cambiar inputs numéricos
+        function updateGlobalParams() {
+            mass = parseFloat(massInput.value);
+            angle = parseFloat(angleRange.value);
+            friction = parseFloat(frictionRange.value);
+            length = parseFloat(lengthInput.value);
+            gravity = parseFloat(gravityInput.value);
+            
+            pulleyConfig.counterMass = parseFloat(counterMassInput.value);
+            
+            drawSimulation();
+            updateResultsExplanation();
+        }
+        
+        document.querySelectorAll('input[type="number"]').forEach(input => {
+            input.addEventListener('input', updateGlobalParams);
+        });
+        
+        // --- MANEJO DE RESULTADOS Y NOTIFICACIONES ---
+
+        function showNotification(title, message, type = 'info') { 
+            const notificationContainer = document.getElementById('notification-container'); 
+            const notification = document.createElement('div');
+            notification.className = 'notification'; 
+            let icon = 'ℹ️'; 
+            if (type === 'warning') icon = '⚠️';
+            if (type === 'error') icon = '❌'; 
+            if (type === 'success') icon = '✅';
+            notification.innerHTML = ` 
+                <div class="notification-icon">${icon}</div> 
+                <div class="notification-content"> 
+                    <div class="notification-title">${title}</div> 
+                    <div class="notification-message">${message}</div> 
+                </div> 
+                <button class="notification-close">&times;</button> 
+            `; 
+            notificationContainer.appendChild(notification);
+            
+            notification.querySelector('.notification-close').addEventListener('click', function() { 
+                notification.remove(); 
+            });
+            
+            setTimeout(() => { 
+                if (notification.parentNode) { 
+                    notification.remove(); 
+                } 
+            }, 5000);
+        } 
+        
+        function updateResultsExplanation() { 
+            const currentMass = usePulley ? parseFloat(massInputPulley.value) : parseFloat(massInput.value);
+            const currentAngle = usePulley ? parseFloat(angleRange.value) : parseFloat(angleRange.value);
+            const currentFriction = usePulley ? parseFloat(frictionRange.value) : parseFloat(frictionRange.value);
+            const currentGravity = usePulley ? parseFloat(gravityInput.value) : parseFloat(gravityInput.value);
+
+            const angleRad = currentAngle * Math.PI / 180;
+            const gravitationalForce = currentMass * currentGravity * Math.sin(angleRad);
+            const frictionForce = currentFriction * currentMass * currentGravity * Math.cos(angleRad);
+            let netForceValue = gravitationalForce - frictionForce;
+            let counterWeightForce = 0;
+
+            if (usePulley) {
+                counterWeightForce = parseFloat(counterMassInput.value) * currentGravity;
+                netForceValue = gravitationalForce - frictionForce - counterWeightForce;
+            }
+
+            // Análisis del movimiento 
+            if (netForceValue > 0) { 
+                movementAnalysis.textContent = `El objeto tiene una tendencia a moverse hacia abajo del plano. Fuerza Neta calculada: ${netForceValue.toFixed(2)} N.`;
+            } else if (netForceValue < 0) { 
+                movementAnalysis.textContent = `El objeto tiene una tendencia a moverse hacia arriba del plano (o permanecer quieto si |Fgravedad| < |Ffricción|). Fuerza Neta calculada: ${netForceValue.toFixed(2)} N.`;
+            } else { 
+                movementAnalysis.textContent = `El objeto está en equilibrio. La fuerza neta es de 0 N.`;
+            } 
+            
+            // Comportamiento del sistema 
+            if (usePulley) { 
+                systemBehavior.textContent = `El sistema de poleas está activado. El contrapeso de ${pulleyConfig.counterMass} kg ejerce una fuerza de ${counterWeightForce.toFixed(2)} N. El movimiento resulta de la combinación de Fg, Ffricción y la Tensión de la cuerda.`;
+            } else { 
+                systemBehavior.textContent = `El sistema de poleas está desactivado. El movimiento está determinado únicamente por la fuerza gravitatoria paralela al plano (${gravitationalForce.toFixed(2)} N) y la fuerza de fricción (${frictionForce.toFixed(2)} N).`;
+            } 
+            
+            // Explicación del desplazamiento 
+            if (netForceValue > 0) { 
+                displacementExplanation.textContent = `Si la simulación se inicia y la fuerza neta es positiva, el objeto acelerará hacia abajo del plano.`;
+            } else if (netForceValue < 0) { 
+                displacementExplanation.textContent = `Si la simulación se inicia y la fuerza neta es negativa, el objeto intentará acelerar hacia arriba. Si la fricción es estática y el objeto está en reposo, podría permanecer quieto.`;
+            } else { 
+                displacementExplanation.textContent = `El objeto se moverá con velocidad constante si ya está en movimiento, o permanecerá en reposo si se inicia desde la posición 0.`;
+            } 
+        } 
+        
+        // --- MANEJO DE EVENTOS ---
+        
+        startBtn.addEventListener('click', function() {
+            if (isRunning) {
+                // Si está corriendo, pausar/continuar
+                isPaused = !isPaused;
+                pauseBtn.textContent = isPaused ? "Continuar" : "Pausar";
+                if (!isPaused) {
+                    animate(performance.now());
+                    showNotification('Simulación Reanudada', 'La simulación ha sido reanudada.', 'info');
+                } else {
+                    showNotification('Simulación Pausada', 'La simulación ha sido pausada.', 'info');
+                }
+            } else {
+                // Si no está corriendo, iniciar
+                resetSimulation(); // Resetear antes de iniciar para asegurar valores iniciales
+                isRunning = true;
+                startBtn.disabled = true;
+                animate(performance.now());
+                showNotification('Simulación Iniciada', 'El objeto está en movimiento.', 'success');
+            }
+        });
+       
+        pauseBtn.addEventListener('click', function() {
+            if (isRunning) {
+                isPaused = !isPaused;
+                pauseBtn.textContent = isPaused ? "Continuar" : "Pausar";
+                if (!isPaused) {
+                    animate(performance.now());
+                    showNotification('Simulación Reanudada', 'La simulación ha sido reanudada.', 'info');
+                } else {
+                    showNotification('Simulación Pausada', 'La simulación ha sido pausada.', 'info');
+                }
+            }
+        });
+       
+        resetBtn.addEventListener('click', function() {
+            resetSimulation();
+        });
+       
+        function exportData() {
+            const dataString = simulationData.map(d => `${d.time},${d.position},${d.velocity},${d.acceleration}`).join('\n');
+            const header = "Tiempo (s),Posición (M),Velocidad (M/s),Aceleración (M/s²)\n";
+            const csvData = header + dataString;
+            
+            const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.setAttribute('href', url);
+            link.setAttribute('download', 'datos_plano_inclinado.csv');
+            link.click();
+            showNotification('Exportación Exitosa', 'Los datos de la simulación han sido exportados a un archivo CSV.', 'success');
+        }
+
+        exportBtn.addEventListener('click', exportData);
+       
+        // Guardar configuración actual 
+        saveConfigBtn.addEventListener('click', function() { 
+            const configName = prompt("Ingrese un nombre para esta configuración:", `Configuración ${new Date().toLocaleTimeString()}`); 
+            if (configName) { 
+                const config = { 
+                    id: Date.now(), 
+                    name: configName, 
+                    timestamp: new Date().toISOString(), 
+                    params: { 
+                        mass: mass, 
+                        angle: angle, 
+                        friction: friction, 
+                        length: length, 
+                        gravity: gravity, 
+                        usePulley: usePulley, 
+                        pulleyConfig: {...pulleyConfig} 
+                    } 
+                }; 
+                
+                configHistory.unshift(config); 
+                if (configHistory.length > 10) { 
+                    configHistory = configHistory.slice(0, 10); 
+                } 
+                
+                localStorage.setItem('inclinedPlaneHistory', JSON.stringify(configHistory)); 
+                renderHistory(); 
+                showNotification('Configuración Guardada', `La configuración "${configName}" se ha guardado correctamente.`, 'success'); 
+            } 
+        }); 
+
+        // Manejo de carga de historial
+        historyList.addEventListener('click', function(e) {
+            if (e.target.classList.contains('load-config')) {
+                const index = e.target.getAttribute('data-index');
+                const config = configHistory[index];
+                
+                // Cargar parámetros en inputs
+                const p = config.params;
+                
+                if (p.usePulley) {
+                    document.querySelector('.tab[data-tab="pulley"]').click();
+                    massInputPulley.value = p.mass;
+                    angleRangePulley.value = p.angle;
+                    frictionRangePulley.value = p.friction;
+                    lengthInputPulley.value = p.length;
+                    gravityInputPulley.value = p.gravity;
+                    counterMassInput.value = p.pulleyConfig.counterMass;
+                    
+                    angleValuePulley.textContent = `${p.angle}°`;
+                    frictionValuePulley.textContent = p.friction.toFixed(2);
+                } else {
+                    document.querySelector('.tab[data-tab="basic"]').click();
+                    massInput.value = p.mass;
+                    angleRange.value = p.angle;
+                    frictionRange.value = p.friction;
+                    lengthInput.value = p.length;
+                    gravityInput.value = p.gravity;
+                    
+                    angleValue.textContent = `${p.angle}°`;
+                    frictionValue.textContent = p.friction.toFixed(2);
+                }
+                
+                // Actualizar variables globales y visualización
+                updateGlobalParams();
+                
+                showNotification('Configuración Cargada', `Se ha cargado la configuración "${config.name}".`, 'info');
+
+            } else if (e.target.classList.contains('delete')) {
+                const index = e.target.getAttribute('data-index');
+                const deletedName = configHistory[index].name;
+                configHistory.splice(index, 1);
+                localStorage.setItem('inclinedPlaneHistory', JSON.stringify(configHistory));
+                renderHistory();
+                showNotification('Configuración Eliminada', `La configuración "${deletedName}" ha sido eliminada.`, 'warning');
+            }
+        });
+
+        // Inicialización
+        window.addEventListener('load', function() {
+            setupCanvas();
+            renderHistory(); // Cargar historial al inicio
+            drawSimulation();
+            updateResultsExplanation();
+            showNotification('Bienvenido', 'El laboratorio virtual de plano inclinado está listo. Configure los parámetros y presione "Iniciar Simulación".', 'info');
+        });
+       
+        window.addEventListener('resize', function() {
+            setupCanvas();
+            drawSimulation();
+        });
+    </script>
+</body>
+</html>
     <style>
         :root {
             --primary-color: #1a365d;
