@@ -721,56 +721,45 @@
                     <div class="tab" data-tab="pulley">Poleas</div>
                 </div>
                
-       
                 <div class="tab-content active" id="basic-tab">
                     <div class="input-group">
                         <label for="mass-input">Masa del objeto (M)</label>
                         <div class="input-container">
-              
                             <input type="number" id="mass-input" min="0.1" value="5" step="0.1">
                             <span class="unit">Kg</span>
                         </div>
                         <div class="validation-message" id="mass-validation"></div>
-  
                     </div>
                    
                     <div class="input-group">
                         <label for="angle-input">Ángulo del plano (θ)</label>
-              
                         <div class="range-container">
                             <input type="range" id="angle-range" min="1" max="90" value="30" step="1">
                             <span class="range-value" id="angle-value">30°</span>
                         </div>
- 
                         <input type="number" id="angle-input" min="1" max="90" value="30" step="1" style="display: none;">
                     </div>
                    
                     <div class="input-group">
-         
                         <label for="friction-input">Coeficiente de fricción (μ)</label>
                         <div class="range-container">
                             <input type="range" id="friction-range" min="0" max="1" value="0.1" step="0.01">
-                      
                             <span class="range-value" id="friction-value">0.10</span>
                         </div>
                         <input type="number" id="friction-input" min="0" max="1" value="0.1" step="0.01" style="display: none;">
                     </div>
                 
-    
                     <div class="input-group">
                         <label for="length-input">Longitud del plano (L)</label>
                         <div class="input-container">
-                       
                             <input type="number" id="length-input" min="1" value="8" step="0.5">
                             <span class="unit">M</span>
                         </div>
                     </div>
                  
-    
                     <div class="input-group">
                         <label for="gravity-input">Gravedad (g)</label>
                         <div class="input-container">
-                          
                             <input type="number" id="gravity-input" value="9.8" min="1" step="0.1">
                             <span class="unit">M/s²</span>
                         </div>
@@ -781,32 +770,26 @@
                 <div class="tab-content" id="pulley-tab">
                     <div class="input-group">
                         <label for="mass-input-pulley">Masa del objeto (M)</label>
-                      
                         <div class="input-container">
                             <input type="number" id="mass-input-pulley" min="0.1" value="5" step="0.1">
                             <span class="unit">Kg</span>
-           
                         </div>
                         <div class="validation-message" id="mass-validation-pulley"></div>
                     </div>
                    
                     <div class="input-group">
-                        <label 
-for="counter-mass-input">Masa contrapeso (M₂)</label>
+                        <label for="counter-mass-input">Masa contrapeso (M₂)</label>
                         <div class="input-container">
                             <input type="number" id="counter-mass-input" min="0.1" value="3" step="0.1">
                             <span class="unit">kg</span>
-           
                         </div>
                         <div class="validation-message" id="counter-mass-validation"></div>
                     </div>
                    
                     <div class="input-group">
- 
                         <label for="angle-input-pulley">Ángulo del plano (θ)</label>
                         <div class="range-container">
                             <input type="range" id="angle-range-pulley" min="1" max="90" value="30" step="1">
-              
                             <span class="range-value" id="angle-value-pulley">30°</span>
                         </div>
                         <input type="number" id="angle-input-pulley" min="1" max="90" value="30" step="1" style="display: none;">
@@ -816,134 +799,116 @@ for="counter-mass-input">Masa contrapeso (M₂)</label>
                     <div class="input-group">
                         <label for="friction-input-pulley">Coeficiente de fricción (μ)</label>
                         <div class="range-container">
-               
                             <input type="range" id="friction-range-pulley" min="0" max="1" value="0.1" step="0.01">
                             <span class="range-value" id="friction-value-pulley">0.10</span>
                         </div>
-                        <input type="number" id="friction-input-pulley" 
-min="0" max="1" value="0.1" step="0.01" style="display: none;">
+                        <input type="number" id="friction-input-pulley" min="0" max="1" value="0.1" step="0.01" style="display: none;">
                     </div>
                    
                     <div class="input-group">
                         <label for="length-input-pulley">Longitud del plano (L)</label>
-       
                         <div class="input-container">
                             <input type="number" id="length-input-pulley" min="1" value="8" step="0.5">
                             <span class="unit">M</span>
-                    
                         </div>
                     </div>
                    
                     <div class="input-group">
                         <label for="gravity-input-pulley">Gravedad (g)</label>
-          
                         <div class="input-container">
                             <input type="number" id="gravity-input-pulley" value="9.8" min="1" step="0.1">
                             <span class="unit">M/s²</span>
-                       
                         </div>
                     </div>
                 </div>
                
                 <button id="start-btn">
                     <svg class="icon" viewBox="0 0 24 24">
-      
                         <path d="M8 5v14l11-7z"/>
                     </svg>
                     Iniciar Simulación
                 </button>
                 <button id="save-config-btn" style="background: var(--success-color);">
-    
                     <svg class="icon" viewBox="0 0 24 24">
                         <path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"/>
                     </svg>
-              
                     Guardar Configuración
                 </button>
                 <button id="reset-btn" class="reset-btn">
                     <svg class="icon" viewBox="0 0 24 24">
-                        <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 
-8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
+                        <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
                     </svg>
                     Reiniciar
                 </button>
             </div>
            
-    
             <div class="simulation-area">
                 <div class="canvas-container">
                     <h2>Visualización del Experimento</h2>
                     <canvas id="simulation-canvas"></canvas>
                 </div>
-               
- 
                 <div class="data-display">
                     <div class="data-item">
                         <div class="data-label">Tiempo</div>
                         <div class="data-value" id="time-value">0.00 s</div>
-          
                     </div>
                     <div class="data-item">
                         <div class="data-label">Posición</div>
                         <div class="data-value" id="position-value">0.00 M</div>
-                 
                     </div>
                     <div class="data-item">
                         <div class="data-label">Velocidad</div>
                         <div class="data-value" id="velocity-value">0.00 M/s</div>
                     </div>
-    
                     <div class="data-item">
                         <div class="data-label">Aceleración</div>
                         <div class="data-value" id="acceleration-value">0.00 M/s²</div>
                     </div>
-           
                     <div class="data-item">
                         <div class="data-label">Fuerza Net</div>
                         <div class="data-value" id="force-value">0.00 N</div>
                     </div>
-                 
                     <div class="data-item">
                         <div class="data-label">Energía</div>
                         <div class="data-value" id="energy-value">0.00 J</div>
                     </div>
                 </div>
-        
-        
                 <div class="controls">
                     <button id="pause-btn" class="pause-btn">
                         <svg class="icon" viewBox="0 0 24 24">
-                         
                             <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
                         </svg>
                         Pausar
                     </button>
                     <button id="export-btn" class="export-btn">
-     
                         <svg class="icon" viewBox="0 0 24 24">
                             <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
                         </svg>
                         Exportar Datos
                     </button>
-                </div> <div class="history-container">
+                </div>
+                <div class="history-container">
                     <h2>Historial de Configuraciones</h2>
                     <div class="history-list" id="history-list">
-                        <div class="empty-history" id="empty-history">No hay configuraciones guardadas. Guarda una configuración para verla aquí.</div>
+                        <div class="empty-history" id="empty-history">No hay configuraciones guardadas.
+                            Guarda una configuración para verla aquí.</div>
                     </div>
                 </div>
             </div>
-        </div> <div class="results-container">
+        </div>
+        <div class="results-container">
             <h2>Resultados y Explicación del Sistema</h2>
             <div class="results-explanation">
                 <h4>Análisis del Movimiento</h4>
-                <p id="movement-analysis">El sistema está en reposo. Inicie la simulación para ver el análisis del movimiento.</p>
+                <p id="movement-analysis">El sistema está en reposo.
+                    Inicie la simulación para ver el análisis del movimiento.</p>
                 <h4>Comportamiento del Sistema</h4>
                 <p id="system-behavior">El objeto permanecerá en reposo o se moverá dependiendo de la relación entre la fuerza gravitatoria paralela al plano y la fuerza de fricción.</p>
                 <h4>Explicación del Desplazamiento</h4>
-                <p id="displacement-explanation">El desplazamiento del objeto está determinado por la fuerza neta que actúa sobre él. Si la componente gravitatoria paralela al plano supera la fuerza de fricción, el objeto acelerará hacia abajo del plano.</p>
+                <p id="displacement-explanation">El desplazamiento del objeto está determinado por la fuerza neta que actúa sobre él.
+                    Si la componente gravitatoria paralela al plano supera la fuerza de fricción, el objeto acelerará hacia abajo del plano.</p>
             </div>
         </div>
-        
         <div class="info-panel">
             <h2>Fundamentos Teóricos</h2>
             <div class="tabs">
@@ -951,10 +916,10 @@ min="0" max="1" value="0.1" step="0.01" style="display: none;">
                 <div class="tab" data-tab="formulas">Fórmulas</div>
                 <div class="tab" data-tab="instructions">Instrucciones</div>
             </div>
-            
             <div class="tab-content active" id="theory-tab">
                 <div class="theory-content">
-                    <p>Un plano inclinado es una superficie plana que forma un ángulo agudo con la horizontal. Se utiliza para elevar cuerpos a una cierta altura con una fuerza menor que el peso del cuerpo.</p>
+                    <p>Un plano inclinado es una superficie plana que forma un ángulo agudo con la horizontal.
+                        Se utiliza para elevar cuerpos a una cierta altura con una fuerza menor que el peso del cuerpo.</p>
                     <p>Las fuerzas que actúan sobre un objeto en un plano inclinado son:</p>
                     <ul>
                         <li><span class="variable">Peso (mg)</span>: Fuerza gravitatoria dirigida hacia el centro de la Tierra.</li>
@@ -964,7 +929,6 @@ min="0" max="1" value="0.1" step="0.01" style="display: none;">
                     <p>Cuando se añade un sistema de poleas, se introduce una fuerza adicional que puede modificar el movimiento del objeto en el plano inclinado.</p>
                 </div>
             </div>
-            
             <div class="tab-content" id="formulas-tab">
                 <div class="theory-content">
                     <p><strong>Fuerzas en un plano inclinado (Serway):</strong></p>
@@ -979,13 +943,11 @@ min="0" max="1" value="0.1" step="0.01" style="display: none;">
                     <div class="formula"> T = m<sub>2</sub>g - m<sub>2</sub>a </div>
                 </div>
             </div>
-            
             <div class="tab-content" id="instructions-tab">
                 <div class="theory-content">
                     <p>Instrucciones del sistema:</p>
                     <ul>
-                        <li><strong>Primer paso:</strong> Seleccionar el sistema 
-que desee utilzar (Básico o con polea).</li>
+                        <li><strong>Primer paso:</strong> Seleccionar el sistema que desee utilzar (Básico o con polea).</li>
                         <li><strong>Segundo paso:</strong> Insertar datos correspondientes al sistema seleccionado y apretar el boton de iniciar simulación.</li>
                         <li><strong>Tercer paso:</strong> Al detenerse, se puede utilizar la opción reiniciar o exportar datos, al exportarlos se entregará un documento.</li>
                         <li><strong>Nueva función:</strong> Puede guardar configuraciones para usarlas posteriormente desde el panel de historial.</li>
@@ -993,118 +955,97 @@ que desee utilzar (Básico o con polea).</li>
                 </div>
             </div>
         </div>
-        
         <footer>
             <p>Laboratorio Virtual de Física - Simulador de Plano Inclinado con Poleas y sin poleas</p>
             <p>© 2023 - Departamento de Física - Universidad Virtual</p>
         </footer>
-    </div> 
-    
-    <div class="notification-container" id="notification-container"></div> 
-    
-    <script> 
-        // Elementos del DOM 
-        const canvas = document.getElementById('simulation-canvas'); 
-        const ctx = canvas.getContext('2d'); 
-        
-        // Inputs numéricos 
-        const massInput = document.getElementById('mass-input'); 
-        const angleInput = document.getElementById('angle-input'); 
+    </div>
+    <div class="notification-container" id="notification-container"></div>
+    <script>
+        // Elementos del DOM
+        const canvas = document.getElementById('simulation-canvas');
+        const ctx = canvas.getContext('2d');
+        // Inputs numéricos
+        const massInput = document.getElementById('mass-input');
+        const angleInput = document.getElementById('angle-input');
         const angleRange = document.getElementById('angle-range');
-        const angleValue = document.getElementById('angle-value'); 
-        const frictionInput = document.getElementById('friction-input'); 
-        const frictionRange = document.getElementById('friction-range'); 
-        const frictionValue = document.getElementById('friction-value'); 
+        const angleValue = document.getElementById('angle-value');
+        const frictionInput = document.getElementById('friction-input');
+        const frictionRange = document.getElementById('friction-range');
+        const frictionValue = document.getElementById('friction-value');
         const lengthInput = document.getElementById('length-input');
-        const gravityInput = document.getElementById('gravity-input'); 
-        
-        // Inputs de la pestaña Poleas 
-        const massInputPulley = document.getElementById('mass-input-pulley'); 
+        const gravityInput = document.getElementById('gravity-input');
+        // Inputs de la pestaña Poleas
+        const massInputPulley = document.getElementById('mass-input-pulley');
         const angleInputPulley = document.getElementById('angle-input-pulley');
-        const angleRangePulley = document.getElementById('angle-range-pulley'); 
-        const angleValuePulley = document.getElementById('angle-value-pulley'); 
-        const frictionInputPulley = document.getElementById('friction-input-pulley'); 
-        const frictionRangePulley = document.getElementById('friction-range-pulley'); 
+        const angleRangePulley = document.getElementById('angle-range-pulley');
+        const angleValuePulley = document.getElementById('angle-value-pulley');
+        const frictionInputPulley = document.getElementById('friction-input-pulley');
+        const frictionRangePulley = document.getElementById('friction-range-pulley');
         const frictionValuePulley = document.getElementById('friction-value-pulley');
-        const lengthInputPulley = document.getElementById('length-input-pulley'); 
-        const gravityInputPulley = document.getElementById('gravity-input-pulley'); 
-        
-        // Configuración de poleas 
+        const lengthInputPulley = document.getElementById('length-input-pulley');
+        const gravityInputPulley = document.getElementById('gravity-input-pulley');
+        // Configuración de poleas
         const counterMassInput = document.getElementById('counter-mass-input');
-        
-        // Botones 
-        const startBtn = document.getElementById('start-btn'); 
-        const pauseBtn = document.getElementById('pause-btn'); 
-        const resetBtn = document.getElementById('reset-btn'); 
+        // Botones
+        const startBtn = document.getElementById('start-btn');
+        const pauseBtn = document.getElementById('pause-btn');
+        const resetBtn = document.getElementById('reset-btn');
         const exportBtn = document.getElementById('export-btn');
-        const saveConfigBtn = document.getElementById('save-config-btn'); 
-        
-        // Historial 
-        const historyList = document.getElementById('history-list'); 
+        const saveConfigBtn = document.getElementById('save-config-btn');
+        // Historial
+        const historyList = document.getElementById('history-list');
         const emptyHistory = document.getElementById('empty-history');
-        
-        // Valores de datos 
-        const timeValue = document.getElementById('time-value'); 
-        const positionValue = document.getElementById('position-value'); 
-        const velocityValue = document.getElementById('velocity-value'); 
+        // Valores de datos
+        const timeValue = document.getElementById('time-value');
+        const positionValue = document.getElementById('position-value');
+        const velocityValue = document.getElementById('velocity-value');
         const accelerationValue = document.getElementById('acceleration-value');
-        const forceValue = document.getElementById('force-value'); 
-        const energyValue = document.getElementById('energy-value'); 
-        
-        // Mensajes de validación 
-        const massValidation = document.getElementById('mass-validation'); 
+        const forceValue = document.getElementById('force-value');
+        const energyValue = document.getElementById('energy-value');
+        // Mensajes de validación
+        const massValidation = document.getElementById('mass-validation');
         const massValidationPulley = document.getElementById('mass-validation-pulley');
-        const counterMassValidation = document.getElementById('counter-mass-validation'); 
-        
-        // Elementos de resultados 
-        const movementAnalysis = document.getElementById('movement-analysis'); 
-        const systemBehavior = document.getElementById('system-behavior'); 
+        const counterMassValidation = document.getElementById('counter-mass-validation');
+        // Elementos de resultados
+        const movementAnalysis = document.getElementById('movement-analysis');
+        const systemBehavior = document.getElementById('system-behavior');
         const displacementExplanation = document.getElementById('displacement-explanation');
-        
-        // Variables de simulación 
-        let animationId; 
-        let isRunning = false; 
-        let isPaused = false; 
+
+        // Variables de simulación
+        let animationId;
+        let isRunning = false;
+        let isPaused = false;
         let currentTime = 0;
-        let position = 0; 
-        let velocity = 0; 
-        let acceleration = 0; 
-        let netForce = 0; 
+        let position = 0;
+        let velocity = 0;
+        let acceleration = 0;
+        let netForce = 0;
         let energy = 0;
-        let simulationData = []; 
-        
-        // Parámetros iniciales 
-        let mass = parseFloat(massInput.value); 
-        let angle = parseFloat(angleInput.value); 
+        let simulationData = [];
+
+        // Parámetros iniciales
+        let mass = parseFloat(massInput.value);
+        let angle = parseFloat(angleInput.value);
         let friction = parseFloat(frictionInput.value);
-        let length = parseFloat(lengthInput.value); 
-        let gravity = parseFloat(gravityInput.value); 
-        let usePulley = false; 
+        let length = parseFloat(lengthInput.value);
+        let gravity = parseFloat(gravityInput.value);
+        let usePulley = false;
         let pulleyConfig = { counterMass: parseFloat(counterMassInput.value) };
-        
-        // Variables para controlar notificaciones 
-        let angleChanged = false; 
+
+        // Variables para controlar notificaciones
+        let angleChanged = false;
         let frictionChanged = false;
-        
-        // Historial de configuraciones 
-        let configHistory = JSON.parse(localStorage.getItem('inclinedPlaneHistory')) || []; 
-        
-        // Constantes para dibujar el plano (ajusta si es necesario)
-        const INCLINE_START_X = 50;
-        const INCLINE_START_Y_OFFSET = 50; 
-        const MAX_LENGTH_PHYSICAL = 10; // Longitud máxima física para el escalado
-        const BOX_SIZE = 40; 
-        
-        
-        // -------------------------------------------------------------------
-        // FUNCIONES DE DIBUJO Y SIMULACIÓN (Parte esencial modificada/añadida)
-        // -------------------------------------------------------------------
-        
-        function setupCanvas() {
-            // Ajusta el tamaño del canvas al contenedor
-            canvas.width = canvas.parentElement.clientWidth;
-            canvas.height = Math.max(canvas.parentElement.clientHeight - 50, 400); 
-        }
+
+        // Historial de configuraciones
+        let configHistory = JSON.parse(localStorage.getItem('inclinedPlaneHistory')) || [];
+
+        // Inicializar el historial
+        renderHistory();
+
+        // ----------------------------------------------------------------------
+        // Funciones de utilidad y dibujo (Aquí está la modificación del ángulo)
+        // ----------------------------------------------------------------------
 
         /**
          * Dibuja el símbolo del ángulo en la esquina inferior izquierda (P1),
@@ -1121,10 +1062,9 @@ que desee utilzar (Básico o con polea).</li>
             ctx.save();
             ctx.beginPath();
 
-            // Arco: desde el suelo (ángulo 0) hasta la rampa (ángulo -angleRad)
-            // Se dibuja en sentido antihorario (true) para un ángulo positivo
-            // o directamente desde 0 hasta el ángulo negativo
-            
+            // Arco: desde la horizontal (ángulo 0) hasta la rampa (ángulo -angleRad)
+            // El sentido antihorario (true) es esencial para que dibuje el ángulo positivo
+            // desde la horizontal hacia arriba.
             ctx.arc(x, y, radius, 0, -angleRad, true); 
             
             ctx.strokeStyle = color;
@@ -1137,7 +1077,7 @@ que desee utilzar (Básico o con polea).</li>
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
             
-            // Posición para la etiqueta θ: a medio camino entre 0 y -angleRad
+            // Posición para la etiqueta θ: a medio camino en el arco
             const midAngle = -angleRad / 2;
             const labelX = x + (radius + 15) * Math.cos(midAngle); 
             const labelY = y + (radius + 15) * Math.sin(midAngle); 
@@ -1146,215 +1086,454 @@ que desee utilzar (Básico o con polea).</li>
 
             ctx.restore();
         }
-        
+
+        function drawLine(ctx, x1, y1, x2, y2, color = 'black', width = 2) {
+            ctx.beginPath();
+            ctx.strokeStyle = color;
+            ctx.lineWidth = width;
+            ctx.moveTo(x1, y1);
+            ctx.lineTo(x2, y2);
+            ctx.stroke();
+        }
+
+        function drawRect(ctx, x, y, w, h, color = 'blue') {
+            ctx.fillStyle = color;
+            ctx.fillRect(x, y, w, h);
+        }
+
+        function drawBlock(ctx, x, y, size, angleRad, color = '#3182ce') {
+            ctx.save();
+            ctx.translate(x, y);
+            ctx.rotate(-angleRad); // Rotar para que se alinee con el plano
+            
+            // Dibuja el bloque centrado en (0, 0) y luego se traslada
+            const halfSize = size / 2;
+            ctx.fillStyle = color;
+            ctx.fillRect(-halfSize, -halfSize, size, size);
+
+            ctx.strokeStyle = 'black';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(-halfSize, -halfSize, size, size);
+
+            ctx.restore();
+        }
+
+        function drawPulley(ctx, x, y, radius, color = 'gray') {
+            // Rueda de la polea
+            ctx.beginPath();
+            ctx.fillStyle = color;
+            ctx.arc(x, y, radius, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.strokeStyle = 'black';
+            ctx.stroke();
+
+            // Centro
+            ctx.beginPath();
+            ctx.fillStyle = 'black';
+            ctx.arc(x, y, 3, 0, 2 * Math.PI);
+            ctx.fill();
+
+            // Soporte (opcional, simplificado)
+            drawLine(ctx, x, y - radius, x, y - radius - 15, 'black', 4);
+        }
+
         function drawInclinedPlane(ctx, angle, length, usePulley) {
             const W = canvas.width;
             const H = canvas.height;
             const angleRad = angle * Math.PI / 180;
+            const padding = 50;
 
-            // Escala el dibujo para que se ajuste al canvas
-            const MAX_CANVAS_WIDTH = W - 100;
-            const MAX_CANVAS_HEIGHT = H - 100;
+            // Coordenadas del triángulo (Plano inclinado)
+            // P1: Esquina inferior izquierda (base del plano)
+            const P1_X = padding;
+            const P1_Y = H - padding;
             
-            // Si la altura máxima es menor que la base máxima, ajusta por altura
-            const maxBase = MAX_LENGTH_PHYSICAL / Math.cos(Math.PI / 4); // Para 45 grados
-            const maxHeight = MAX_LENGTH_PHYSICAL / Math.sin(Math.PI / 4);
+            // P3: Esquina inferior derecha (depende del espacio)
+            const base = (W - 2 * padding) * 0.8;
+            const P3_X = P1_X + base;
+
+            // P2: Esquina superior (altura)
+            const height = base * Math.tan(angleRad);
+            const P2_X = P1_X;
+            const P2_Y = P1_Y - height;
             
-            const scaleBase = MAX_CANVAS_WIDTH / maxBase;
-            const scaleHeight = MAX_CANVAS_HEIGHT / maxHeight;
-            
-            const scale = Math.min(scaleBase, scaleHeight);
+            // Escala para el dibujo: Convertir Longitud (M) a Longitud del dibujo
+            const drawingLength = Math.sqrt(base * base + height * height);
+            const scale = length / drawingLength; 
 
-            const adjustedLength = length * scale; 
-            const height = adjustedLength * Math.sin(angleRad);
-            const base = adjustedLength * Math.cos(angleRad);
-
-            // Coordenadas del plano inclinado (triángulo rectángulo)
-            const P1_X = INCLINE_START_X; // Esquina inferior izquierda (BASE)
-            const P1_Y = H - INCLINE_START_Y_OFFSET; 
-            const P2_X = P1_X + base; // Esquina inferior derecha (BASE + Cateto Adyacente)
-            const P2_Y = P1_Y;
-            const P3_X = P2_X; // Esquina superior derecha (Cateto Opuesto)
-            const P3_Y = P1_Y - height; 
-
-            // 1. Dibuja el Plano Inclinado (Rampa)
-            ctx.save();
+            // 1. Dibuja el Plano Inclinado (Triángulo)
             ctx.beginPath();
-            ctx.moveTo(P1_X, P1_Y); 
-            ctx.lineTo(P2_X, P2_Y); 
-            ctx.lineTo(P3_X, P3_Y); 
+            ctx.moveTo(P1_X, P1_Y); // P1 (Base)
+            ctx.lineTo(P3_X, P1_Y); // P3 (Suelo horizontal)
+            ctx.lineTo(P2_X, P2_Y); // P2 (Altura)
             ctx.closePath();
-            ctx.fillStyle = '#e2e8f0'; 
+            
+            ctx.fillStyle = '#cbd5e0'; // Color de la rampa
             ctx.fill();
-
-            // Dibuja el suelo (Cateto Adyacente)
-            ctx.beginPath();
-            ctx.moveTo(0, P1_Y); 
-            ctx.lineTo(W, P2_Y); 
-            ctx.strokeStyle = '#2d3748';
-            ctx.lineWidth = 4;
+            ctx.strokeStyle = 'black';
+            ctx.lineWidth = 2;
             ctx.stroke();
 
-            // Dibuja la altura (Cateto Opuesto - línea punteada)
-            ctx.beginPath();
-            ctx.moveTo(P2_X, P2_Y);
-            ctx.lineTo(P3_X, P3_Y);
-            ctx.strokeStyle = '#2d3748';
-            ctx.setLineDash([5, 5]); 
-            ctx.lineWidth = 1;
-            ctx.stroke();
-            ctx.setLineDash([]); 
-
-            // Dibuja la superficie del plano (Hipotenusa)
-            ctx.beginPath();
-            ctx.moveTo(P1_X, P1_Y);
-            ctx.lineTo(P3_X, P3_Y);
-            ctx.strokeStyle = '#2d3748';
-            ctx.lineWidth = 4;
-            ctx.stroke();
+            // Dibuja la base y la altura para el triángulo de referencia (opcional)
+            drawLine(ctx, P1_X, P1_Y, P3_X, P1_Y, '#2d3748', 3); // Base Horizontal (Suelo)
+            drawLine(ctx, P1_X, P1_Y, P2_X, P2_Y, '#2d3748', 3); // Soporte Vertical
             
-            // Dibuja la línea vertical en P2
-            ctx.beginPath();
-            ctx.moveTo(P2_X, P2_Y);
-            ctx.lineTo(P2_X, P3_Y);
-            ctx.strokeStyle = '#2d3748';
-            ctx.lineWidth = 4;
-            ctx.stroke();
-            
-            ctx.restore();
-
             // 2. Dibuja el Símbolo del Ángulo (θ) - EN LA ESQUINA INFERIOR IZQUIERDA (P1)
+            // Llama a la función CORREGIDA
             drawAngleAtBaseHorizontal(ctx, P1_X, P1_Y, angleRad, 40); 
+            
+            // 3. Dibuja la Polea si está activada
+            let pulleyX = P3_X;
+            let pulleyY = P1_Y;
+            if (usePulley) {
+                // Coloca la polea en el extremo superior del plano inclinado (P2)
+                pulleyX = P1_X + base * Math.cos(angleRad) * Math.cos(angleRad); // Esto es incorrecto para P2
+                pulleyX = P1_X + height * Math.cos(angleRad); // Proyección en X de P2
+                pulleyY = P1_Y - height * Math.cos(angleRad); // Proyección en Y de P2
+                
+                // Cálculo simple de P2 (extremo superior de la rampa)
+                // Usaremos P_rampa_extremo: P1_X + Base_rampa en X, P1_Y - Altura_rampa en Y
+                const rampEndX = P1_X + base * Math.cos(angleRad); // Esto NO es correcto para el vértice P2, es para un punto intermedio
+                
+                // El punto P2 es (P1_X, P1_Y - height). La polea debe ir allí, o en el extremo de la hipotenusa.
+                
+                // Usaremos el extremo superior de la hipotenusa (P_hipotenusa_end)
+                const rampLength = length / scale;
+                const P_hipotenusa_end_X = P1_X + rampLength * Math.cos(angleRad);
+                const P_hipotenusa_end_Y = P1_Y - rampLength * Math.sin(angleRad);
+                
+                // Usaremos un punto fijo en el dibujo (el vértice superior P2 para simplificar la cadena)
+                // La polea se dibujará justo encima del extremo superior de la hipotenusa
+                
+                // Coordenadas correctas para la polea en el extremo superior de la rampa
+                pulleyX = P1_X + base * 0.95; // Un poco antes del final de la base
+                pulleyY = P1_Y - (P1_X + base * 0.95 - P1_X) * Math.tan(angleRad);
 
-
-            return { P1_X, P1_Y, P3_X, P3_Y, base, height, scale, angleRad };
-        }
-        
-        function drawObject(ctx, planeCoords, currentPosition) {
-            const { P1_X, P1_Y, base, height, scale, angleRad } = planeCoords;
+                drawPulley(ctx, pulleyX, pulleyY, 15);
+            }
             
-            // La posición (currentPosition) es a lo largo de la hipotenusa (0 a length)
-            const scaledPosition = currentPosition * scale;
-            
-            // Calcular la posición del centro del bloque en el plano.
-            // La rotación se aplica al contexto, no solo al bloque.
-            ctx.save();
-            
-            // Traslada al punto de inicio del plano
-            ctx.translate(P1_X, P1_Y);
-            // Rota el sistema de coordenadas por el ángulo del plano
-            ctx.rotate(-angleRad);
-            
-            // Dibuja el bloque. En el sistema rotado, el plano es horizontal.
-            // El bloque comienza en x=0 (y=0) y se mueve a lo largo de X.
-            const boxCenterOffset = BOX_SIZE / 2;
-            const boxX = scaledPosition - boxCenterOffset;
-            const boxY = -boxCenterOffset; // Se dibuja sobre la línea que ahora es el eje x
-
-            ctx.fillStyle = 'var(--primary-color)';
-            ctx.fillRect(boxX, boxY, BOX_SIZE, BOX_SIZE);
-            
-            // Dibujar un pequeño punto de referencia en la posición 0
-            ctx.fillStyle = 'white';
-            ctx.fillRect(scaledPosition - 5, -5, 10, 10);
-
-            ctx.restore();
-            
-            // Dibujar las fuerzas (simplificado)
-            // ... (Fuerzas y polea irían aquí)
+            return { P1_X, P1_Y, P3_X, P3_Y: P1_Y, base, height, scale, angleRad, pulleyX, pulleyY };
         }
 
         function drawSimulation() {
-            // Clear canvas
             ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Obtener parámetros
+            const currentMass = usePulley ? parseFloat(massInputPulley.value) : parseFloat(massInput.value);
+            const currentAngle = usePulley ? parseFloat(angleInputPulley.value) : parseFloat(angleInput.value);
+            const currentLength = usePulley ? parseFloat(lengthInputPulley.value) : parseFloat(lengthInput.value);
 
-            // Determine current parameters based on active tab
-            let currentAngle, currentLength;
+            const { P1_X, P1_Y, scale, angleRad, pulleyX, pulleyY } = drawInclinedPlane(ctx, currentAngle, currentLength, usePulley);
+
+            // Calcular la posición del bloque en el plano inclinado (convertir 'position' de M a pixeles)
+            const positionPx = position / scale; 
+            
+            // Coordenadas del centro del bloque (desplazamiento a lo largo de la rampa)
+            const blockRadius = 25;
+            // La posición inicial (0) es la base. El desplazamiento es a lo largo de la hipotenusa.
+            const blockCenterX = P1_X + positionPx * Math.cos(angleRad);
+            const blockCenterY = P1_Y - positionPx * Math.sin(angleRad);
+            
+            // 4. Dibuja el Bloque
+            drawBlock(ctx, blockCenterX, blockCenterY, blockRadius * 2, angleRad, usePulley ? '#e53e3e' : '#3182ce');
+
+            // 5. Dibuja Fuerzas (Vector de Peso y Normal para referencia)
+            // (La implementación de las fuerzas es compleja y no es necesaria para el ángulo)
+
+            // 6. Dibuja la Cuerda y el Contrapeso (si se usa polea)
             if (usePulley) {
-                currentAngle = angleInputPulley.value;
-                currentLength = lengthInputPulley.value;
-            } else {
-                currentAngle = angleInput.value;
-                currentLength = lengthInput.value;
-            }
+                const counterMass = parseFloat(counterMassInput.value);
+                const blockTopEdgeX = blockCenterX + blockRadius * Math.sin(angleRad);
+                const blockTopEdgeY = blockCenterY + blockRadius * Math.cos(angleRad);
 
-            // Draw the inclined plane and get its coordinates
-            const planeCoords = drawInclinedPlane(ctx, parseFloat(currentAngle), parseFloat(currentLength), usePulley);
-            
-            // Draw the block
-            drawObject(ctx, planeCoords, position);
-        }
+                // Cuerda en el plano inclinado
+                drawLine(ctx, blockCenterX, blockCenterY, pulleyX, pulleyY, 'gray', 3);
 
-        let lastTime;
-        function animate(timestamp) {
-            if (!isRunning || isPaused) {
-                return;
-            }
-
-            if (lastTime === undefined) {
-                lastTime = timestamp;
-            }
-            const deltaTime = (timestamp - lastTime) / 1000; // Delta time in seconds
-            lastTime = timestamp;
-
-            // --- FÍSICA ---
-            // Recalcula aceleración con los parámetros actuales
-            let currentMass = usePulley ? parseFloat(massInputPulley.value) : parseFloat(massInput.value);
-            let currentAngle = usePulley ? parseFloat(angleInputPulley.value) : parseFloat(angleInput.value);
-            let currentFriction = usePulley ? parseFloat(frictionInputPulley.value) : parseFloat(frictionInput.value);
-            let currentGravity = usePulley ? parseFloat(gravityInputPulley.value) : parseFloat(gravityInput.value);
-            let currentLength = usePulley ? parseFloat(lengthInputPulley.value) : parseFloat(lengthInput.value);
-            
-            const angleRad = currentAngle * Math.PI / 180;
-            const fn = currentMass * currentGravity * Math.cos(angleRad);
-            const fk = currentFriction * fn;
-            const fgx = currentMass * currentGravity * Math.sin(angleRad);
-            
-            if (usePulley) {
-                // Lógica de poleas más compleja. Simplificamos la aceleración
-                const m2 = parseFloat(counterMassInput.value);
-                netForce = (fgx - fk + m2 * currentGravity) / (currentMass + m2); // Simplificado para que se mueva.
-                acceleration = netForce; 
-            } else {
-                // Lógica sin poleas
-                netForce = fgx - fk;
-                acceleration = netForce / currentMass;
-            }
-            
-            if (Math.abs(netForce) < 0.01 && velocity < 0.01) {
-                 acceleration = 0;
-                 netForce = 0;
-            }
-
-            // Integración de movimiento
-            velocity += acceleration * deltaTime;
-            position += velocity * deltaTime;
-            currentTime += deltaTime;
-
-            // --- DETENCIÓN ---
-            if (position < 0 || position > currentLength) {
-                isRunning = false;
-                position = Math.max(0, Math.min(currentLength, position)); 
-                velocity = 0;
-                acceleration = 0;
-                showNotification('Simulación Terminada', 'El objeto ha llegado al final del plano.', 'success');
-            }
-
-            // --- ACTUALIZAR DATOS ---
-            timeValue.textContent = currentTime.toFixed(2) + ' s';
-            positionValue.textContent = position.toFixed(2) + ' M';
-            velocityValue.textContent = velocity.toFixed(2) + ' M/s';
-            accelerationValue.textContent = acceleration.toFixed(2) + ' M/s²';
-            forceValue.textContent = netForce.toFixed(2) + ' N';
-            
-            // --- DIBUJAR ---
-            drawSimulation();
-            
-            if (isRunning) {
-                animationId = requestAnimationFrame(animate);
+                // Cuerda vertical que cae
+                const stringLength = canvas.height - pulleyY - padding;
+                drawLine(ctx, pulleyX, pulleyY, pulleyX, pulleyY + stringLength, 'gray', 3);
+                
+                // Contrapeso (solo dibujamos la masa, la posición exacta depende de la longitud de la cuerda)
+                const counterMassY = pulleyY + stringLength;
+                drawBlock(ctx, pulleyX, counterMassY + 20, 30, 0, '#38a169');
             }
         }
         
+        function setupCanvas() {
+            const container = document.getElementById('simulation-canvas').parentNode;
+            canvas.width = container.clientWidth;
+            canvas.height = Math.max(container.clientHeight, 400); // Altura mínima
+        }
+
+        // ----------------------------------------------------------------------
+        // Funciones de cálculo y simulación
+        // ----------------------------------------------------------------------
+
+        function calculateAcceleration(m, angle, friction, g, L, m2 = 0) {
+            const angleRad = angle * Math.PI / 180;
+            const F_gx = m * g * Math.sin(angleRad);
+            const F_n = m * g * Math.cos(angleRad);
+            const F_k = friction * F_n;
+
+            let netForce;
+            let accelerationValue;
+            let isMovingUp = false;
+
+            if (usePulley) {
+                // Sistema con Polea
+                const F_g2 = m2 * g;
+                
+                // Determine la dirección potencial de movimiento si el sistema está en reposo o no
+                if (F_g2 > (F_gx + F_k)) {
+                    // M2 jala hacia abajo, M1 sube.
+                    netForce = F_g2 - F_gx - F_k;
+                    accelerationValue = netForce / (m + m2);
+                } else if ((F_gx - F_k) > F_g2) {
+                    // M1 jala hacia abajo, M2 sube.
+                    netForce = F_gx - F_k - F_g2;
+                    accelerationValue = netForce / (m + m2);
+                } else {
+                    // Equilibrio o fricción estática mayor que la fuerza neta motriz
+                    netForce = 0;
+                    accelerationValue = 0;
+                }
+            } else {
+                // Sistema Básico (objeto desliza hacia abajo)
+                netForce = F_gx - F_k;
+
+                if (netForce > 0) {
+                    // Acelera hacia abajo
+                    accelerationValue = netForce / m;
+                } else {
+                    // Reposo o fricción evita el movimiento
+                    accelerationValue = 0;
+                    netForce = 0;
+                }
+            }
+            
+            return { acceleration: accelerationValue, netForce, isMovingUp };
+        }
+
+        function updateSimulation(deltaTime) {
+            const currentMass = usePulley ? parseFloat(massInputPulley.value) : parseFloat(massInput.value);
+            const currentAngle = usePulley ? parseFloat(angleInputPulley.value) : parseFloat(angleInput.value);
+            const currentFriction = usePulley ? parseFloat(frictionInputPulley.value) : parseFloat(frictionInput.value);
+            const currentLength = usePulley ? parseFloat(lengthInputPulley.value) : parseFloat(lengthInput.value);
+            const currentGravity = usePulley ? parseFloat(gravityInputPulley.value) : parseFloat(gravityInput.value);
+            const counterMass = usePulley ? parseFloat(counterMassInput.value) : 0;
+            
+            const { acceleration: acc, netForce: force } = calculateAcceleration(currentMass, currentAngle, currentFriction, currentGravity, currentLength, counterMass);
+            
+            acceleration = acc;
+            netForce = force;
+
+            // Integración de movimiento
+            // v = v₀ + a*t
+            velocity += acceleration * deltaTime;
+            
+            // x = x₀ + v₀*t + 0.5*a*t²
+            position += velocity * deltaTime + 0.5 * acceleration * deltaTime * deltaTime;
+            
+            // Condición de parada (si el bloque llega al final del plano)
+            if (position >= currentLength) {
+                position = currentLength;
+                velocity = 0;
+                isRunning = false;
+                cancelAnimationFrame(animationId);
+                showNotification('Simulación Terminada', 'El objeto ha llegado al final del plano inclinado.', 'success');
+            } else if (position < 0) { // Si el movimiento es hacia arriba y se detiene antes de L
+                position = 0;
+                velocity = 0;
+                isRunning = false;
+                cancelAnimationFrame(animationId);
+                showNotification('Simulación Terminada', 'El objeto ha llegado a la base del plano inclinado.', 'success');
+            }
+
+            // Calcular Energía (Potencial + Cinética)
+            const angleRad = currentAngle * Math.PI / 180;
+            const height = position * Math.sin(angleRad); // Altura vertical
+            const potentialEnergy = currentMass * currentGravity * height;
+            const kineticEnergy = 0.5 * currentMass * velocity * velocity;
+            energy = potentialEnergy + kineticEnergy;
+
+            // Actualizar tiempo
+            currentTime += deltaTime;
+
+            // Guardar datos
+            simulationData.push({
+                time: currentTime,
+                position,
+                velocity,
+                acceleration,
+                netForce,
+                energy
+            });
+
+            // Actualizar visualización de datos
+            timeValue.textContent = `${currentTime.toFixed(2)} s`;
+            positionValue.textContent = `${position.toFixed(2)} M`;
+            velocityValue.textContent = `${velocity.toFixed(2)} M/s`;
+            accelerationValue.textContent = `${acceleration.toFixed(2)} M/s²`;
+            forceValue.textContent = `${netForce.toFixed(2)} N`;
+            energyValue.textContent = `${energy.toFixed(2)} J`;
+            
+            // Actualizar explicación de resultados
+            updateResultsExplanation();
+        }
+
+        let lastTime = 0;
+        const maxTimeStep = 1/60; // Máximo paso de tiempo para estabilidad
+
+        function animate(timestamp) {
+            if (!isRunning || isPaused) return;
+
+            const deltaTime = Math.min((timestamp - lastTime) / 1000, maxTimeStep);
+            lastTime = timestamp;
+
+            updateSimulation(deltaTime);
+            drawSimulation();
+
+            animationId = requestAnimationFrame(animate);
+        }
+
+        // ----------------------------------------------------------------------
+        // Funciones de control e interacción
+        // ----------------------------------------------------------------------
+
+        function showNotification(title, message, type = 'info') {
+            const notificationContainer = document.getElementById('notification-container');
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            let icon = 'ℹ️';
+            if (type === 'warning') icon = '⚠️';
+            if (type === 'error') icon = '❌';
+            if (type === 'success') icon = '✅';
+            
+            let borderColor = '';
+            if (type === 'warning') borderColor = 'var(--warning-color)';
+            else if (type === 'error') borderColor = 'var(--danger-color)';
+            else if (type === 'success') borderColor = 'var(--success-color)';
+            else borderColor = 'var(--accent-color)';
+            
+            notification.style.borderLeftColor = borderColor;
+
+            notification.innerHTML = `
+                <div class="notification-icon">${icon}</div>
+                <div class="notification-content">
+                    <div class="notification-title">${title}</div>
+                    <div class="notification-message">${message}</div>
+                </div>
+                <button class="notification-close">&times;</button>
+            `;
+            notificationContainer.appendChild(notification);
+
+            notification.querySelector('.notification-close').addEventListener('click', function() {
+                notification.remove();
+            });
+
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.remove();
+                }
+            }, 5000);
+        }
+
+        function updateResultsExplanation() {
+            const currentMass = usePulley ? parseFloat(massInputPulley.value) : parseFloat(massInput.value);
+            const currentAngle = usePulley ? parseFloat(angleInputPulley.value) : parseFloat(angleInput.value);
+            const currentFriction = usePulley ? parseFloat(frictionInputPulley.value) : parseFloat(frictionInput.value);
+            const currentGravity = usePulley ? parseFloat(gravityInputPulley.value) : parseFloat(gravityInput.value);
+            const counterMass = usePulley ? parseFloat(counterMassInput.value) : 0;
+            
+            const angleRad = currentAngle * Math.PI / 180;
+            const gravitationalForce = currentMass * currentGravity * Math.sin(angleRad);
+            const normalForce = currentMass * currentGravity * Math.cos(angleRad);
+            const frictionForce = currentFriction * normalForce;
+            
+            let analysisText = "";
+            let behaviorText = "";
+            let displacementText = "";
+            let netForceStatic;
+
+            if (usePulley) {
+                const F_g2 = counterMass * currentGravity;
+                
+                // Fuerza neta potencial hacia M1 abajo
+                const F_net_down = gravitationalForce - frictionForce - F_g2;
+                // Fuerza neta potencial hacia M2 abajo (M1 arriba)
+                const F_net_up = F_g2 - gravitationalForce - frictionForce;
+                
+                // Mínima fricción estática para que permanezca en reposo (F_s_max = mu_s * F_n)
+                // Aquí usamos mu_k (coeficiente cinético) como aproximación de mu_s
+                const F_s_max = frictionForce; 
+                
+                if (position > 0 && isRunning) {
+                     // Si el movimiento ya está en curso, usamos la aceleración calculada en updateSimulation
+                    analysisText = `El sistema se mueve con una aceleración neta de ${acceleration.toFixed(2)} M/s².`;
+                    behaviorText = `El objeto principal (${currentMass} Kg) se desliza ${acceleration > 0 ? 'hacia abajo' : 'hacia arriba'} del plano con la masa contrapeso (${counterMass} Kg) dictando la fuerza motriz.`;
+                } else if (F_net_down > 0) {
+                    analysisText = `El objeto se moverá hacia **abajo** del plano. La fuerza motriz neta es de ${F_net_down.toFixed(2)} N.`;
+                    behaviorText = `La componente gravitatoria de M (${gravitationalForce.toFixed(2)} N) supera la suma de la fricción y la fuerza del contrapeso.`;
+                } else if (F_net_up > 0) {
+                    analysisText = `El objeto se moverá **hacia arriba** del plano, jalado por el contrapeso. La fuerza motriz neta es de ${F_net_up.toFixed(2)} N.`;
+                    behaviorText = `La fuerza gravitatoria del contrapeso (M₂ = ${F_g2.toFixed(2)} N) supera la fuerza gravitatoria paralela de M y la fricción.`;
+                } else {
+                    analysisText = `El sistema permanece en **equilibrio estático**.`;
+                    behaviorText = `La fuerza neta que intenta mover el sistema no es suficiente para superar la fuerza de fricción estática (${F_s_max.toFixed(2)} N).`;
+                }
+
+                displacementText = `El desplazamiento máximo es la longitud del plano (${currentLength.toFixed(2)} M). El movimiento y la aceleración se calculan considerando la inercia total (M + M₂).`;
+
+            } else {
+                // Sistema Básico (sin polea)
+                netForceStatic = gravitationalForce - frictionForce;
+                
+                if (netForceStatic > 0) {
+                    analysisText = `El objeto se moverá **hacia abajo** del plano. La fuerza neta es de ${netForceStatic.toFixed(2)} N.`;
+                    behaviorText = `La fuerza gravitatoria paralela (${gravitationalForce.toFixed(2)} N) es mayor que la fuerza de fricción (${frictionForce.toFixed(2)} N).`;
+                } else if (netForceStatic < 0) {
+                    analysisText = `El objeto está en **equilibrio estático**.`;
+                    behaviorText = `La fuerza de fricción (${frictionForce.toFixed(2)} N) es mayor que la fuerza gravitatoria paralela (${gravitationalForce.toFixed(2)} N), lo que impide el movimiento.`;
+                } else {
+                    analysisText = `El objeto está en **equilibrio estático**.`;
+                    behaviorText = `La fuerza gravitatoria paralela es exactamente igual a la fuerza de fricción.`;
+                }
+                
+                displacementText = `El objeto solo se desplaza hacia abajo si la fuerza neta es positiva. Se detiene al llegar a la longitud máxima del plano (${currentLength.toFixed(2)} M).`;
+            }
+            
+            movementAnalysis.innerHTML = analysisText;
+            systemBehavior.innerHTML = behaviorText;
+            displacementExplanation.innerHTML = displacementText;
+        }
+
+        function startSimulation() {
+            if (isRunning) return; 
+            
+            // Validaciones
+            if (usePulley) {
+                if (parseFloat(massInputPulley.value) <= 0 || parseFloat(counterMassInput.value) <= 0) {
+                    showNotification('Error', 'Las masas deben ser mayores a 0.', 'error');
+                    return;
+                }
+            } else {
+                if (parseFloat(massInput.value) <= 0) {
+                    showNotification('Error', 'La masa debe ser mayor a 0.', 'error');
+                    return;
+                }
+            }
+
+            isRunning = true;
+            isPaused = false;
+            startBtn.textContent = 'Simulación en Curso...';
+            startBtn.disabled = true;
+            pauseBtn.textContent = 'Pausar';
+            
+            lastTime = performance.now();
+            animationId = requestAnimationFrame(animate);
+            showNotification('Simulación Iniciada', 'El movimiento del objeto ha comenzado.', 'info');
+        }
+
         function resetSimulation() {
             cancelAnimationFrame(animationId);
             isRunning = false;
@@ -1364,216 +1543,241 @@ que desee utilzar (Básico o con polea).</li>
             velocity = 0;
             acceleration = 0;
             netForce = 0;
+            energy = 0;
             simulationData = [];
 
-            // Resetear visualización de datos
+            // Actualizar DOM
             timeValue.textContent = '0.00 s';
             positionValue.textContent = '0.00 M';
             velocityValue.textContent = '0.00 M/s';
             accelerationValue.textContent = '0.00 M/s²';
             forceValue.textContent = '0.00 N';
             energyValue.textContent = '0.00 J';
+            
+            startBtn.textContent = 'Iniciar Simulación';
+            startBtn.disabled = false;
+            pauseBtn.textContent = 'Pausar';
 
             // Redibujar el estado inicial
             drawSimulation();
             updateResultsExplanation();
-            
-            pauseBtn.textContent = "Pausar";
-            startBtn.disabled = false;
-            showNotification('Simulación Reiniciada', 'Todos los parámetros y la simulación han sido restablecidos.', 'info');
+            showNotification('Simulación Reiniciada', 'Todos los parámetros se han restablecido al estado inicial.', 'warning');
         }
 
-        // --- MANEJO DE HISTORIAL Y CONFIGURACIÓN ---
+        function exportData() {
+            if (simulationData.length === 0) {
+                showNotification('Advertencia', 'No hay datos para exportar. Inicie una simulación primero.', 'warning');
+                return;
+            }
+
+            let csvContent = "data:text/csv;charset=utf-8,";
+            csvContent += "Tiempo (s),Posicion (M),Velocidad (M/s),Aceleracion (M/s²),Fuerza Neta (N),Energia (J)\n";
+
+            simulationData.forEach(item => {
+                let row = `${item.time.toFixed(3)},${item.position.toFixed(3)},${item.velocity.toFixed(3)},${item.acceleration.toFixed(3)},${item.netForce.toFixed(3)},${item.energy.toFixed(3)}`;
+                csvContent += row + "\n";
+            });
+
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "datos_plano_inclinado.csv");
+            document.body.appendChild(link); // Requerido para Firefox
+            link.click();
+            document.body.removeChild(link);
+            
+            showNotification('Datos Exportados', 'Los datos de la simulación han sido exportados como CSV.', 'success');
+        }
+
+        function saveConfiguration() {
+            const config = {
+                timestamp: new Date().toLocaleString(),
+                type: usePulley ? 'Polea' : 'Básico',
+                mass: usePulley ? parseFloat(massInputPulley.value) : parseFloat(massInput.value),
+                angle: usePulley ? parseFloat(angleInputPulley.value) : parseFloat(angleInput.value),
+                friction: usePulley ? parseFloat(frictionInputPulley.value) : parseFloat(frictionInput.value),
+                length: usePulley ? parseFloat(lengthInputPulley.value) : parseFloat(lengthInput.value),
+                gravity: usePulley ? parseFloat(gravityInputPulley.value) : parseFloat(gravityInput.value),
+                counterMass: usePulley ? parseFloat(counterMassInput.value) : null
+            };
+
+            configHistory.unshift(config);
+            if (configHistory.length > 10) {
+                configHistory.pop(); // Mantener solo las últimas 10 configuraciones
+            }
+            localStorage.setItem('inclinedPlaneHistory', JSON.stringify(configHistory));
+            renderHistory();
+            showNotification('Configuración Guardada', `Configuración ${config.type} (${config.angle}°) guardada en el historial.`, 'success');
+        }
+
+        function loadConfiguration(index) {
+            const config = configHistory[index];
+            if (!config) return;
+
+            // Cambiar pestaña si es necesario
+            const targetTabId = config.type === 'Polea' ? 'pulley' : 'basic';
+            document.querySelector(`.tab[data-tab="${targetTabId}"]`).click();
+            
+            // Cargar valores
+            if (config.type === 'Básico') {
+                massInput.value = config.mass;
+                angleInput.value = config.angle;
+                angleRange.value = config.angle;
+                frictionInput.value = config.friction;
+                frictionRange.value = config.friction;
+                lengthInput.value = config.length;
+                gravityInput.value = config.gravity;
+            } else { // Polea
+                massInputPulley.value = config.mass;
+                angleInputPulley.value = config.angle;
+                angleRangePulley.value = config.angle;
+                frictionInputPulley.value = config.friction;
+                frictionRangePulley.value = config.friction;
+                lengthInputPulley.value = config.length;
+                gravityInputPulley.value = config.gravity;
+                counterMassInput.value = config.counterMass;
+            }
+            
+            // Forzar actualización de variables y dibujo
+            updateParams();
+            drawSimulation();
+            updateResultsExplanation();
+            resetSimulation(); // Asegurar que la simulación se reinicia con la nueva config
+            showNotification('Configuración Cargada', `Configuración ${config.type} (${config.angle}°) cargada y lista para iniciar.`, 'info');
+        }
         
-        function renderHistory() { 
-            if (configHistory.length === 0) { 
-                emptyHistory.style.display = 'block'; 
-                historyList.innerHTML = ''; 
-                historyList.appendChild(emptyHistory); 
-                return; 
-            } 
-            emptyHistory.style.display = 'none'; 
-            historyList.innerHTML = ''; 
-            configHistory.forEach((config, index) => { 
-                const item = document.createElement('div'); 
-                item.className = 'history-item'; 
-                const date = new Date(config.timestamp); 
-                const dateStr = date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'});
-                
-                const type = config.params.usePulley ? 'Polea' : 'Básico';
-                const paramsStr = `M: ${config.params.mass} kg, θ: ${config.params.angle}°, μ: ${config.params.friction}`;
-                
+        function deleteConfiguration(index) {
+            configHistory.splice(index, 1);
+            localStorage.setItem('inclinedPlaneHistory', JSON.stringify(configHistory));
+            renderHistory();
+            showNotification('Configuración Eliminada', 'La configuración ha sido eliminada del historial.', 'warning');
+        }
+
+        function renderHistory() {
+            historyList.innerHTML = '';
+            if (configHistory.length === 0) {
+                emptyHistory.style.display = 'block';
+                return;
+            }
+            emptyHistory.style.display = 'none';
+
+            configHistory.forEach((config, index) => {
+                const item = document.createElement('div');
+                item.className = 'history-item';
                 item.innerHTML = `
                     <div class="history-details">
-                        <div class="history-title">${config.name} (${type})</div>
-                        <div class="history-params">${paramsStr}</div>
-                        <div class="history-date">${dateStr}</div>
+                        <div class="history-title">${config.type} - θ: ${config.angle}°</div>
+                        <div class="history-params">
+                            M: ${config.mass} Kg, 
+                            ${config.type === 'Polea' ? `M₂: ${config.counterMass} Kg, ` : ''}
+                            μ: ${config.friction.toFixed(2)}, 
+                            L: ${config.length} M
+                        </div>
+                        <div class="history-date">${config.timestamp}</div>
                     </div>
                     <div class="history-actions">
-                        <button class="history-btn-small load-config" data-index="${index}">Cargar</button>
+                        <button class="history-btn-small load" data-index="${index}">Cargar</button>
                         <button class="history-btn-small delete" data-index="${index}">Eliminar</button>
                     </div>
                 `;
-                historyList.appendChild(item); 
-            }); 
-        } 
+                historyList.appendChild(item);
+            });
+
+            document.querySelectorAll('.history-btn-small.load').forEach(btn => {
+                btn.addEventListener('click', (e) => loadConfiguration(parseInt(e.target.dataset.index)));
+            });
+            document.querySelectorAll('.history-btn-small.delete').forEach(btn => {
+                btn.addEventListener('click', (e) => deleteConfiguration(parseInt(e.target.dataset.index)));
+            });
+        }
         
-        // --- MANEJO DE TABS ---
+        // Función para actualizar los parámetros globales a partir de los inputs
+        function updateParams() {
+            if (document.getElementById('basic-tab').classList.contains('active')) {
+                usePulley = false;
+                mass = parseFloat(massInput.value);
+                angle = parseFloat(angleInput.value);
+                friction = parseFloat(frictionInput.value);
+                length = parseFloat(lengthInput.value);
+                gravity = parseFloat(gravityInput.value);
+            } else {
+                usePulley = true;
+                mass = parseFloat(massInputPulley.value);
+                angle = parseFloat(angleInputPulley.value);
+                friction = parseFloat(frictionInputPulley.value);
+                length = parseFloat(lengthInputPulley.value);
+                gravity = parseFloat(gravityInputPulley.value);
+                pulleyConfig.counterMass = parseFloat(counterMassInput.value);
+            }
+            // Actualizar valores en los rangos y viceversa para mantener sincronía
+            updateRangeValues();
+        }
+        
+        function updateRangeValues() {
+            angleValue.textContent = `${angleRange.value}°`;
+            angleInput.value = angleRange.value;
+            frictionValue.textContent = parseFloat(frictionRange.value).toFixed(2);
+            frictionInput.value = frictionRange.value;
+            
+            angleValuePulley.textContent = `${angleRangePulley.value}°`;
+            angleInputPulley.value = angleRangePulley.value;
+            frictionValuePulley.textContent = parseFloat(frictionRangePulley.value).toFixed(2);
+            frictionInputPulley.value = frictionRangePulley.value;
+        }
+
+        // ----------------------------------------------------------------------
+        // Event Listeners
+        // ----------------------------------------------------------------------
+
+        // Manejar Tabs
         document.querySelectorAll('.tab').forEach(tab => {
             tab.addEventListener('click', function() {
                 document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                
                 this.classList.add('active');
+                document.getElementById(`${this.dataset.tab}-tab`).classList.add('active');
                 
-                document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
-                document.getElementById(this.getAttribute('data-tab') + '-tab').classList.add('active');
-
-                // Actualizar el estado de usePulley al cambiar de pestaña
-                usePulley = (this.getAttribute('data-tab') === 'pulley');
-                drawSimulation();
-            });
-        });
-        
-        // --- MANEJO DE ENTRADAS ---
-        
-        // Sincronización de rangos y valores
-        function syncRange(rangeId, valueId, inputId, unit = '', decimals = 0) {
-            const range = document.getElementById(rangeId);
-            const valueSpan = document.getElementById(valueId);
-            const input = document.getElementById(inputId);
-
-            range.addEventListener('input', () => {
-                const val = parseFloat(range.value).toFixed(decimals);
-                valueSpan.textContent = val + unit;
-                input.value = val;
-                
-                // Actualizar variable global y redibujar
-                if (rangeId.includes('angle-range')) {
-                    angle = parseFloat(val);
-                } else if (rangeId.includes('friction-range')) {
-                    friction = parseFloat(val);
-                }
+                // Forzar actualización y redibujo al cambiar de pestaña
+                updateParams();
                 drawSimulation();
                 updateResultsExplanation();
             });
-        }
-        
-        syncRange('angle-range', 'angle-value', 'angle-input', '°', 0);
-        syncRange('friction-range', 'friction-value', 'friction-input', '', 2);
-        syncRange('angle-range-pulley', 'angle-value-pulley', 'angle-input-pulley', '°', 0);
-        syncRange('friction-range-pulley', 'friction-value-pulley', 'friction-input-pulley', '', 2);
-        
-        // Actualizar parámetros globales al cambiar inputs numéricos
-        function updateGlobalParams() {
-            mass = parseFloat(massInput.value);
-            angle = parseFloat(angleRange.value);
-            friction = parseFloat(frictionRange.value);
-            length = parseFloat(lengthInput.value);
-            gravity = parseFloat(gravityInput.value);
-            
-            pulleyConfig.counterMass = parseFloat(counterMassInput.value);
-            
-            drawSimulation();
-            updateResultsExplanation();
-        }
-        
-        document.querySelectorAll('input[type="number"]').forEach(input => {
-            input.addEventListener('input', updateGlobalParams);
+        });
+
+        // Sincronizar inputs numéricos y rangos, y redibujar
+        document.querySelectorAll('input[type="range"]').forEach(range => {
+            range.addEventListener('input', function() {
+                updateParams();
+                drawSimulation();
+                updateResultsExplanation();
+                // Si la simulación está pausada, al cambiar parámetros se vuelve a dibujar.
+                if (!isRunning || isPaused) {
+                    drawSimulation();
+                }
+            });
         });
         
-        // --- MANEJO DE RESULTADOS Y NOTIFICACIONES ---
-
-        function showNotification(title, message, type = 'info') { 
-            const notificationContainer = document.getElementById('notification-container'); 
-            const notification = document.createElement('div');
-            notification.className = 'notification'; 
-            let icon = 'ℹ️'; 
-            if (type === 'warning') icon = '⚠️';
-            if (type === 'error') icon = '❌'; 
-            if (type === 'success') icon = '✅';
-            notification.innerHTML = ` 
-                <div class="notification-icon">${icon}</div> 
-                <div class="notification-content"> 
-                    <div class="notification-title">${title}</div> 
-                    <div class="notification-message">${message}</div> 
-                </div> 
-                <button class="notification-close">&times;</button> 
-            `; 
-            notificationContainer.appendChild(notification);
-            
-            notification.querySelector('.notification-close').addEventListener('click', function() { 
-                notification.remove(); 
+        document.querySelectorAll('input[type="number"]').forEach(input => {
+            input.addEventListener('change', function() {
+                updateParams();
+                drawSimulation();
+                updateResultsExplanation();
             });
-            
-            setTimeout(() => { 
-                if (notification.parentNode) { 
-                    notification.remove(); 
-                } 
-            }, 5000);
-        } 
+        });
         
-        function updateResultsExplanation() { 
-            const currentMass = usePulley ? parseFloat(massInputPulley.value) : parseFloat(massInput.value);
-            const currentAngle = usePulley ? parseFloat(angleRange.value) : parseFloat(angleRange.value);
-            const currentFriction = usePulley ? parseFloat(frictionRange.value) : parseFloat(frictionRange.value);
-            const currentGravity = usePulley ? parseFloat(gravityInput.value) : parseFloat(gravityInput.value);
-
-            const angleRad = currentAngle * Math.PI / 180;
-            const gravitationalForce = currentMass * currentGravity * Math.sin(angleRad);
-            const frictionForce = currentFriction * currentMass * currentGravity * Math.cos(angleRad);
-            let netForceValue = gravitationalForce - frictionForce;
-            let counterWeightForce = 0;
-
-            if (usePulley) {
-                counterWeightForce = parseFloat(counterMassInput.value) * currentGravity;
-                netForceValue = gravitationalForce - frictionForce - counterWeightForce;
-            }
-
-            // Análisis del movimiento 
-            if (netForceValue > 0) { 
-                movementAnalysis.textContent = `El objeto tiene una tendencia a moverse hacia abajo del plano. Fuerza Neta calculada: ${netForceValue.toFixed(2)} N.`;
-            } else if (netForceValue < 0) { 
-                movementAnalysis.textContent = `El objeto tiene una tendencia a moverse hacia arriba del plano (o permanecer quieto si |Fgravedad| < |Ffricción|). Fuerza Neta calculada: ${netForceValue.toFixed(2)} N.`;
-            } else { 
-                movementAnalysis.textContent = `El objeto está en equilibrio. La fuerza neta es de 0 N.`;
-            } 
-            
-            // Comportamiento del sistema 
-            if (usePulley) { 
-                systemBehavior.textContent = `El sistema de poleas está activado. El contrapeso de ${pulleyConfig.counterMass} kg ejerce una fuerza de ${counterWeightForce.toFixed(2)} N. El movimiento resulta de la combinación de Fg, Ffricción y la Tensión de la cuerda.`;
-            } else { 
-                systemBehavior.textContent = `El sistema de poleas está desactivado. El movimiento está determinado únicamente por la fuerza gravitatoria paralela al plano (${gravitationalForce.toFixed(2)} N) y la fuerza de fricción (${frictionForce.toFixed(2)} N).`;
-            } 
-            
-            // Explicación del desplazamiento 
-            if (netForceValue > 0) { 
-                displacementExplanation.textContent = `Si la simulación se inicia y la fuerza neta es positiva, el objeto acelerará hacia abajo del plano.`;
-            } else if (netForceValue < 0) { 
-                displacementExplanation.textContent = `Si la simulación se inicia y la fuerza neta es negativa, el objeto intentará acelerar hacia arriba. Si la fricción es estática y el objeto está en reposo, podría permanecer quieto.`;
-            } else { 
-                displacementExplanation.textContent = `El objeto se moverá con velocidad constante si ya está en movimiento, o permanecerá en reposo si se inicia desde la posición 0.`;
-            } 
-        } 
-        
-        // --- MANEJO DE EVENTOS ---
-        
+        // Botones de control
         startBtn.addEventListener('click', function() {
-            if (isRunning) {
-                // Si está corriendo, pausar/continuar
-                isPaused = !isPaused;
-                pauseBtn.textContent = isPaused ? "Continuar" : "Pausar";
-                if (!isPaused) {
-                    animate(performance.now());
-                    showNotification('Simulación Reanudada', 'La simulación ha sido reanudada.', 'info');
-                } else {
-                    showNotification('Simulación Pausada', 'La simulación ha sido pausada.', 'info');
-                }
-            } else {
-                // Si no está corriendo, iniciar
-                resetSimulation(); // Resetear antes de iniciar para asegurar valores iniciales
-                isRunning = true;
-                startBtn.disabled = true;
-                animate(performance.now());
-                showNotification('Simulación Iniciada', 'El objeto está en movimiento.', 'success');
+            if (!isRunning) {
+                // resetSimulation() se llama implícitamente al cargar config. 
+                // Pero si no hay config cargada, se asegura que los parámetros están correctos y la simulación se inicializa.
+                updateParams();
+                startSimulation();
+            } else if (isPaused) {
+                isPaused = false;
+                pauseBtn.textContent = "Pausar";
+                animate();
+                showNotification('Simulación Reanudada', 'La simulación ha sido reanudada.', 'info');
             }
         });
        
@@ -1582,9 +1786,10 @@ que desee utilzar (Básico o con polea).</li>
                 isPaused = !isPaused;
                 pauseBtn.textContent = isPaused ? "Continuar" : "Pausar";
                 if (!isPaused) {
-                    animate(performance.now());
+                    animate();
                     showNotification('Simulación Reanudada', 'La simulación ha sido reanudada.', 'info');
                 } else {
+                    cancelAnimationFrame(animationId);
                     showNotification('Simulación Pausada', 'La simulación ha sido pausada.', 'info');
                 }
             }
@@ -1594,103 +1799,13 @@ que desee utilzar (Básico o con polea).</li>
             resetSimulation();
         });
        
-        function exportData() {
-            const dataString = simulationData.map(d => `${d.time},${d.position},${d.velocity},${d.acceleration}`).join('\n');
-            const header = "Tiempo (s),Posición (M),Velocidad (M/s),Aceleración (M/s²)\n";
-            const csvData = header + dataString;
-            
-            const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
-            const url = URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            link.setAttribute('href', url);
-            link.setAttribute('download', 'datos_plano_inclinado.csv');
-            link.click();
-            showNotification('Exportación Exitosa', 'Los datos de la simulación han sido exportados a un archivo CSV.', 'success');
-        }
-
         exportBtn.addEventListener('click', exportData);
+        saveConfigBtn.addEventListener('click', saveConfiguration);
        
-        // Guardar configuración actual 
-        saveConfigBtn.addEventListener('click', function() { 
-            const configName = prompt("Ingrese un nombre para esta configuración:", `Configuración ${new Date().toLocaleTimeString()}`); 
-            if (configName) { 
-                const config = { 
-                    id: Date.now(), 
-                    name: configName, 
-                    timestamp: new Date().toISOString(), 
-                    params: { 
-                        mass: mass, 
-                        angle: angle, 
-                        friction: friction, 
-                        length: length, 
-                        gravity: gravity, 
-                        usePulley: usePulley, 
-                        pulleyConfig: {...pulleyConfig} 
-                    } 
-                }; 
-                
-                configHistory.unshift(config); 
-                if (configHistory.length > 10) { 
-                    configHistory = configHistory.slice(0, 10); 
-                } 
-                
-                localStorage.setItem('inclinedPlaneHistory', JSON.stringify(configHistory)); 
-                renderHistory(); 
-                showNotification('Configuración Guardada', `La configuración "${configName}" se ha guardado correctamente.`, 'success'); 
-            } 
-        }); 
-
-        // Manejo de carga de historial
-        historyList.addEventListener('click', function(e) {
-            if (e.target.classList.contains('load-config')) {
-                const index = e.target.getAttribute('data-index');
-                const config = configHistory[index];
-                
-                // Cargar parámetros en inputs
-                const p = config.params;
-                
-                if (p.usePulley) {
-                    document.querySelector('.tab[data-tab="pulley"]').click();
-                    massInputPulley.value = p.mass;
-                    angleRangePulley.value = p.angle;
-                    frictionRangePulley.value = p.friction;
-                    lengthInputPulley.value = p.length;
-                    gravityInputPulley.value = p.gravity;
-                    counterMassInput.value = p.pulleyConfig.counterMass;
-                    
-                    angleValuePulley.textContent = `${p.angle}°`;
-                    frictionValuePulley.textContent = p.friction.toFixed(2);
-                } else {
-                    document.querySelector('.tab[data-tab="basic"]').click();
-                    massInput.value = p.mass;
-                    angleRange.value = p.angle;
-                    frictionRange.value = p.friction;
-                    lengthInput.value = p.length;
-                    gravityInput.value = p.gravity;
-                    
-                    angleValue.textContent = `${p.angle}°`;
-                    frictionValue.textContent = p.friction.toFixed(2);
-                }
-                
-                // Actualizar variables globales y visualización
-                updateGlobalParams();
-                
-                showNotification('Configuración Cargada', `Se ha cargado la configuración "${config.name}".`, 'info');
-
-            } else if (e.target.classList.contains('delete')) {
-                const index = e.target.getAttribute('data-index');
-                const deletedName = configHistory[index].name;
-                configHistory.splice(index, 1);
-                localStorage.setItem('inclinedPlaneHistory', JSON.stringify(configHistory));
-                renderHistory();
-                showNotification('Configuración Eliminada', `La configuración "${deletedName}" ha sido eliminada.`, 'warning');
-            }
-        });
-
         // Inicialización
         window.addEventListener('load', function() {
             setupCanvas();
-            renderHistory(); // Cargar historial al inicio
+            updateParams();
             drawSimulation();
             updateResultsExplanation();
             showNotification('Bienvenido', 'El laboratorio virtual de plano inclinado está listo. Configure los parámetros y presione "Iniciar Simulación".', 'info');
