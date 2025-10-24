@@ -1107,35 +1107,39 @@ que desee utilzar (Básico o con polea).</li>
         }
 
         /**
-         * Dibuja el símbolo del ángulo (arco y etiqueta) en el rincón del plano.
+         * Dibuja el símbolo del ángulo en la esquina superior del plano (paralelo al de 90°).
          * @param {CanvasRenderingContext2D} ctx - Contexto de dibujo del canvas.
-         * @param {number} x - Coordenada X del vértice del ángulo (esquina inferior izquierda).
-         * @param {number} y - Coordenada Y del vértice del ángulo (esquina inferior izquierda).
+         * @param {number} x - Coordenada X del vértice (esquina superior derecha P3).
+         * @param {number} y - Coordenada Y del vértice (esquina superior derecha P3).
          * @param {number} angleRad - Valor del ángulo en radianes.
          * @param {number} radius - Radio del arco.
          * @param {string} color - Color del ángulo.
          * @param {string} label - Etiqueta del ángulo ('θ').
          */
-        function drawAngle(ctx, x, y, angleRad, radius, color = '#e53e3e', label = 'θ') {
+        function drawAngleAtTop(ctx, x, y, angleRad, radius, color = '#e53e3e', label = 'θ') {
             ctx.save();
             ctx.beginPath();
-            // Dibuja el arco: comienza en el eje x (0 rad) y va hacia arriba
-            ctx.arc(x, y, radius, 0, -angleRad, true); 
+
+            // Dibujamos el arco del ángulo complementario (90 - theta)
+            const complementAngleRad = Math.PI / 2 - angleRad; 
+            
+            // El arco va desde la vertical (ángulo -PI/2) hasta la rampa (ángulo -angleRad)
+            // Ya que el eje Y es hacia abajo, los ángulos son negativos en la parte superior derecha
+            ctx.arc(x, y, radius, -Math.PI / 2, -angleRad, false); 
+            
             ctx.strokeStyle = color;
             ctx.lineWidth = 3;
             ctx.stroke();
 
             // Coloca la etiqueta del ángulo (θ)
-            const midAngle = angleRad / 2;
-            // Coordenadas para la etiqueta (ligeramente fuera del arco)
-            const labelX = x + (radius + 15) * Math.cos(midAngle);
-            const labelY = y - (radius + 15) * Math.sin(midAngle); 
-
+            // Se coloca el texto en un punto fijo dentro de la rampa para el ángulo theta
             ctx.fillStyle = color;
-            ctx.font = '24px serif'; 
+            ctx.font = '24px serif';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
-            ctx.fillText(label, labelX, labelY);
+            
+            // Posición fija dentro del triángulo, cerca de la esquina superior
+            ctx.fillText(label, x - 15, y + 15); 
 
             ctx.restore();
         }
@@ -1154,11 +1158,11 @@ que desee utilzar (Básico o con polea).</li>
             const base = adjustedLength * Math.cos(angleRad);
 
             // Coordenadas del plano inclinado (triángulo rectángulo)
-            const P1_X = INCLINE_START_X; 
+            const P1_X = INCLINE_START_X; // Esquina inferior izquierda (ángulo θ original)
             const P1_Y = H - INCLINE_START_Y_OFFSET; 
-            const P2_X = P1_X + base; 
+            const P2_X = P1_X + base; // Esquina inferior derecha (90°)
             const P2_Y = P1_Y;
-            const P3_X = P2_X;
+            const P3_X = P2_X; // Esquina superior derecha (vértice donde queremos el nuevo ángulo)
             const P3_Y = P1_Y - height; 
 
             // 1. Dibuja el Plano Inclinado (Rampa)
@@ -1173,8 +1177,8 @@ que desee utilzar (Básico o con polea).</li>
 
             // Dibuja el suelo (Cateto Adyacente)
             ctx.beginPath();
-            ctx.moveTo(0, P1_Y); // Un poco más allá del punto P1
-            ctx.lineTo(W, P2_Y); // Un poco más allá del punto P2
+            ctx.moveTo(0, P1_Y); 
+            ctx.lineTo(W, P2_Y); 
             ctx.strokeStyle = '#2d3748';
             ctx.lineWidth = 4;
             ctx.stroke();
@@ -1199,9 +1203,9 @@ que desee utilzar (Básico o con polea).</li>
             
             ctx.restore();
 
-            // 2. Dibuja el Símbolo del Ángulo (θ) - EN LA ESQUINA SOLICITADA
-            // Llama a la función de dibujo del ángulo en el punto P1 (esquina adyacente-hipotenusa)
-            drawAngle(ctx, P1_X, P1_Y, angleRad, 40); 
+            // 2. Dibuja el Símbolo del Ángulo (θ) - EN LA ESQUINA SOLICITADA (Superior/Paralelo a 90°)
+            // Llama a la función de dibujo del ángulo en el punto P3
+            drawAngleAtTop(ctx, P3_X, P3_Y, angleRad, 40); 
 
 
             return { P1_X, P1_Y, P3_X, P3_Y, base, height, scale, angleRad };
