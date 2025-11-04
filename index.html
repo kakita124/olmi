@@ -1027,7 +1027,7 @@
         let isPaused = false;
         let animationId;
         let currentTime = 0;
-        let position = 0;
+        let position = 0; // Posición a lo largo del plano (0 = inicio, length = final)
         let velocity = 0;
         let acceleration = 0;
         let energy = 0;
@@ -1655,6 +1655,8 @@
             const pulleyRadius = 15;
             const pulleyX = baseX + planeWidth;
             const pulleyY = baseY - planeHeight;
+            const angleRad = angle * Math.PI / 180;
+            const inclineLengthCanvas = planeWidth / Math.cos(angleRad);
            
             // 1. Dibujar la polea (círculo)
             ctx.beginPath();
@@ -1677,27 +1679,30 @@
             ctx.fillRect(pulleyX - 15, pulleyY - 30, 30, 5); // Base del soporte
            
             // 3. Dibujar la cuerda desde el objeto hasta la polea (RECTA)
-            const angleRad = angle * Math.PI / 180;
-            const inclineLengthCanvas = planeWidth / Math.cos(angleRad);
             
-            ctx.save();
+            // Calculamos la distancia D desde V1 (Top Left) hasta el punto de conexión (esquina superior derecha del bloque)
+            // La nueva posición de dibujo invierte el X, por lo que D es la distancia real recorrida desde el punto de inicio de la rampa (que ahora es el final del movimiento físico).
+            const distanceAlongIncline = inclineLengthCanvas - (position / length) * inclineLengthCanvas;
+
+            // Coordenadas del punto de conexión en el marco ROTADO (origen en V1/Top Left):
+            // X_rot = D (distancia recorrida a lo largo del plano)
+            // Y_rot = -massHeight (arriba de la superficie del plano)
+            const blockTopRightRotX = distanceAlongIncline;
+            const blockTopRightRotY = -massHeight;
             
+            // Coordenadas de V1 (Top Left):
             const inclineXStart = baseX;
             const inclineYStart = baseY - planeHeight;
-            
-            // Calculamos la posición del bloque en coordenadas ABSOLUTAS
-            const blockDistanceAlongIncline = (position / length) * inclineLengthCanvas;
-            const blockAngle = angleRad;
-            
-            const blockTopRightAbsX = inclineXStart + (blockDistanceAlongIncline + massWidth) * Math.cos(blockAngle);
-            const blockTopRightAbsY = inclineYStart - (blockDistanceAlongIncline + massWidth) * Math.sin(blockAngle);
+
+            // Transformación a coordenadas absolutas:
+            const blockTopRightAbsX = inclineXStart + blockTopRightRotX * Math.cos(angleRad) - blockTopRightRotY * Math.sin(angleRad);
+            const blockTopRightAbsY = inclineYStart + blockTopRightRotX * Math.sin(angleRad) + blockTopRightRotY * Math.cos(angleRad);
             
             // Dibuja la cuerda desde el bloque hasta la polea
             ctx.beginPath();
             ctx.moveTo(blockTopRightAbsX, blockTopRightAbsY);
-            // La cuerda sigue la línea hasta el punto de tangencia inferior del bloque, y luego va a la polea
-            // Simplificamos la cuerda como una línea recta desde la esquina superior derecha del bloque hasta el borde de la polea.
-            ctx.lineTo(pulleyX - pulleyRadius * Math.sin(blockAngle), pulleyY + pulleyRadius * Math.cos(blockAngle)); // Aproximación al punto de tangencia
+            // La cuerda va hasta el punto de tangencia inferior de la polea
+            ctx.lineTo(pulleyX - pulleyRadius * Math.sin(angleRad), pulleyY + pulleyRadius * Math.cos(angleRad)); 
             
             ctx.strokeStyle = '#8B4513';
             ctx.lineWidth = 2;
@@ -1706,6 +1711,9 @@
             // 4. Dibujar la parte vertical de la cuerda y el contrapeso
             
             const maxCounterWeightMovement = 150; // Max movimiento vertical para el contrapeso
+            // La masa contrapeso debe descender si la masa M se mueve hacia V1 (Top Left)
+            // position=0 (M está en Bottom Right), counterWeightMovement debe ser 0.
+            // position=length (M está en Top Left), counterWeightMovement debe ser maxCounterWeightMovement.
             const counterWeightMovement = (position / length) * maxCounterWeightMovement;
             const counterWeightY = pulleyY + pulleyRadius + 30 + counterWeightMovement;
             
@@ -1751,17 +1759,17 @@
             const baseX = usePulley ? width * 0.4 : width * 0.2;
             const baseY = height - 100;
            
-            // Coordenada del vértice superior izquierdo (punto de partida de la masa)
+            // Coordenada del vértice superior izquierdo (V1)
             const inclineXStart = baseX;
             const inclineYStart = baseY - planeHeight;
            
             ctx.clearRect(0, 0, width, height);
            
-            // Dibujar plano inclinado
+            // Dibujar plano inclinado (V3 -> V2 -> V1)
             ctx.beginPath();
-            ctx.moveTo(baseX, baseY);
-            ctx.lineTo(baseX + planeWidth, baseY);
-            ctx.lineTo(inclineXStart, inclineYStart); // Vértice superior
+            ctx.moveTo(baseX, baseY); // V3 (Bottom Left, Right Angle)
+            ctx.lineTo(baseX + planeWidth, baseY); // V2 (Bottom Right)
+            ctx.lineTo(inclineXStart, inclineYStart); // V1 (Top Left)
             ctx.closePath();
             ctx.fillStyle = "#a3c9a8";
             ctx.fill();
@@ -1769,7 +1777,7 @@
             ctx.lineWidth = 2;
             ctx.stroke();
            
-            // Dibujar poleas si están activadas (Llamada al sistema absoluto)
+            // Dibujar poleas si están activadas
             if (usePulley) {
                 drawPulleySystem(width, height, baseX, baseY, planeWidth, planeHeight);
             }
@@ -1777,14 +1785,16 @@
             // --- DIBUJO DE LA MASA (Sistema de coordenadas ROTADO) ---
            
             ctx.save();
-            // 1. Mover el origen al punto de inicio del plano inclinado (Vértice Superior Izquierdo)
+            // 1. Mover el origen al punto de inicio del plano inclinado (Vértice Superior Izquierdo, V1)
             ctx.translate(inclineXStart, inclineYStart);
-            // 2. Rotar el canvas
-            ctx.rotate(angleRad); // La rotación es positiva (CCW) para alinear el eje X con la hipotenusa
+            // 2. Rotar el canvas para alinear el eje X con la hipotenusa (incline)
+            ctx.rotate(angleRad); 
            
             // Posición a lo largo del plano inclinado (eje X rotado)
-            // massDrawX es la posición del borde izquierdo del bloque
-            const massDrawX = (position / length) * inclineLengthCanvas;
+            // Posición de dibujo para que position=0 esté en el BOTTOM RIGHT y position=length esté en el TOP LEFT
+            // massDrawX: Distancia desde V1 a la esquina superior izquierda del bloque.
+            const distanceMovedFromTop = (position / length) * inclineLengthCanvas;
+            const massDrawX = inclineLengthCanvas - distanceMovedFromTop - massWidth; 
             const massDrawY = 0; // El plano inclinado es ahora el eje X
            
             // 1. Dibuja el cuerpo (rectángulo)
@@ -1811,13 +1821,16 @@
             ctx.restore();
             // --- FIN DIBUJO DE LA MASA ---
            
-            // Dibujar el ángulo θ (en coordenadas absolutas)
+            // --- DIBUJO DEL ÁNGULO θ (en esquina inferior derecha, V2) ---
+            
+            // Coordenadas de V2 (Bottom Right)
             const angleArcRadius = 30;
-            const angleArcX = inclineXStart;
+            const angleArcX = baseX + planeWidth;
             const angleArcY = baseY;
            
             ctx.beginPath();
-            ctx.arc(angleArcX, angleArcY, angleArcRadius, Math.PI - angleRad, Math.PI, false);
+            // Arco desde el horizontal (0) hasta el plano inclinado (-angleRad), en sentido horario (true)
+            ctx.arc(angleArcX, angleArcY, angleArcRadius, 0, -angleRad, true);
             ctx.strokeStyle = '#e74c3c';
             ctx.lineWidth = 2;
             ctx.stroke();
@@ -1825,11 +1838,15 @@
             ctx.fillStyle = '#e74c3c';
             ctx.font = 'bold 18px Arial';
             const thetaTextRadius = angleArcRadius * 0.6;
-            const centerAngle = Math.PI - angleRad / 2;
+            // Posición del texto en el centro del arco
+            const centerAngle = -angleRad / 2;
             const thetaX = angleArcX + thetaTextRadius * Math.cos(centerAngle);
             const thetaY = angleArcY + thetaTextRadius * Math.sin(centerAngle);
             ctx.fillText('θ', thetaX, thetaY);
+            
+            // --- FIN DIBUJO DEL ÁNGULO θ ---
            
+            // Dibujar el cuadrado de 90° en la esquina inferior izquierda (V3)
             const squareSize = 15;
             const squareX = baseX + squareSize/2;
             const squareY = baseY - squareSize/2;
@@ -1842,7 +1859,7 @@
             ctx.stroke();
         }
        
-        // Función principal de física - SE MANTIENE EL CÁLCULO PARA QUE LA SIMULACIÓN FUNCIONE
+        // Función principal de física - SE MANTIENE EL CÁLCULO
         function calculatePhysics() {
             if (!isRunning || isPaused) return;
            
