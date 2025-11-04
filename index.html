@@ -1679,22 +1679,6 @@
             // 3. Dibujar la cuerda desde el objeto hasta la polea (RECTA)
             const angleRad = angle * Math.PI / 180;
             const inclineLengthCanvas = planeWidth / Math.cos(angleRad);
-            const massDrawX = (position / length) * inclineLengthCanvas;
-
-            // Punto de la cuerda en el bloque (esquina superior derecha)
-            const blockTopRightX = massDrawX + massWidth;
-            const blockTopRightY = -massHeight;
-            
-            // Punto de tangencia en la polea
-            const pulleyTangentX = inclineLengthCanvas - pulleyRadius;
-            const pulleyTangentY = 0; // En el sistema rotado
-
-            // Dibuja la cuerda en el sistema de coordenadas rotado (dentro de drawSimulation's save/restore)
-            // Ya estamos en el sistema rotado en drawSimulation antes de llamar a drawPulleySystem.
-            // Necesitamos pasar la lógica de la cuerda al sistema no rotado, o hacer la translación/rotación aquí.
-            
-            // ************ CORRECCIÓN: El código de la cuerda de la polea estaba incorrecto. Debe redibujarse en el sistema no rotado (ABSOLUTO) ************
-            // La lógica de la polea será simplificada y dibujada en coordenadas ABSOLUTAS.
             
             ctx.save();
             
@@ -1705,15 +1689,14 @@
             const blockDistanceAlongIncline = (position / length) * inclineLengthCanvas;
             const blockAngle = angleRad;
             
-            const blockCenterAbsX = inclineXStart + (blockDistanceAlongIncline + massWidth / 2) * Math.cos(blockAngle);
-            const blockCenterAbsY = inclineYStart - (blockDistanceAlongIncline + massWidth / 2) * Math.sin(blockAngle);
-            
             const blockTopRightAbsX = inclineXStart + (blockDistanceAlongIncline + massWidth) * Math.cos(blockAngle);
             const blockTopRightAbsY = inclineYStart - (blockDistanceAlongIncline + massWidth) * Math.sin(blockAngle);
             
             // Dibuja la cuerda desde el bloque hasta la polea
             ctx.beginPath();
             ctx.moveTo(blockTopRightAbsX, blockTopRightAbsY);
+            // La cuerda sigue la línea hasta el punto de tangencia inferior del bloque, y luego va a la polea
+            // Simplificamos la cuerda como una línea recta desde la esquina superior derecha del bloque hasta el borde de la polea.
             ctx.lineTo(pulleyX - pulleyRadius * Math.sin(blockAngle), pulleyY + pulleyRadius * Math.cos(blockAngle)); // Aproximación al punto de tangencia
             
             ctx.strokeStyle = '#8B4513';
@@ -1791,7 +1774,7 @@
                 drawPulleySystem(width, height, baseX, baseY, planeWidth, planeHeight);
             }
            
-            // --- DIBUJO DE LA MASA Y VECTORES (Sistema de coordenadas ROTADO) ---
+            // --- DIBUJO DE LA MASA (Sistema de coordenadas ROTADO) ---
            
             ctx.save();
             // 1. Mover el origen al punto de inicio del plano inclinado (Vértice Superior Izquierdo)
@@ -1825,60 +1808,10 @@
             ctx.lineWidth = 0.5;
             ctx.stroke();
            
-            // --- DIBUJO DE VECTORES (Dinámico) ---
-           
-            // 1. Calcular Magnitudes de las Fuerzas
-            const normalForceMagnitude = mass * gravity * Math.cos(angleRad); // N
-            const gravitationalParallelForce = mass * gravity * Math.sin(angleRad); // Px (siempre apunta +X, Down)
-            const frictionMaxMagnitude = friction * normalForceMagnitude; // f_k max
-            let tensionMagnitude = 0;
-            if (usePulley) {
-                tensionMagnitude = pulleyConfig.counterMass * gravity;
-            }
-            
-            // Fuerza de Tendencia a la Movilización (Px - T)
-            const netDrivingForce = gravitationalParallelForce - tensionMagnitude;
-            
-            let frictionDrawMagnitude = 0;
-            let frictionDrawDirection = 0; // -1: Up the plane (-X); 1: Down the plane (+X)
-            
-            if (velocity !== 0) {
-                // Movimiento (Fricción Cinética): Se opone a la velocidad
-                frictionDrawMagnitude = frictionMaxMagnitude;
-                frictionDrawDirection = -Math.sign(velocity);
-            } else if (Math.abs(netForce) < 0.01 && position > 0) {
-                // Detenido por fricción estática o balanceado (Fricción CERO si Px = T)
-                frictionDrawMagnitude = Math.min(frictionMaxMagnitude, Math.abs(netDrivingForce));
-                frictionDrawDirection = -Math.sign(netDrivingForce);
-                if (netDrivingForce === 0) frictionDrawMagnitude = 0;
-            } else if (velocity === 0) {
-                 // Estático antes de iniciar el movimiento
-                frictionDrawMagnitude = Math.min(frictionMaxMagnitude, Math.abs(netDrivingForce));
-                frictionDrawDirection = -Math.sign(netDrivingForce || 1); // Si está en reposo, opone a la tendencia (o a Px por defecto)
-                if (netDrivingForce === 0) frictionDrawMagnitude = 0;
-            }
-            
-            // 1. Fuerza Normal (Perpendicular, hacia arriba) - Siempre -Y
-            drawArrow(ctx, massCenterX, massCenterY, massCenterX, massCenterY - normalForceMagnitude * forceScale, '#2ecc71', 'N');
-           
-            // 2. Componente Paralela del Peso (Hacia abajo del plano) - Siempre +X
-            drawArrow(ctx, massCenterX, massCenterY, massCenterX + gravitationalParallelForce * forceScale, massCenterY, '#3498db', 'Pₓ');
-           
-            // 3. Fuerza de Fricción (Opuesta al movimiento/tendencia)
-            if (frictionDrawMagnitude > 0) {
-                drawArrow(ctx, massCenterX, massCenterY, massCenterX + frictionDrawDirection * frictionDrawMagnitude * forceScale, massCenterY, '#e67e22', 'f');
-            }
-            
-            // 4. Fuerza de Tensión (Solo con polea) - Siempre -X (hacia arriba del plano)
-            if (usePulley && tensionMagnitude > 0) {
-                 drawArrow(ctx, massCenterX, massCenterY, massCenterX - tensionMagnitude * forceScale, massCenterY, '#f39c12', 'T');
-            }
-           
             ctx.restore();
-            // --- FIN DIBUJO DE VECTORES ---
+            // --- FIN DIBUJO DE LA MASA ---
            
             // Dibujar el ángulo θ (en coordenadas absolutas)
-            // ... (el resto del código de dibujo del ángulo es correcto)
             const angleArcRadius = 30;
             const angleArcX = inclineXStart;
             const angleArcY = baseY;
@@ -1909,52 +1842,7 @@
             ctx.stroke();
         }
        
-        // Función auxiliar para dibujar flechas de fuerza
-        function drawArrow(ctx, fromX, fromY, toX, toY, color, label) {
-            const headlen = 8; // length of head in pixels
-            const angle = Math.atan2(toY - fromY, toX - fromX);
-            const dx = toX - fromX;
-            const dy = toY - fromY;
-            const length = Math.sqrt(dx * dx + dy * dy);
-           
-            // No dibujar si el vector es muy pequeño
-            if (length < 5 && label !== 'N') return;
-
-            ctx.beginPath();
-            ctx.strokeStyle = color;
-            ctx.lineWidth = 2.5;
-            ctx.moveTo(fromX, fromY);
-            ctx.lineTo(toX, toY);
-            ctx.stroke();
-           
-            // Dibujar punta de flecha
-            ctx.beginPath();
-            ctx.fillStyle = color;
-            ctx.moveTo(toX, toY);
-            ctx.lineTo(toX - headlen * Math.cos(angle - Math.PI / 6), toY - headlen * Math.sin(angle - Math.PI / 6));
-            ctx.lineTo(toX - headlen * Math.cos(angle + Math.PI / 6), toY - headlen * Math.sin(angle + Math.PI / 6));
-            ctx.closePath();
-            ctx.fill();
-           
-            // Etiqueta
-            ctx.fillStyle = color;
-            ctx.font = 'bold 16px Arial';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-           
-            // Posición de la etiqueta: en el centro del vector, ligeramente desplazada
-            const textX = fromX + (toX - fromX) / 2;
-            const textY = fromY + (toY - fromY) / 2 - 10;
-           
-            // Si la flecha es vertical, mover la etiqueta lateralmente
-            if (Math.abs(angle - (-Math.PI / 2)) < 0.1) { // Flecha vertical (F. Normal)
-                ctx.fillText(label, textX - 10, textY + 10);
-            } else {
-                ctx.fillText(label, textX, textY);
-            }
-        }
-       
-        // Función principal de física - LÓGICA DE FRICCIÓN CORREGIDA
+        // Función principal de física - SE MANTIENE EL CÁLCULO PARA QUE LA SIMULACIÓN FUNCIONE
         function calculatePhysics() {
             if (!isRunning || isPaused) return;
            
