@@ -1048,13 +1048,14 @@
         let angleChanged = false;
         let frictionChanged = false;
 
-        // --- NUEVAS CONSTANTES DE DIBUJO PARA LA MASA ---
+        // --- CONSTANTES DE DIBUJO ---
         const massWidth = 40; // Ancho del bloque
         const massHeight = 25; // Alto del bloque
         const massColor = 'rgba(211, 211, 211, 0.9)'; // Gris claro
         const massBorderColor = '#333'; // Gris oscuro para el borde
         const massCenterColor = '#e53e3e'; // Rojo para el centro de masa
-        // --- FIN NUEVAS CONSTANTES DE DIBUJO ---
+        const forceScale = 50; // Escala para la longitud de los vectores de fuerza
+        // --- FIN CONSTANTES DE DIBUJO ---
        
         // Historial de configuraciones
         let configHistory = JSON.parse(localStorage.getItem('inclinedPlaneHistory')) || [];
@@ -1102,61 +1103,72 @@
             const frictionForce = friction * normalForce;
            
             let netForceValue;
-            let acceleration;
+            let acc;
            
             if (!usePulley) {
                 // Sistema básico
                 netForceValue = gravitationalForce - frictionForce;
-                acceleration = netForceValue / mass;
+                acc = netForceValue / mass;
                
                 // Análisis del movimiento
                 if (Math.abs(gravitationalForce) <= frictionForce && velocity === 0) {
                     movementAnalysis.textContent = `El objeto está en reposo. La fuerza neta es cero, ya que la componente gravitatoria paralela (${gravitationalForce.toFixed(2)} N) es superada por la fuerza de fricción estática.`;
-                    acceleration = 0; // Sobrescribir aceleración si está en reposo y no puede moverse.
+                    acc = 0;
                     displacementExplanation.textContent = `El objeto no se moverá a menos que se aplique una fuerza externa o se cambien los parámetros (ángulo, fricción).`;
                 } else if (netForceValue > 0) {
-                    movementAnalysis.textContent = `El objeto está acelerando hacia abajo del plano con una aceleración constante de ${acceleration.toFixed(2)} m/s².`;
+                    movementAnalysis.textContent = `El objeto está acelerando hacia abajo del plano con una aceleración constante de ${acc.toFixed(2)} m/s².`;
                     displacementExplanation.textContent = `La fuerza neta de ${netForceValue.toFixed(2)} N provoca un movimiento acelerado hacia abajo, recorriendo ${length.toFixed(2)} M.`;
                 } else {
-                    movementAnalysis.textContent = `El objeto se moverá con velocidad constante o permanecerá en reposo. Aceleración: ${acceleration.toFixed(2)} m/s².`;
+                    movementAnalysis.textContent = `El objeto se moverá con velocidad constante o permanecerá en reposo. Aceleración: ${acc.toFixed(2)} m/s².`;
                     displacementExplanation.textContent = `El objeto se moverá con velocidad constante o está en reposo. No hay aceleración neta significativa para un movimiento iniciado.`;
                 }
                
             } else {
                 // Sistema con polea
                 const counterWeightForce = pulleyConfig.counterMass * gravity;
-                netForceValue = gravitationalForce - frictionForce - counterWeightForce; // Fricción y M2 se oponen
-                acceleration = netForceValue / (mass + pulleyConfig.counterMass);
-               
+                const drivingForce = gravitationalForce - counterWeightForce;
+                
+                let frictionDirectionSign = -Math.sign(drivingForce);
+                if(drivingForce === 0) frictionDirectionSign = -1; // Default: opposes Px if balanced
+                
+                if (Math.abs(drivingForce) > frictionForce) {
+                    // Hay movimiento
+                    netForceValue = drivingForce + (frictionDirectionSign * frictionForce);
+                    acc = netForceValue / (mass + pulleyConfig.counterMass);
+                } else {
+                    // Estático
+                    netForceValue = 0;
+                    acc = 0;
+                }
+                
                 if (Math.abs(netForceValue) <= 0.01 && velocity === 0) {
                     movementAnalysis.textContent = `El sistema está en equilibrio o reposo. La fuerza neta es casi cero.`;
-                    acceleration = 0;
                     displacementExplanation.textContent = `El sistema no tiene una fuerza neta significativa para iniciar el movimiento.`;
                 } else if (netForceValue > 0) {
-                    movementAnalysis.textContent = `El objeto (M) acelera hacia abajo del plano con ${acceleration.toFixed(2)} m/s².`;
+                    movementAnalysis.textContent = `El objeto (M) acelera hacia abajo del plano con ${acc.toFixed(2)} m/s².`;
                     displacementExplanation.textContent = `La componente gravitatoria paralela domina la fricción y el contrapeso, causando una aceleración positiva.`;
                 } else {
                     // netForceValue < 0: el contrapeso y/o fricción son mayores
-                    movementAnalysis.textContent = `El contrapeso (M₂) es más pesado y el objeto (M) acelera hacia arriba del plano con ${Math.abs(acceleration).toFixed(2)} m/s².`;
-                    displacementExplanation.textContent = `El contrapeso y la fricción dominan la componente gravitatoria paralela. Si ya está en movimiento, el objeto subirá.`;
+                    movementAnalysis.textContent = `El contrapeso (M₂) es más pesado y el objeto (M) acelera hacia arriba del plano con ${Math.abs(acc).toFixed(2)} m/s².`;
+                    displacementExplanation.textContent = `El contrapeso y la fricción dominan la componente gravitatoria paralela. El sistema se mueve hacia el contrapeso.`;
                 }
             }
            
             // Comportamiento del sistema (Común)
-            if (acceleration > 0) {
+            if (acc > 0) {
                 systemBehavior.textContent = `El objeto acelerará hacia abajo del plano. La fuerza neta es positiva.`;
-            } else if (acceleration < 0) {
-                systemBehavior.textContent = `El objeto acelerará hacia arriba del plano (si hay polea y movimiento inicial) o desacelerará. La fuerza neta es negativa.`;
+            } else if (acc < 0) {
+                systemBehavior.textContent = `El objeto acelerará hacia arriba del plano (si hay polea) o desacelerará. La fuerza neta es negativa.`;
             } else {
                 systemBehavior.textContent = `El objeto permanecerá en reposo o se moverá con velocidad constante. La fuerza neta es cero.`;
             }
            
             // Explicación del desplazamiento
-            if (acceleration > 0) {
-                displacementExplanation.textContent = `El objeto está acelerando hacia abajo del plano con una aceleración de ${acceleration.toFixed(2)} m/s².
+            if (acc > 0) {
+                displacementExplanation.textContent = `El objeto está acelerando hacia abajo del plano con una aceleración de ${acc.toFixed(2)} m/s².
                 La velocidad aumenta con el tiempo.`;
-            } else if (acceleration < 0) {
-                displacementExplanation.textContent = `El objeto está desacelerando (aceleración negativa de ${acceleration.toFixed(2)} m/s²).
+            } else if (acc < 0) {
+                displacementExplanation.textContent = `El objeto está desacelerando (aceleración negativa de ${acc.toFixed(2)} m/s²).
                 La velocidad disminuye con el tiempo.`;
             } else {
                 displacementExplanation.textContent = `El objeto se mueve con velocidad constante o está en reposo.
@@ -1471,7 +1483,8 @@
             let isValid = true;
            
             // Validar masa
-            if (mass <= 0) {
+            const currentMassInput = usePulley ? massInputPulley : massInput;
+            if (parseFloat(currentMassInput.value) <= 0) {
                 massValidation.textContent = "La masa debe ser mayor que cero";
                 massValidation.style.display = 'block';
                 isValid = false;
@@ -1481,7 +1494,7 @@
             }
            
             // Validar contrapeso si las poleas están activadas
-            if (usePulley && pulleyConfig.counterMass <= 0) {
+            if (usePulley && parseFloat(counterMassInput.value) <= 0) {
                 counterMassValidation.textContent = "La masa del contrapeso debe ser mayor que cero";
                 counterMassValidation.style.display = 'block';
                 isValid = false;
@@ -1638,7 +1651,7 @@
         });
        
         // Función de dibujo del sistema de poleas
-        function drawPulleySystem(width, height, baseX, baseY, planeWidth, planeHeight, objectX, objectY) {
+        function drawPulleySystem(width, height, baseX, baseY, planeWidth, planeHeight) {
             const pulleyRadius = 15;
             const pulleyX = baseX + planeWidth;
             const pulleyY = baseY - planeHeight;
@@ -1664,47 +1677,64 @@
             ctx.fillRect(pulleyX - 15, pulleyY - 30, 30, 5); // Base del soporte
            
             // 3. Dibujar la cuerda desde el objeto hasta la polea (RECTA)
-            ctx.beginPath();
-            // Para el punto de inicio, es mejor usar la esquina superior derecha del bloque
-            const massDrawX = (position / length) * planeWidth;
-            const cordStartX = baseX + planeWidth + (massDrawX - planeWidth) * Math.cos(angle * Math.PI / 180);
-            const cordStartY = baseY - planeHeight + (massDrawX - planeWidth) * Math.sin(angle * Math.PI / 180);
+            const angleRad = angle * Math.PI / 180;
+            const inclineLengthCanvas = planeWidth / Math.cos(angleRad);
+            const massDrawX = (position / length) * inclineLengthCanvas;
 
-            // Calcular el punto de la cuerda en la polea (ángulo)
-            // Ya que el canvas está rotado, necesitamos deshacer la rotación para usar coordenadas absolutas
+            // Punto de la cuerda en el bloque (esquina superior derecha)
+            const blockTopRightX = massDrawX + massWidth;
+            const blockTopRightY = -massHeight;
+            
+            // Punto de tangencia en la polea
+            const pulleyTangentX = inclineLengthCanvas - pulleyRadius;
+            const pulleyTangentY = 0; // En el sistema rotado
+
+            // Dibuja la cuerda en el sistema de coordenadas rotado (dentro de drawSimulation's save/restore)
+            // Ya estamos en el sistema rotado en drawSimulation antes de llamar a drawPulleySystem.
+            // Necesitamos pasar la lógica de la cuerda al sistema no rotado, o hacer la translación/rotación aquí.
+            
+            // ************ CORRECCIÓN: El código de la cuerda de la polea estaba incorrecto. Debe redibujarse en el sistema no rotado (ABSOLUTO) ************
+            // La lógica de la polea será simplificada y dibujada en coordenadas ABSOLUTAS.
+            
             ctx.save();
-            ctx.translate(baseX, baseY);
-            ctx.rotate(-angle * Math.PI / 180);
             
-            const startX = massDrawX + massWidth; // Esquina superior derecha del bloque en el sistema rotado
-            const startY = -massHeight;
+            const inclineXStart = baseX;
+            const inclineYStart = baseY - planeHeight;
             
+            // Calculamos la posición del bloque en coordenadas ABSOLUTAS
+            const blockDistanceAlongIncline = (position / length) * inclineLengthCanvas;
+            const blockAngle = angleRad;
+            
+            const blockCenterAbsX = inclineXStart + (blockDistanceAlongIncline + massWidth / 2) * Math.cos(blockAngle);
+            const blockCenterAbsY = inclineYStart - (blockDistanceAlongIncline + massWidth / 2) * Math.sin(blockAngle);
+            
+            const blockTopRightAbsX = inclineXStart + (blockDistanceAlongIncline + massWidth) * Math.cos(blockAngle);
+            const blockTopRightAbsY = inclineYStart - (blockDistanceAlongIncline + massWidth) * Math.sin(blockAngle);
+            
+            // Dibuja la cuerda desde el bloque hasta la polea
             ctx.beginPath();
-            ctx.moveTo(startX, startY);
-            
-            ctx.lineTo(planeWidth - pulleyRadius, 0); // Ir al punto de tangencia en la polea
+            ctx.moveTo(blockTopRightAbsX, blockTopRightAbsY);
+            ctx.lineTo(pulleyX - pulleyRadius * Math.sin(blockAngle), pulleyY + pulleyRadius * Math.cos(blockAngle)); // Aproximación al punto de tangencia
             
             ctx.strokeStyle = '#8B4513';
             ctx.lineWidth = 2;
             ctx.stroke();
 
-            // 4. Dibujar la parte vertical de la cuerda y el contrapeso (Requiere restaurar y volver a traducir)
-            ctx.restore(); // Restaura la rotación y traslación
-
-            // Parte vertical de la cuerda
-            ctx.beginPath();
-            ctx.moveTo(pulleyX + pulleyRadius * Math.cos(Math.PI / 2), pulleyY + pulleyRadius * Math.sin(Math.PI / 2)); // Empieza en la parte inferior de la polea
+            // 4. Dibujar la parte vertical de la cuerda y el contrapeso
             
-            const maxCounterWeightMovement = 200;
+            const maxCounterWeightMovement = 150; // Max movimiento vertical para el contrapeso
             const counterWeightMovement = (position / length) * maxCounterWeightMovement;
             const counterWeightY = pulleyY + pulleyRadius + 30 + counterWeightMovement;
             
+            // Parte vertical de la cuerda
+            ctx.beginPath();
+            ctx.moveTo(pulleyX, pulleyY + pulleyRadius); // Empieza en la parte inferior de la polea
             ctx.lineTo(pulleyX, counterWeightY - 30); // Va hasta la parte superior del contrapeso
             ctx.strokeStyle = '#8B4513';
             ctx.lineWidth = 2;
             ctx.stroke();
            
-            // Dibujar el contrapeso como RECTÁNGULO
+            // Dibujar el contrapeso
             const counterWeightWidth = 20 + pulleyConfig.counterMass / 2;
             const counterWeightHeight = 15 + pulleyConfig.counterMass / 3;
             ctx.fillStyle = '#3498db';
@@ -1719,25 +1749,28 @@
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
             ctx.fillText('M₂', pulleyX, counterWeightY);
+            
+            ctx.restore();
         }
        
         // Función de dibujo de la simulación
         function drawSimulation() {
             const width = canvas.width;
             const height = canvas.height;
-           
-            // Calcular dimensiones del plano
             const angleRad = angle * Math.PI / 180;
+           
+            // Calcular dimensiones del plano (base horizontal y altura)
             const planeHeight = Math.min(height * 0.5, width * 0.6 * Math.tan(angleRad));
             const planeWidth = planeHeight / Math.tan(angleRad);
+            const inclineLengthCanvas = planeWidth / Math.cos(angleRad); // Longitud de la hipotenusa en píxeles
            
-            // Ajustar posición inicial del plano según si hay polea o no
+            // Ajustar posición inicial del plano (esquina inferior izquierda)
             const baseX = usePulley ? width * 0.4 : width * 0.2;
             const baseY = height - 100;
            
-            // Calcular posición del objeto (no se usa directamente para el dibujo rotado, pero sí para el cálculo de fuerzas)
-            const objectX = baseX + (position / length) * planeWidth;
-            const objectY = baseY - planeHeight + (position / length) * planeHeight;
+            // Coordenada del vértice superior izquierdo (punto de partida de la masa)
+            const inclineXStart = baseX;
+            const inclineYStart = baseY - planeHeight;
            
             ctx.clearRect(0, 0, width, height);
            
@@ -1745,7 +1778,7 @@
             ctx.beginPath();
             ctx.moveTo(baseX, baseY);
             ctx.lineTo(baseX + planeWidth, baseY);
-            ctx.lineTo(baseX, baseY - planeHeight);
+            ctx.lineTo(inclineXStart, inclineYStart); // Vértice superior
             ctx.closePath();
             ctx.fillStyle = "#a3c9a8";
             ctx.fill();
@@ -1753,22 +1786,22 @@
             ctx.lineWidth = 2;
             ctx.stroke();
            
-            // Dibujar poleas si están activadas
+            // Dibujar poleas si están activadas (Llamada al sistema absoluto)
             if (usePulley) {
-                drawPulleySystem(width, height, baseX, baseY, planeWidth, planeHeight, objectX, objectY);
+                drawPulleySystem(width, height, baseX, baseY, planeWidth, planeHeight);
             }
            
-            // --- CÓDIGO MODIFICADO PARA DIBUJAR LA MASA CON EL NUEVO ESTILO ---
-            // Usamos el sistema de coordenadas del plano inclinado (rotación)
+            // --- DIBUJO DE LA MASA Y VECTORES (Sistema de coordenadas ROTADO) ---
            
             ctx.save();
-            // 1. Mover el origen al punto de inicio del plano inclinado
-            ctx.translate(baseX, baseY);
-            // 2. Rotar el canvas al ángulo del plano
-            ctx.rotate(-angleRad); // La rotación es negativa ya que el ángulo es hacia arriba (en sentido horario)
+            // 1. Mover el origen al punto de inicio del plano inclinado (Vértice Superior Izquierdo)
+            ctx.translate(inclineXStart, inclineYStart);
+            // 2. Rotar el canvas
+            ctx.rotate(angleRad); // La rotación es positiva (CCW) para alinear el eje X con la hipotenusa
            
             // Posición a lo largo del plano inclinado (eje X rotado)
-            const massDrawX = (position / length) * planeWidth;
+            // massDrawX es la posición del borde izquierdo del bloque
+            const massDrawX = (position / length) * inclineLengthCanvas;
             const massDrawY = 0; // El plano inclinado es ahora el eje X
            
             // 1. Dibuja el cuerpo (rectángulo)
@@ -1776,83 +1809,94 @@
             ctx.strokeStyle = massBorderColor; // Gris oscuro para el borde
             ctx.lineWidth = 1.5;
            
-            // Dibuja el rectángulo desde la esquina superior izquierda
+            // Dibuja el rectángulo desde la esquina superior izquierda (ajustado para sentarse en el eje X)
             ctx.fillRect(massDrawX, massDrawY - massHeight, massWidth, massHeight);
             ctx.strokeRect(massDrawX, massDrawY - massHeight, massWidth, massHeight);
            
             // 2. Dibuja el centro de masa (círculo rojo)
-            const centerX = massDrawX + massWidth / 2;
-            const centerY = massDrawY - massHeight / 2; // Centro vertical
+            const massCenterX = massDrawX + massWidth / 2;
+            const massCenterY = massDrawY - massHeight / 2; // Centro vertical
            
             ctx.beginPath();
-            ctx.arc(centerX, centerY, 3.5, 0, 2 * Math.PI); // Radio de 3.5px para el punto
+            ctx.arc(massCenterX, massCenterY, 3.5, 0, 2 * Math.PI); // Radio de 3.5px para el punto
             ctx.fillStyle = massCenterColor; // Rojo
             ctx.fill();
             ctx.strokeStyle = '#000'; // Pequeño borde negro para contraste
             ctx.lineWidth = 0.5;
             ctx.stroke();
            
-            ctx.restore();
-            // --- FIN CÓDIGO MODIFICADO PARA DIBUJAR LA MASA ---
+            // --- DIBUJO DE VECTORES (Dinámico) ---
            
-            // Dibujar Fuerzas (simplificado)
-            if (isRunning || !usePulley) { // Dibujar fuerzas si no está corriendo o si es sistema básico
-                ctx.save();
-                ctx.translate(baseX, baseY);
-                ctx.rotate(-angleRad); // Rotar al sistema de coordenadas del plano
+            // 1. Calcular Magnitudes de las Fuerzas
+            const normalForceMagnitude = mass * gravity * Math.cos(angleRad); // N
+            const gravitationalParallelForce = mass * gravity * Math.sin(angleRad); // Px (siempre apunta +X, Down)
+            const frictionMaxMagnitude = friction * normalForceMagnitude; // f_k max
+            let tensionMagnitude = 0;
+            if (usePulley) {
+                tensionMagnitude = pulleyConfig.counterMass * gravity;
+            }
+            
+            // Fuerza de Tendencia a la Movilización (Px - T)
+            const netDrivingForce = gravitationalParallelForce - tensionMagnitude;
+            
+            let frictionDrawMagnitude = 0;
+            let frictionDrawDirection = 0; // -1: Up the plane (-X); 1: Down the plane (+X)
+            
+            if (velocity !== 0) {
+                // Movimiento (Fricción Cinética): Se opone a la velocidad
+                frictionDrawMagnitude = frictionMaxMagnitude;
+                frictionDrawDirection = -Math.sign(velocity);
+            } else if (Math.abs(netForce) < 0.01 && position > 0) {
+                // Detenido por fricción estática o balanceado (Fricción CERO si Px = T)
+                frictionDrawMagnitude = Math.min(frictionMaxMagnitude, Math.abs(netDrivingForce));
+                frictionDrawDirection = -Math.sign(netDrivingForce);
+                if (netDrivingForce === 0) frictionDrawMagnitude = 0;
+            } else if (velocity === 0) {
+                 // Estático antes de iniciar el movimiento
+                frictionDrawMagnitude = Math.min(frictionMaxMagnitude, Math.abs(netDrivingForce));
+                frictionDrawDirection = -Math.sign(netDrivingForce || 1); // Si está en reposo, opone a la tendencia (o a Px por defecto)
+                if (netDrivingForce === 0) frictionDrawMagnitude = 0;
+            }
+            
+            // 1. Fuerza Normal (Perpendicular, hacia arriba) - Siempre -Y
+            drawArrow(ctx, massCenterX, massCenterY, massCenterX, massCenterY - normalForceMagnitude * forceScale, '#2ecc71', 'N');
            
-                const forceScale = 5; // Escala para la longitud de los vectores de fuerza
-                const massCenterX = (position / length) * planeWidth + massWidth / 2;
-                const massCenterY = -massHeight / 2;
+            // 2. Componente Paralela del Peso (Hacia abajo del plano) - Siempre +X
+            drawArrow(ctx, massCenterX, massCenterY, massCenterX + gravitationalParallelForce * forceScale, massCenterY, '#3498db', 'Pₓ');
            
-                const normalForceMagnitude = mass * gravity * Math.cos(angleRad) * forceScale;
-                const parallelForceMagnitude = mass * gravity * Math.sin(angleRad) * forceScale;
-                const frictionForceMagnitude = friction * (mass * gravity * Math.cos(angleRad)) * forceScale;
-           
-                // 1. Fuerza Normal (Perpendicular, hacia arriba)
-                drawArrow(ctx, massCenterX, massCenterY, massCenterX, massCenterY - normalForceMagnitude, '#2ecc71', 'N');
-           
-                // 2. Componente Paralela del Peso (Hacia abajo del plano)
-                drawArrow(ctx, massCenterX, massCenterY, massCenterX + parallelForceMagnitude, massCenterY, '#3498db', 'Pₓ');
-           
-                // 3. Fuerza de Fricción (Opuesta al movimiento/Pₓ)
-                // Se dibuja solo si Px > f (movimiento hacia abajo) o si Px < f (movimiento hacia arriba si tiene velocidad inicial)
-                if (velocity > 0 || (velocity === 0 && mass * gravity * Math.sin(angleRad) > friction * mass * gravity * Math.cos(angleRad))) {
-                    drawArrow(ctx, massCenterX, massCenterY, massCenterX - frictionForceMagnitude, massCenterY, '#e67e22', 'f');
-                } else if (velocity < 0) {
-                    // Si el objeto se mueve hacia arriba (solo posible con polea o fuerza inicial, que no está simulada aquí, pero por si acaso)
-                    drawArrow(ctx, massCenterX, massCenterY, massCenterX + frictionForceMagnitude, massCenterY, '#e67e22', 'f');
-                }
-           
-                ctx.restore();
+            // 3. Fuerza de Fricción (Opuesta al movimiento/tendencia)
+            if (frictionDrawMagnitude > 0) {
+                drawArrow(ctx, massCenterX, massCenterY, massCenterX + frictionDrawDirection * frictionDrawMagnitude * forceScale, massCenterY, '#e67e22', 'f');
+            }
+            
+            // 4. Fuerza de Tensión (Solo con polea) - Siempre -X (hacia arriba del plano)
+            if (usePulley && tensionMagnitude > 0) {
+                 drawArrow(ctx, massCenterX, massCenterY, massCenterX - tensionMagnitude * forceScale, massCenterY, '#f39c12', 'T');
             }
            
-            // Dibujar el ángulo θ
+            ctx.restore();
+            // --- FIN DIBUJO DE VECTORES ---
+           
+            // Dibujar el ángulo θ (en coordenadas absolutas)
+            // ... (el resto del código de dibujo del ángulo es correcto)
             const angleArcRadius = 30;
-            const angleArcX = baseX;
+            const angleArcX = inclineXStart;
             const angleArcY = baseY;
            
             ctx.beginPath();
-            // El ángulo se mide desde la base (Math.PI) hacia la hipotenusa (Math.PI - angleRad).
-            // Dibuja el arco desde Math.PI - angleRad hasta Math.PI (sentido antihorario = false)
             ctx.arc(angleArcX, angleArcY, angleArcRadius, Math.PI - angleRad, Math.PI, false);
             ctx.strokeStyle = '#e74c3c';
             ctx.lineWidth = 2;
             ctx.stroke();
            
-            // Etiqueta θ DENTRO del arco
             ctx.fillStyle = '#e74c3c';
             ctx.font = 'bold 18px Arial';
-            // Calcular posición para el texto θ (a la mitad del ángulo y más cerca del vértice)
             const thetaTextRadius = angleArcRadius * 0.6;
-            // Mueve el texto más adentro del arco
-            // Ángulo para el centro del texto: Math.PI - angleRad / 2
             const centerAngle = Math.PI - angleRad / 2;
             const thetaX = angleArcX + thetaTextRadius * Math.cos(centerAngle);
             const thetaY = angleArcY + thetaTextRadius * Math.sin(centerAngle);
             ctx.fillText('θ', thetaX, thetaY);
            
-            // Dibujar cuadrado de 90° en la base (entre cateto adyacente y opuesto)
             const squareSize = 15;
             const squareX = baseX + squareSize/2;
             const squareY = baseY - squareSize/2;
@@ -1873,6 +1917,9 @@
             const dy = toY - fromY;
             const length = Math.sqrt(dx * dx + dy * dy);
            
+            // No dibujar si el vector es muy pequeño
+            if (length < 5 && label !== 'N') return;
+
             ctx.beginPath();
             ctx.strokeStyle = color;
             ctx.lineWidth = 2.5;
@@ -1907,56 +1954,58 @@
             }
         }
        
-        // Función principal de física
+        // Función principal de física - LÓGICA DE FRICCIÓN CORREGIDA
         function calculatePhysics() {
             if (!isRunning || isPaused) return;
            
             const angleRad = angle * Math.PI / 180;
             const normalForce = mass * gravity * Math.cos(angleRad);
             const gravitationalParallelForce = mass * gravity * Math.sin(angleRad);
-            const frictionForceMagnitude = friction * normalForce;
+            const frictionMaxMagnitude = friction * normalForce;
            
             let netForceValue;
+            let counterMass = usePulley ? pulleyConfig.counterMass : 0;
+            const totalMass = mass + counterMass;
+
+            // Fuerza impulsora neta (sin fricción) - Positivo = Down the plane
+            let drivingForce = gravitationalParallelForce;
+            if (usePulley) {
+                drivingForce -= counterMass * gravity;
+            }
            
-            if (!usePulley) {
-                // Sistema Básico
-                // La fricción se opone al movimiento, que es hacia abajo.
-                netForceValue = gravitationalParallelForce - frictionForceMagnitude;
-                acceleration = netForceValue / mass;
-               
-                // Comprobación de fricción estática (si está en reposo)
-                if (Math.abs(gravitationalParallelForce) <= frictionForceMagnitude && velocity === 0) {
+            if (velocity === 0) {
+                // Fricción Estática
+                if (Math.abs(drivingForce) > frictionMaxMagnitude) {
+                    // El movimiento comienza (Fuerza neta > Fricción estática máxima)
+                    netForceValue = drivingForce - Math.sign(drivingForce) * frictionMaxMagnitude;
+                    acceleration = netForceValue / totalMass;
+                } else {
+                    // Reposo (Fricción estática balancea la drivingForce)
                     acceleration = 0;
                     netForceValue = 0;
                 }
-               
             } else {
-                // Sistema con Polea
-                const counterMass = pulleyConfig.counterMass;
-                const counterWeightForce = counterMass * gravity;
-               
-                // Fuerza Neta = (Fuerza de M) - (Fuerza de M2) - (Fricción)
-                netForceValue = gravitationalParallelForce - counterWeightForce - frictionForceMagnitude;
-                acceleration = netForceValue / (mass + counterMass);
-               
-                // Comprobación de fricción estática (si está en reposo)
-                if (Math.abs(netForceValue) <= frictionForceMagnitude && velocity === 0) {
-                    // Aquí la lógica de fricción estática es más compleja, ya que M2 empuja contra la fricción.
-                    // Simplificamos: si la fuerza neta es muy pequeña, asumimos reposo
-                    if (Math.abs(netForceValue) < 0.01) {
-                         acceleration = 0;
-                         netForceValue = 0;
-                    }
-                }
+                // Fricción Cinética (opuesta al movimiento)
+                const directionOfMotion = Math.sign(velocity);
+                
+                // La fricción se resta si el movimiento es a favor de drivingForce, se suma si es en contra.
+                // Simplificado: F_net = DrivingForce - (dirección * fricciónMax)
+                netForceValue = drivingForce - directionOfMotion * frictionMaxMagnitude;
+                acceleration = netForceValue / totalMass;
             }
            
             // Integración de Euler simple
             velocity += acceleration * deltaTime;
            
-            // No permitir que el objeto vaya hacia arriba de la parte superior
+            // No permitir que el objeto vaya hacia arriba de la parte superior (position < 0)
             if (position <= 0 && velocity < 0) {
                 velocity = 0;
                 position = 0;
+                // Si el objeto intenta subir al inicio (solo con polea), la aceleración debe ser cero si no hay fuerza impulsora.
+                if (usePulley && drivingForce < 0 && Math.abs(drivingForce) <= frictionMaxMagnitude) {
+                    acceleration = 0;
+                    netForceValue = 0;
+                }
             }
            
             // No permitir que el objeto sobrepase la longitud del plano
@@ -1972,8 +2021,8 @@
             currentTime += deltaTime;
            
             // Calcular energía
-            const heightFromTop = (length - position) * Math.sin(angleRad);
-            const potentialEnergy = mass * gravity * heightFromTop;
+            const heightFromBase = position * Math.sin(angleRad);
+            const potentialEnergy = mass * gravity * heightFromBase; // Potencial relativo a la base
             const kineticEnergy = 0.5 * mass * velocity * velocity;
             energy = potentialEnergy + kineticEnergy;
             netForce = netForceValue;
@@ -2170,6 +2219,8 @@
             const maxVelocity = Math.max(...simulationData.map(d => Math.abs(d.velocity)));
             const maxAcceleration = Math.max(...simulationData.map(d => Math.abs(d.acceleration)));
            
+            const angleRad = angle * Math.PI / 180;
+           
             const summaryData = [
                 ["RESUMEN DE RESULTADOS"],
                 ["Tiempo total de simulación:", finalTime.toFixed(2), "s"],
@@ -2179,9 +2230,9 @@
                 ["Estado final:", finalPosition >= length ? "Completado" : "En progreso", ""],
                 [""],
                 ["ANÁLISIS FÍSICO"],
-                ["Fuerza gravitatoria paralela:", (mass * gravity * Math.sin(angle * Math.PI / 180)).toFixed(2), "N"],
-                ["Fuerza normal:", (mass * gravity * Math.cos(angle * Math.PI / 180)).toFixed(2), "N"],
-                ["Fuerza de fricción:", (friction * mass * gravity * Math.cos(angle * Math.PI / 180)).toFixed(2), "N"],
+                ["Fuerza gravitatoria paralela:", (mass * gravity * Math.sin(angleRad)).toFixed(2), "N"],
+                ["Fuerza normal:", (mass * gravity * Math.cos(angleRad)).toFixed(2), "N"],
+                ["Fuerza de fricción máxima:", (friction * mass * gravity * Math.cos(angleRad)).toFixed(2), "N"],
                 ...(usePulley ? [["Fuerza del contrapeso:", (pulleyConfig.counterMass * gravity).toFixed(2), "N"]] : []),
                 ["Fuerza neta inicial:", simulationData[0]?.force.toFixed(2) || "0.00", "N"]
             ];
