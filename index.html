@@ -725,7 +725,7 @@
                
                 <div class="tab-content active" id="basic-tab">
                     <div class="input-group">
-                        <label for="mass-input">Masa del objeto (M)</label>
+                        <label for="mass-input">Masa del objeto (m)</label>
                         <div class="input-container">
                             <input type="number" id="mass-input" min="0.1" value="5" step="0.1">
                             <span class="unit">Kg</span>
@@ -755,7 +755,7 @@
                         <label for="length-input">Longitud del plano (L)</label>
                         <div class="input-container">
                             <input type="number" id="length-input" min="1" value="8" step="0.5">
-                            <span class="unit">M</span>
+                            <span class="unit">m</span>
                         </div>
                     </div>
                    
@@ -763,14 +763,14 @@
                         <label for="gravity-input">Gravedad (g)</label>
                         <div class="input-container">
                             <input type="number" id="gravity-input" value="9.8" min="1" step="0.1">
-                            <span class="unit">M/s²</span>
+                            <span class="unit">m/s²</span>
                         </div>
                     </div>
                 </div>
                
                 <div class="tab-content" id="pulley-tab">
                     <div class="input-group">
-                        <label for="mass-input-pulley">Masa del objeto (M)</label>
+                        <label for="mass-input-pulley">Masa del objeto (m)</label>
                         <div class="input-container">
                             <input type="number" id="mass-input-pulley" min="0.1" value="5" step="0.1">
                             <span class="unit">Kg</span>
@@ -809,7 +809,7 @@
                         <label for="length-input-pulley">Longitud del plano (L)</label>
                         <div class="input-container">
                             <input type="number" id="length-input-pulley" min="1" value="8" step="0.5">
-                            <span class="unit">M</span>
+                            <span class="unit">m</span>
                         </div>
                     </div>
                    
@@ -817,7 +817,7 @@
                         <label for="gravity-input-pulley">Gravedad (g)</label>
                         <div class="input-container">
                             <input type="number" id="gravity-input-pulley" value="9.8" min="1" step="0.1">
-                            <span class="unit">M/s²</span>
+                            <span class="unit">m/s²</span>
                         </div>
                     </div>
                 </div>
@@ -855,15 +855,15 @@
                     </div>
                     <div class="data-item">
                         <div class="data-label">Posición</div>
-                        <div class="data-value" id="position-value">0.00 M</div>
+                        <div class="data-value" id="position-value">0.00 m</div>
                     </div>
                     <div class="data-item">
                         <div class="data-label">Velocidad</div>
-                        <div class="data-value" id="velocity-value">0.00 M/s</div>
+                        <div class="data-value" id="velocity-value">0.00 m/s</div>
                     </div>
                     <div class="data-item">
                         <div class="data-label">Aceleración</div>
-                        <div class="data-value" id="acceleration-value">0.00 M/s²</div>
+                        <div class="data-value" id="acceleration-value">0.00 m/s²</div>
                     </div>
                     <div class="data-item">
                         <div class="data-label">Fuerza Net</div>
@@ -1980,9 +1980,9 @@
            
             // Actualizar valores en pantalla
             timeValue.textContent = currentTime.toFixed(2) + " s";
-            positionValue.textContent = position.toFixed(2) + " M";
-            velocityValue.textContent = velocity.toFixed(2) + " M/s";
-            accelerationValue.textContent = acceleration.toFixed(2) + " M/s²";
+            positionValue.textContent = position.toFixed(2) + " m";
+            velocityValue.textContent = velocity.toFixed(2) + " m/s";
+            accelerationValue.textContent = acceleration.toFixed(2) + " m/s²";
             forceValue.textContent = netForce.toFixed(2) + " N";
             energyValue.textContent = energy.toFixed(2) + " J";
            
@@ -2024,9 +2024,9 @@
             simulationData = [];
            
             timeValue.textContent = "0.00 s";
-            positionValue.textContent = "0.00 M";
-            velocityValue.textContent = "0.00 M/s";
-            accelerationValue.textContent = "0.00 M/s²";
+            positionValue.textContent = "0.00 m";
+            velocityValue.textContent = "0.00 m/s";
+            accelerationValue.textContent = "0.00 m/s²";
             forceValue.textContent = "0.00 N";
             energyValue.textContent = "0.00 J";
            
@@ -2066,7 +2066,7 @@
             const paramsData = [
                 ["PARÁMETRO", "VALOR", "UNIDAD"],
                 ["Sistema", usePulley ? "Plano con Polea" : "Plano Básico", ""],
-                ["Masa Objeto (M)", parseFloat(currentMassInput.value).toFixed(2), "kg"],
+                ["Masa Objeto (m)", parseFloat(currentMassInput.value).toFixed(2), "kg"],
                 ["Ángulo del Plano (θ)", parseFloat(currentAngleInput.value).toFixed(0), "°"],
                 ["Fricción (μ)", parseFloat(currentFrictionInput.value).toFixed(2), ""],
                 ["Longitud del Plano (L)", parseFloat(currentLengthInput.value).toFixed(1), "m"],
@@ -2075,8 +2075,8 @@
             
             if (usePulley) {
                 // Si la polea está activa, usar el input de polea para M y añadir M2
-                paramsData[2] = ["Masa Objeto (M)", parseFloat(massInputPulley.value).toFixed(2), "kg"]; 
-                paramsData.push(["Masa Contrapeso (M₂)", parseFloat(counterMassInput.value).toFixed(2), "kg"]);
+                paramsData[2] = ["Masa Objeto (m)", parseFloat(massInputPulley.value).toFixed(2), "kg"]; 
+                paramsData.push(["Masa Contrapeso (m₂)", parseFloat(counterMassInput.value).toFixed(2), "kg"]);
             }
             
             // Usamos aoa_to_sheet (Array of Arrays) para datos sencillos como los parámetros
