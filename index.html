@@ -6,6 +6,7 @@
     <title>Laboratorio Virtual - Plano Inclinado</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
+        /* Todos los estilos CSS se mantienen igual */
         :root {
             --primary-color: #1a365d;
             --secondary-color: #2d3748;
@@ -938,41 +939,50 @@
            
             <div class="tab-content" id="formulas-tab">
                 <div class="theory-content">
-                    <p><strong>Fuerzas en un plano inclinado (Serway):</strong></p>
+                    <p><strong>Fuerzas en un plano inclinado:</strong></p>
                    
                     <div class="formula">
-                        F<sub>gx</sub> = mg sen θ
+                        Peso = m · g
                     </div>
                    
                     <div class="formula">
-                        F<sub>gy</sub> = mg cos θ
+                        Fuerza normal = m · g · cos θ
                     </div>
                    
                     <div class="formula">
-                        F<sub>n</sub> = mg cos θ
+                        Componente paralela del peso = m · g · sen θ
                     </div>
                    
                     <div class="formula">
-                        f<sub>k</sub> = μ<sub>k</sub> F<sub>n</sub> = μ<sub>k</sub> mg cos θ
+                        Fuerza de fricción = μ · m · g · cos θ
                     </div>
                    
                     <div class="formula">
-                        F<sub>neta</sub> = mg sen θ - f<sub>k</sub>
+                        Fuerza neta = m · g · sen θ - μ · m · g · cos θ
                     </div>
                    
                     <div class="formula">
-                        a = F<sub>neta</sub> / m
+                        Aceleración = Fuerza neta / m
                     </div>
                    
                     <p><strong>Con sistema de poleas:</strong></p>
                    
                     <div class="formula">
-                        F<sub>neta</sub> = mg sen θ - f<sub>k</sub> - m<sub>2</sub>g
+                        Fuerza neta = m · g · sen θ - μ · m · g · cos θ - m₂ · g
                     </div>
                    
                     <div class="formula">
-                        a = F<sub>neta</sub> / (m + m<sub>2</sub>)
+                        Aceleración = Fuerza neta / (m + m₂)
                     </div>
+                   
+                    <p><strong>Donde:</strong></p>
+                    <ul>
+                        <li><span class="variable">m</span> = masa del objeto (kg)</li>
+                        <li><span class="variable">m₂</span> = masa del contrapeso (kg)</li>
+                        <li><span class="variable">g</span> = aceleración gravitatoria (m/s²)</li>
+                        <li><span class="variable">θ</span> = ángulo del plano inclinado (grados)</li>
+                        <li><span class="variable">μ</span> = coeficiente de fricción</li>
+                    </ul>
                 </div>
             </div>
            
