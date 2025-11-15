@@ -1680,7 +1680,7 @@
             }
         });
        
-        // Función drawSimulation
+        // Función drawSimulation - MODIFICADA: Eliminé la etiqueta de masa
         function drawSimulation() {
             const width = canvas.width;
             const height = canvas.height;
@@ -1755,15 +1755,7 @@
             ctx.restore();
             // --- FIN DIBUJO DE LA MASA ---
            
-            // Calcular posición del objeto para etiquetas
-            const objectX = baseX + (position / length) * planeWidth;
-            const objectY = baseY - planeHeight + (position / length) * planeHeight;
-           
-            // Etiqueta de masa
-            ctx.fillStyle = '#000';
-            ctx.font = 'bold 14px Arial';
-            ctx.textAlign = 'center';
-            ctx.fillText(`${mass} kg`, objectX, objectY - massHeight - 15);
+            // NOTA: He eliminado la etiqueta de masa que mostraba "X kg" sobre el objeto
            
             // Posición del ángulo (esquina inferior DERECHA)
             const angleArcRadius = 30; // Radio del arco, reducido para que quepa mejor.
@@ -1808,7 +1800,7 @@
             ctx.stroke();
         }
        
-        // Dibujar sistema de poleas mejorado con cuerda recta
+        // Dibujar sistema de poleas mejorado con cuerda recta - MODIFICADA: Eliminé la etiqueta del contrapeso
         function drawPulleySystem(width, height, baseX, baseY, planeWidth, planeHeight) {
             // Posicionar la polea a la izquierda del plano
             const pulleyX = baseX - 100;
@@ -1887,11 +1879,7 @@
             ctx.fillRect(pulleyX - counterWeightWidth/2 + 5, counterWeightY - counterWeightHeight/2 + 5, counterWeightWidth - 10, 3);
             ctx.fillRect(pulleyX - counterWeightWidth/2 + 5, counterWeightY - counterWeightHeight/2 + 10, counterWeightWidth - 10, 3);
            
-            // Etiqueta de contrapeso
-            ctx.fillStyle = '#2c3e50';
-            ctx.font = '14px Arial';
-            ctx.textAlign = 'center';
-            ctx.fillText(`${pulleyConfig.counterMass} kg`, pulleyX, counterWeightY + counterWeightHeight/2 + 20);
+            // NOTA: He eliminado la etiqueta del contrapeso que mostraba "X kg" debajo del contrapeso
            
             // Dibujar cuerda del contrapeso (RECTA)
             ctx.beginPath();
