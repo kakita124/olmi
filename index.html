@@ -6,7 +6,7 @@
     <title>Laboratorio Virtual - Plano Inclinado</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
-        /* (Mantengo todos los estilos anteriores para no hacer el código demasiado largo) */
+        /* (Todos los estilos CSS se mantienen igual) */
         :root {
             --primary-color: #1a365d;
             --secondary-color: #2d3748;
@@ -2035,66 +2035,86 @@
             showNotification('Simulación Reiniciada', 'La simulación se ha reiniciado a su estado inicial.', 'info');
         }
 
-        // (Las funciones de exportación se mantienen igual)
+        // Función para exportar datos a CSV/Excel - FUNCIÓN MEJORADA
         function exportData() {
             if (simulationData.length === 0) {
-                showNotification('Sin Datos', 'No hay datos para exportar. Ejecuta la simulación primero.', 'warning');
+                showNotification('Error de Exportación', 'No hay datos de simulación para exportar. Inicie la simulación primero.', 'warning');
                 return;
             }
 
-            // Crear contenido CSV estructurado
-            let csvContent = "";
-           
-            // Encabezado con información del experimento
-            csvContent += "LABORATORIO VIRTUAL - PLANO INCLINADO\n";
-            csvContent += "Resultados de Simulación\n\n";
-           
-            // Información de configuración
-            csvContent += "CONFIGURACIÓN DEL EXPERIMENTO\n";
-            csvContent += `Masa del objeto: ${mass} kg\n`;
-            csvContent += `Ángulo del plano: ${angle}°\n`;
-            csvContent += `Coeficiente de fricción: ${friction}\n`;
-            csvContent += `Longitud del plano: ${length} m\n`;
-            csvContent += `Gravedad: ${gravity} m/s²\n`;
-            csvContent += `Sistema de poleas: ${usePulley ? "Activado" : "Desactivado"}\n`;
+            // --- 1. Hoja de DATOS DETALLADOS ---
+            // Mapear los datos para usar nombres de columnas claros y formatear los números a 3 decimales
+            const formattedData = simulationData.map(d => ({
+                'Tiempo (s)': d.time.toFixed(3),
+                'Posición (m)': d.position.toFixed(3),
+                'Velocidad (m/s)': d.velocity.toFixed(3),
+                'Aceleración (m/s²)': d.acceleration.toFixed(3),
+                'Fuerza Neta (N)': d.force.toFixed(3),
+                'Energía Total (J)': d.energy.toFixed(3),
+            }));
+
+            // Usamos json_to_sheet para crear la hoja con encabezados claros
+            const dataWs = XLSX.utils.json_to_sheet(formattedData);
+            
+            // --- 2. Hoja de PARÁMETROS DE LA SIMULACIÓN ---
+            const currentMassInput = usePulley ? massInputPulley : massInput;
+            const currentAngleInput = usePulley ? angleInputPulley : angleInput;
+            const currentFrictionInput = usePulley ? frictionInputPulley : frictionInput;
+            const currentLengthInput = usePulley ? lengthInputPulley : lengthInput;
+            const currentGravityInput = usePulley ? gravityInputPulley : gravityInput;
+
+            const paramsData = [
+                ["PARÁMETRO", "VALOR", "UNIDAD"],
+                ["Sistema", usePulley ? "Plano con Polea" : "Plano Básico", ""],
+                ["Masa Objeto (M)", parseFloat(currentMassInput.value).toFixed(2), "kg"],
+                ["Ángulo del Plano (θ)", parseFloat(currentAngleInput.value).toFixed(0), "°"],
+                ["Fricción (μ)", parseFloat(currentFrictionInput.value).toFixed(2), ""],
+                ["Longitud del Plano (L)", parseFloat(currentLengthInput.value).toFixed(1), "m"],
+                ["Gravedad (g)", parseFloat(currentGravityInput.value).toFixed(2), "m/s²"],
+            ];
+            
             if (usePulley) {
-                csvContent += `Masa del contrapeso: ${pulleyConfig.counterMass} kg\n`;
+                // Si la polea está activa, usar el input de polea para M y añadir M2
+                paramsData[2] = ["Masa Objeto (M)", parseFloat(massInputPulley.value).toFixed(2), "kg"]; 
+                paramsData.push(["Masa Contrapeso (M₂)", parseFloat(counterMassInput.value).toFixed(2), "kg"]);
             }
-            csvContent += `Fecha de simulación: ${new Date().toLocaleString()}\n\n`;
-           
-            // Resumen de resultados
-            csvContent += "RESUMEN DE RESULTADOS\n";
+            
+            // Usamos aoa_to_sheet (Array of Arrays) para datos sencillos como los parámetros
+            const paramsWs = XLSX.utils.aoa_to_sheet(paramsData);
+            
+            // --- 3. Hoja de RESUMEN DE RESULTADOS ---
             const finalTime = simulationData[simulationData.length - 1].time;
             const finalPosition = simulationData[simulationData.length - 1].position;
             const maxVelocity = Math.max(...simulationData.map(d => Math.abs(d.velocity)));
             const maxAcceleration = Math.max(...simulationData.map(d => Math.abs(d.acceleration)));
-           
-            csvContent += `Tiempo total de simulación: ${finalTime.toFixed(2)} s\n`;
-            csvContent += `Distancia recorrida: ${finalPosition.toFixed(2)} m\n`;
-            csvContent += `Velocidad máxima: ${maxVelocity.toFixed(2)} m/s\n`;
-            csvContent += `Aceleración máxima: ${maxAcceleration.toFixed(2)} m/s²\n`;
-            csvContent += `Estado final: ${finalPosition >= length ? "Completado" : "En progreso"}\n\n`;
-           
-            // Datos detallados
-            csvContent += "DATOS DETALLADOS DE LA SIMULACIÓN\n";
-            csvContent += "Tiempo (s),Posición (m),Velocidad (m/s),Aceleración (m/s²),Fuerza Neta (N),Energía (J)\n";
-           
-            simulationData.forEach(data => {
-                csvContent += `${data.time.toFixed(3)},${data.position.toFixed(3)},${data.velocity.toFixed(3)},${data.acceleration.toFixed(3)},${data.force.toFixed(3)},${data.energy.toFixed(3)}\n`;
-            });
-           
-            // Crear y descargar archivo
-            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-            const url = URL.createObjectURL(blob);
-            const link = document.createElement("a");
-            link.setAttribute("href", url);
-            link.setAttribute("download", `simulacion_plano_inclinado_${new Date().toISOString().slice(0,10)}.csv`);
-            link.style.visibility = 'hidden';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-           
-            showNotification('Datos Exportados', 'Los datos de la simulación se han exportado correctamente a un archivo CSV estructurado.', 'success');
+            const finalState = finalPosition >= length ? "Completado" : "Detenido/En progreso";
+
+            const summaryData = [
+                ["RESUMEN DE RESULTADOS DE LA SIMULACIÓN"],
+                [""],
+                ["PARÁMETRO", "VALOR", "UNIDAD"],
+                ["Tiempo total", finalTime.toFixed(3), "s"],
+                ["Distancia recorrida", finalPosition.toFixed(3), "m"],
+                ["Velocidad máxima (abs)", maxVelocity.toFixed(3), "m/s"],
+                ["Aceleración máxima (abs)", maxAcceleration.toFixed(3), "m/s²"],
+                ["Estado final", finalState, ""]
+            ];
+
+            const summaryWs = XLSX.utils.aoa_to_sheet(summaryData);
+            
+            // --- 4. Crear el libro de Excel (Workbook) ---
+            const wb = XLSX.utils.book_new();
+
+            // Agregar las hojas en orden lógico
+            XLSX.utils.book_append_sheet(wb, paramsWs, "Parámetros");
+            XLSX.utils.book_append_sheet(wb, summaryWs, "Resumen");
+            XLSX.utils.book_append_sheet(wb, dataWs, "Datos Detallados");
+
+            // --- 5. Exportar el archivo ---
+            const filename = `Plano_Inclinado_Datos_${new Date().toISOString().slice(0, 10)}.xlsx`;
+            XLSX.writeFile(wb, filename);
+
+            showNotification('Exportación Exitosa', `Los datos se han exportado a "${filename}".`, 'success');
         }
 
         // Controladores de botones
